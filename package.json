@@ -1,0 +1,16 @@
+{
+  "name": "oh-md",
+  "version": "0.0.1",
+  "description": "oh-md: simplest markdown js editor",
+  "main": "./source/index.js",
+  "repository": "git@github.com:fr4nki/oh-md.git",
+  "author": "fr4nki <i@fr4nki.ru>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "parcel serve ./example/index.html"
+  },
+  "devDependencies": {
+    "parcel": "^1.10.3",
+    "sass": "^1.15.1"
+  }
+}
