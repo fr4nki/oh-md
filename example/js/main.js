@@ -1,15 +1,27 @@
 import Editor from '../../source/index';
 
-(function(){
+(function () {
     const els = document.querySelectorAll('textarea');
     const opts = {
-        buttons: [
+        classes: {
+            container: '',
+            controls: 'my-line',
+            button: 'nooope',
+            footer: 'my-bottom',
+        },
+
+        settings: {
+            autosave: true,
+            theme: 'default',
+        },
+
+        buttons: [[
             {
                 button: 'bold',
                 hotkey: 'ctrl+b',
                 class: 'button-bold',
                 onClick: () => {
-                    console.log('make me bold, babe!', ...args)
+                    console.log('make me bold, babe!', arguments)
                 },
             },
             {
@@ -54,7 +66,7 @@ import Editor from '../../source/index';
                 button: 'fullscreen',
                 hotkey: 'ctrl+f',
             },
-        ]
+        ]]
     };
     els.forEach(e => new Editor(e, opts).init());
 }())

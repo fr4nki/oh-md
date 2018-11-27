@@ -1,3 +1,5 @@
+import settings from './settings';
+
 export default class Layout {
     constructor(element, options) {
         this.element = element;
@@ -8,7 +10,9 @@ export default class Layout {
     make() {
         console.log(this);
 
+
         const clone = this.element.cloneNode(true);
+        // const layoutClassName = this.options.class.layout
 
         this.layout = document.createElement('div');
         this.layout.classList.add(this.options.class || 'oh-md');

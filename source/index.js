@@ -1,5 +1,4 @@
 import Layout from './oh-md/layout';
-import './styles/style.scss';
 
 export default class Editor {
     constructor(element, options) {
