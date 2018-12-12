@@ -2,16 +2,17 @@ export default class Editor {
     static defaultClassNamePrefix = 'oh-md'
 
     static defaultSettings = {
-        autosave: true,
+        autosave: 0,
         counter: true,
         theme: `${Editor.defaultClassNamePrefix}-theme-default`,
     }
 
     static defaultClasses = {
         container: [Editor.defaultClassNamePrefix],
+        area: [`${Editor.defaultClassNamePrefix}-area`],
         controls: [`${Editor.defaultClassNamePrefix}-controls`],
         button: [`${Editor.defaultClassNamePrefix}-button`],
-        footer: [`${Editor.defaultClassNamePrefix}-footer`],
+        params: [`${Editor.defaultClassNamePrefix}-param`],
     }
 
     static defaultButtons = [
@@ -65,7 +66,9 @@ export default class Editor {
         this.element = element;
         this.container = null;
         this.controls = null;
-        this.footer = null;
+        this.params = null;
+        this.autosaveBlock = null;
+        this.counterBlock = null;
         this.settings = settings || {};
     }
 
@@ -81,40 +84,91 @@ export default class Editor {
         this.settings = { settings, buttons, classes }
     }
 
+    counterInit() {
+        this.counterBlock = document.createElement('p');
+        this.counterBlock.classList.add(`${Editor.defaultClassNamePrefix}-param-counter`);
+        this.params.appendChild(this.counterBlock);
+
+        this.element.addEventListener('input', () => {
+            this.counterBlock.innerText = this.element.value.length;
+        })
+    }
+
+    autosaveFill() {
+        const { URL: url } = window.document;
+        this.element.value = window.localStorage[url];
+    }
+
+    autosaveToggleClass() {
+        const { URL: url } = window.document;
+        const { value } = this.element;
+
+        this.autosaveBlock.classList.add('active');
+        window.localStorage[url] = value;
+
+        setTimeout(() => {
+            this.autosaveBlock.classList.remove('active');
+        }, 2000)
+    }
+
+    autosaveInit() {
+        this.autosaveBlock = document.createElement('p');
+        this.autosaveBlock.classList.add(`${Editor.defaultClassNamePrefix}-param-autosave`);
+        this.autosaveBlock.innerText = 'Saved';
+        this.params.appendChild(this.autosaveBlock);
+
+        setInterval(
+            () => { this.autosaveToggleClass() },
+            this.settings.settings.autosave * 1000
+        )
+    }
 
     makeLayout() {
         const clone = this.element.cloneNode(true);
+        const area = document.createElement('div');
+        area.classList.add(this.settings.classes.area);
 
-        this.container = document.createElement('div');
-        this.container.classList.add(...this.settings.classes.container);
+        this.container = document.createElement('section');
         this.container.appendChild(clone);
+        this.container.classList.add(
+            ...this.settings.classes.container,
+            this.settings.settings.theme
+        );
 
         this.element.parentElement.insertBefore(this.container, this.element);
         this.element.parentElement.removeChild(this.element);
         this.element = clone
+        area.appendChild(this.element);
+        this.container.appendChild(area);
     }
 
     makeButtons() {
-        console.log(this.settings)
-
         this.controls = document.createElement('div');
         this.controls.classList.add(...this.settings.classes.controls);
-        this.element.parentElement.insertBefore(this.controls, this.element);
+        this.container.insertBefore(this.controls, this.element.parentElement);
     }
 
-    makeFooter() {
-        this.footer = document.createElement('div');
-        this.footer.classList.add(...this.settings.classes.footer);
-        this.container.appendChild(this.footer);
+    makeParams() {
+        const { autosave, counter } = this.settings.settings
+
+        this.params = document.createElement('div');
+        this.params.classList.add(...this.settings.classes.params);
+        this.container.appendChild(this.params);
+
+        if (autosave) {
+            this.autosaveInit();
+            this.autosaveFill();
+        }
+
+        if (counter) {
+            this.counterInit();
+        }
     }
 
     init() {
-        console.log(this.element);
-        console.log(this.settings);
-
         this.setSettings();
         this.makeLayout();
         this.makeButtons();
-        this.makeFooter();
+        this.makeParams();
     }
 }
