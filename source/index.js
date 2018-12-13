@@ -1,7 +1,7 @@
 export default class Editor {
     static defaultClassNamePrefix = 'oh-md'
 
-    static defaultSettings = {
+    static defaultParams = {
         autosave: 0,
         counter: true,
         theme: `${Editor.defaultClassNamePrefix}-theme-default`,
@@ -61,6 +61,12 @@ export default class Editor {
         }
     ]
 
+    static createElement = (el, className = ['']) => {
+        const e = document.createElement(el);
+        e.classList.add(...className);
+
+        return e;
+    }
 
     constructor(element, settings) {
         this.element = element;
@@ -73,67 +79,99 @@ export default class Editor {
     }
 
     setSettings() {
-        const settings = Object.assign(Editor.defaultSettings, this.settings.settings || {})
-        const buttons = this.settings.buttons || Editor.defaultButtons
-        const classes = Editor.defaultClasses
+        const params = Object.assign(Editor.defaultParams, this.settings.params || {});
+        const buttons = this.settings.buttons || Editor.defaultButtons;
+        const classes = Editor.defaultClasses;
+        const elementId = this.element.id || this.element.name;
 
         Object.keys(this.settings.classes).forEach(c => {
             classes[c].push(this.settings.classes[c].join(' '))
-        })
+        });
 
-        this.settings = { settings, buttons, classes }
+        if (params.autosave) {
+            if (elementId) {
+                params.id = elementId;
+            } else {
+                params.id = +new Date();
+
+                console.warn(
+                    '# OH-MD: Textarea element doesn\'t contain id or name attribute. Autosave will not work correctly',
+                    this.element
+                );
+            }
+        }
+
+        this.settings = { params, buttons, classes };
     }
 
     counterInit() {
-        this.counterBlock = document.createElement('p');
-        this.counterBlock.classList.add(`${Editor.defaultClassNamePrefix}-param-counter`);
+        this.counterBlock = Editor.createElement(
+            'p',
+            [`${Editor.defaultClassNamePrefix}-param-counter`]
+        );
         this.params.appendChild(this.counterBlock);
 
         this.element.addEventListener('input', () => {
-            this.counterBlock.innerText = this.element.value.length;
-        })
+            this.counterUpdate();
+        });
+    }
+
+    counterUpdate() {
+        this.counterBlock.innerText = this.element.value.length;
+    }
+
+    getTextareaHash() {
+        const { URL: url } = window.document;
+        const { id } = this.settings.params;
+
+        return `${url}@@@${id}`;
     }
 
     autosaveFill() {
-        const { URL: url } = window.document;
-        this.element.value = window.localStorage[url];
+        const hash = this.getTextareaHash();
+
+        this.element.value = window.localStorage[hash] || '';
+        this.counterUpdate();
     }
 
     autosaveToggleClass() {
-        const { URL: url } = window.document;
         const { value } = this.element;
+        const hash = this.getTextareaHash();
 
         this.autosaveBlock.classList.add('active');
-        window.localStorage[url] = value;
+        window.localStorage[hash] = value;
 
         setTimeout(() => {
             this.autosaveBlock.classList.remove('active');
-        }, 2000)
+        }, 2000);
     }
 
     autosaveInit() {
-        this.autosaveBlock = document.createElement('p');
-        this.autosaveBlock.classList.add(`${Editor.defaultClassNamePrefix}-param-autosave`);
+        this.autosaveBlock = Editor.createElement(
+            'p',
+            [`${Editor.defaultClassNamePrefix}-param-autosave`]
+        );
         this.autosaveBlock.innerText = 'Saved';
         this.params.appendChild(this.autosaveBlock);
 
         setInterval(
             () => { this.autosaveToggleClass() },
-            this.settings.settings.autosave * 1000
+            this.settings.params.autosave * 1000
         )
     }
 
     makeLayout() {
         const clone = this.element.cloneNode(true);
-        const area = document.createElement('div');
-        area.classList.add(this.settings.classes.area);
-
-        this.container = document.createElement('section');
-        this.container.appendChild(clone);
-        this.container.classList.add(
-            ...this.settings.classes.container,
-            this.settings.settings.theme
+        const area = Editor.createElement(
+            'div',
+            [...this.settings.classes.area]
         );
+
+        this.container = Editor.createElement(
+            'section',
+            [...this.settings.classes.container, this.settings.params.theme]
+        );
+        this.container.appendChild(clone);
 
         this.element.parentElement.insertBefore(this.container, this.element);
         this.element.parentElement.removeChild(this.element);
@@ -143,25 +181,30 @@ export default class Editor {
     }
 
     makeButtons() {
-        this.controls = document.createElement('div');
-        this.controls.classList.add(...this.settings.classes.controls);
+        this.controls = Editor.createElement(
+            'div',
+            [...this.settings.classes.controls]
+        );
+
         this.container.insertBefore(this.controls, this.element.parentElement);
     }
 
     makeParams() {
-        const { autosave, counter } = this.settings.settings
+        const { autosave, counter } = this.settings.params
 
-        this.params = document.createElement('div');
-        this.params.classList.add(...this.settings.classes.params);
+        this.params = Editor.createElement(
+            'div',
+            [...this.settings.classes.params]
+        );
         this.container.appendChild(this.params);
+
+        if (counter) {
+            this.counterInit();
+        }
 
         if (autosave) {
             this.autosaveInit();
             this.autosaveFill();
-        }
-
-        if (counter) {
-            this.counterInit();
         }
     }
 
