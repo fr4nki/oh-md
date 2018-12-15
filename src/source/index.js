@@ -1,66 +1,7 @@
+import EditorParams from './params';
+import EditorConfig from './config';
+
 export default class Editor {
-    static defaultClassNamePrefix = 'oh-md'
-
-    static defaultParams = {
-        autosave: 0,
-        counter: true,
-        theme: `${Editor.defaultClassNamePrefix}-theme-default`,
-    }
-
-    static defaultClasses = {
-        container: [Editor.defaultClassNamePrefix],
-        area: [`${Editor.defaultClassNamePrefix}-area`],
-        controls: [`${Editor.defaultClassNamePrefix}-controls`],
-        button: [`${Editor.defaultClassNamePrefix}-button`],
-        params: [`${Editor.defaultClassNamePrefix}-param`],
-    }
-
-    static defaultButtons = [
-        {
-            button: 'heading',
-            hotkey: 'ctrl+h',
-        },
-        {
-            button: 'bold',
-            hotkey: 'ctrl+b',
-        },
-        {
-            button: 'italic',
-            hotkey: 'ctrl+i',
-        },
-        { separator: true },
-        {
-            button: 'ordered_list',
-            hotkey: 'ctrl+o',
-        },
-        {
-            button: 'unordered_list',
-            hotkey: 'ctrl+u',
-        },
-        { separator: true },
-        {
-            button: 'quote',
-            hotkey: 'ctrl+q',
-        },
-        {
-            button: 'link',
-            hotkey: 'ctrl+l',
-        },
-        {
-            button: 'image',
-            hotkey: 'ctrl+i',
-        },
-        { separator: true },
-        {
-            button: 'preview',
-            hotkey: 'ctrl+p',
-        },
-        {
-            button: 'fullscreen',
-            hotkey: 'ctrl+f',
-        }
-    ]
-
     static createElement = (el, className = ['']) => {
         const e = document.createElement(el);
         e.classList.add(...className);
@@ -79,9 +20,10 @@ export default class Editor {
     }
 
     setSettings() {
-        const params = Object.assign(Editor.defaultParams, this.settings.params || {});
-        const buttons = this.settings.buttons || Editor.defaultButtons;
-        const classes = Editor.defaultClasses;
+        const params = Object.assign(EditorConfig.defaultParams, this.settings.params || {});
+        const theme = this.settings.theme || EditorConfig.defaultTheme;
+        const buttons = this.settings.buttons || EditorConfig.defaultButtons;
+        const classes = EditorConfig.defaultClasses;
         const elementId = this.element.id || this.element.name;
 
         Object.keys(this.settings.classes).forEach(c => {
@@ -101,13 +43,13 @@ export default class Editor {
             }
         }
 
-        this.settings = { params, buttons, classes };
+        this.settings = { theme, params, buttons, classes };
     }
 
     counterInit() {
         this.counterBlock = Editor.createElement(
             'p',
-            [`${Editor.defaultClassNamePrefix}-param-counter`]
+            [`${EditorConfig.defaultClassNamePrefix}-param-counter`]
         );
         this.params.appendChild(this.counterBlock);
 
@@ -124,7 +66,7 @@ export default class Editor {
         const { URL: url } = window.document;
         const { id } = this.settings.params;
 
-        return `${url}@@@${id}`;
+        return `${url}||||${id}`;
     }
 
     autosaveFill() {
@@ -149,7 +91,7 @@ export default class Editor {
     autosaveInit() {
         this.autosaveBlock = Editor.createElement(
             'p',
-            [`${Editor.defaultClassNamePrefix}-param-autosave`]
+            [`${EditorConfig.defaultClassNamePrefix}-param-autosave`]
         );
         this.autosaveBlock.innerText = 'Saved';
         this.params.appendChild(this.autosaveBlock);
@@ -169,8 +111,9 @@ export default class Editor {
 
         this.container = Editor.createElement(
             'section',
-            [...this.settings.classes.container, this.settings.params.theme]
+            [...this.settings.classes.container, this.settings.theme]
         );
+
         this.container.appendChild(clone);
 
         this.element.parentElement.insertBefore(this.container, this.element);
@@ -211,7 +154,11 @@ export default class Editor {
     init() {
         this.setSettings();
         this.makeLayout();
-        this.makeButtons();
+
+        // new EditorParams(this.element, this.settings).init();
         this.makeParams();
+        this.makeButtons();
+
+        console.log(this.settings)
     }
 }

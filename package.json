@@ -2,7 +2,7 @@
   "name": "oh-md",
   "version": "0.0.1",
   "description": "oh-md: simplest markdown js editor",
-  "main": "./source/index.js",
+  "main": "./src/source/index.js",
   "repository": "git@github.com:fr4nki/oh-md.git",
   "author": "fr4nki <i@fr4nki.ru>",
   "license": "MIT",

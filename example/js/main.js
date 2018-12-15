@@ -1,4 +1,4 @@
-import Editor from '../../source/index';
+import Editor from '../../src/source/index';
 
 (function () {
     const els = document.querySelectorAll('textarea');
