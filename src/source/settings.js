@@ -3,7 +3,7 @@ const defaultClassNamePrefix = 'oh-md'
 const defaultParams = {
     autosave: 0,
     counter: true,
-}
+};
 
 const defaultTheme = `${defaultClassNamePrefix}-theme-default`;
 
@@ -11,9 +11,9 @@ const defaultClasses = {
     container: [defaultClassNamePrefix],
     area: [`${defaultClassNamePrefix}-area`],
     controls: [`${defaultClassNamePrefix}-controls`],
-    button: [`${defaultClassNamePrefix}-button`],
-    params: [`${defaultClassNamePrefix}-param`],
-}
+    button: [`${defaultClassNamePrefix}-buttons`],
+    params: [`${defaultClassNamePrefix}-params`],
+};
 
 const defaultButtons = [
     {
@@ -59,7 +59,13 @@ const defaultButtons = [
         button: 'fullscreen',
         hotkey: 'ctrl+f',
     }
-]
+];
+
+const defaultWarnings = {
+    autosave: {
+        id: '# OH-MD: Textarea element doesn\'t contain id or name attribute. Autosave will not work correctly',
+    },
+};
 
 export default {
     defaultClassNamePrefix,
@@ -67,4 +73,5 @@ export default {
     defaultTheme,
     defaultClasses,
     defaultButtons,
+    defaultWarnings,
 }
