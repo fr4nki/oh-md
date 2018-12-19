@@ -11,59 +11,120 @@ const defaultClasses = {
     container: [defaultClassNamePrefix],
     area: [`${defaultClassNamePrefix}-area`],
     controls: [`${defaultClassNamePrefix}-controls`],
-    button: [`${defaultClassNamePrefix}-buttons`],
     params: [`${defaultClassNamePrefix}-params`],
 };
 
-const defaultButtons = [
+const defaultControls = [
     {
+        type: 'button',
         button: 'heading',
-        hotkey: 'ctrl+h',
+        hotkey: {
+            win: 'ctrl+h',
+            osx: 'cmd+h',
+        },
     },
     {
+        type: 'button',
         button: 'bold',
-        hotkey: 'ctrl+b',
+        hotkey: {
+            win: 'ctrl+b',
+            osx: 'cmd+b',
+        },
     },
     {
+        type: 'button',
         button: 'italic',
-        hotkey: 'ctrl+i',
+        hotkey: {
+            win: 'ctrl+i',
+            osx: 'cmd+i',
+        },
     },
-    { separator: true },
     {
+        type: 'separator',
+        separator: true,
+    },
+    {
+        type: 'button',
         button: 'ordered_list',
-        hotkey: 'ctrl+o',
+        hotkey: {
+            win: 'ctrl+o',
+            osx: 'cmd+o',
+        },
     },
     {
+        type: 'button',
         button: 'unordered_list',
-        hotkey: 'ctrl+u',
+        hotkey: {
+            win: 'ctrl+u',
+            osx: 'cmd+u',
+        },
     },
-    { separator: true },
     {
+        type: 'separator',
+        separator: true,
+    },
+    {
+        type: 'button',
         button: 'quote',
-        hotkey: 'ctrl+q',
+        hotkey: {
+            win: 'ctrl+q',
+            osx: 'cmd+q',
+        },
     },
     {
+        type: 'button',
         button: 'link',
-        hotkey: 'ctrl+l',
+        hotkey: {
+            win: 'ctrl+l',
+            osx: 'cmd+l',
+        },
     },
     {
+        type: 'button',
         button: 'image',
-        hotkey: 'ctrl+i',
+        hotkey: {
+            win: 'ctrl+g',
+            osx: 'cmd+g',
+        },
     },
-    { separator: true },
     {
+        type: 'separator',
+        separator: true,
+    },
+    {
+        type: 'button',
         button: 'preview',
-        hotkey: 'ctrl+p',
+        hotkey: {
+            win: 'ctrl+p',
+            osx: 'cmd+p',
+        },
     },
     {
+        type: 'button',
         button: 'fullscreen',
-        hotkey: 'ctrl+f',
+        hotkey: {
+            win: 'ctrl+f',
+            osx: 'cmd+f',
+        },
     }
 ];
 
+const defaultLayout = [
+    'controls',
+    'area',
+    'params',
+];
+
 const defaultWarnings = {
-    autosave: {
-        id: '# OH-MD: Textarea element doesn\'t contain id or name attribute. Autosave will not work correctly',
+    params: {
+        autosave: {
+            id: 'Textarea element doesn\'t contain id or name attribute. Autosave will not work.',
+        },
+    },
+    controls: {
+        buttons: {
+            notExists: 'Button is not exists',
+        },
     },
 };
 
@@ -72,6 +133,7 @@ export default {
     defaultParams,
     defaultTheme,
     defaultClasses,
-    defaultButtons,
+    defaultControls,
     defaultWarnings,
+    defaultLayout,
 }

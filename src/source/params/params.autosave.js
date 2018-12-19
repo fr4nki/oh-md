@@ -25,10 +25,11 @@ class Autosave {
     }
 
     _saveText() {
+        const { params } = EditorSettings.defaultClasses;
         const { value } = this.textarea;
         const hash = this._getTextareaHash();
 
-        this.element.classList.add('active');
+        this.element.classList.add(`${params}--autosave__saved`);
         window.localStorage[hash] = value;
 
         setTimeout(() => {
@@ -38,18 +39,19 @@ class Autosave {
 
     init() {
         const { defaultWarnings, defaultClasses } = EditorSettings
+        const { createElement, log } = EditorUtils;
         const { params } = defaultClasses;
-        const { id: idWarning } = defaultWarnings.autosave;
+        const { id: idWarning } = defaultWarnings.params.autosave;
         const { autosave } = this.settings;
         const id = this.textarea.id || this.textarea.name || null;
 
         if (!autosave) return;
         if (!id) {
-            console.warn(idWarning, this.textarea);
+            log(idWarning, 'warn', [this.textarea]);
             return;
         }
 
-        this.element = EditorUtils.createElement(
+        this.element = createElement(
             'p',
             [`${params}--autosave`]
         );
@@ -66,4 +68,4 @@ class Autosave {
     }
 }
 
-export default Autosave
+export default Autosave;

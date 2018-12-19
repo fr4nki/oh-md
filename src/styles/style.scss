@@ -14,3 +14,12 @@ $__mdClass: 'oh-md';
         box-sizing: border-box;
     }
 }
+
+.#{$__mdClass}-controls {
+    &--button {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: blue;
+    }
+}

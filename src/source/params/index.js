@@ -1,5 +1,5 @@
-import Autosave from './params_autosave';
-import Counter from './params_counter';
+import Autosave from './params.autosave';
+import Counter from './params.counter';
 
 export default {
     Autosave,

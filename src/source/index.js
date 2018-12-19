@@ -1,4 +1,4 @@
-// import EditorButtons from './buttons/index';
+import EditorControls from './controls/index';
 import EditorParams from './params/index';
 import EditorSettings from './settings';
 import EditorUtils from './utils';
@@ -17,64 +17,94 @@ export default class Editor {
     _setSettings() {
         const params = Object.assign(EditorSettings.defaultParams, this.settings.params || {});
         const theme = this.settings.theme || EditorSettings.defaultTheme;
-        const buttons = this.settings.buttons || EditorSettings.defaultButtons;
+        const controls = this.settings.controls || EditorSettings.defaultControls;
         const classes = EditorSettings.defaultClasses;
+        const layout = Object.assign(EditorSettings.defaultLayout, this.settings.layout || []);
 
         Object.keys(this.settings.classes).forEach(c => {
             classes[c].push(this.settings.classes[c].join(' '))
         });
 
-        this.settings = { theme, params, buttons, classes };
+        this.settings = { theme, params, controls, classes, layout };
     }
 
     _makeLayout() {
-        const clone = this.element.cloneNode(true);
-        const area = EditorUtils.createElement(
-            'div',
-            [...this.settings.classes.area]
-        );
+        const { element, settings } = this;
+        const { layout, classes } = settings;
+        const { createElement } = EditorUtils;
+        const clone = element.cloneNode(true);
 
         this.container = EditorUtils.createElement(
             'section',
             [...this.settings.classes.container, this.settings.theme]
         );
 
-        this.container.appendChild(clone);
-
         this.element.parentElement.insertBefore(this.container, this.element);
         this.element.parentElement.removeChild(this.element);
         this.element = clone
-        area.appendChild(this.element);
-        this.container.appendChild(area);
+        this.element.classList.add(`${classes.area}--text`)
+
+        layout.forEach((layoutItem) => {
+            this[layoutItem] = createElement(
+                'div',
+                [...classes[layoutItem]],
+            );
+
+            this.container.appendChild(this[layoutItem]);
+        });
+
+        if (this.area) {
+            this.area.appendChild(this.element);
+        }
     }
 
-    _makeButtons() {
-        this.controls = EditorUtils.createElement(
-            'div',
-            [...this.settings.classes.controls]
-        );
+    _makeControls() {
+        const { capitalize, log } = EditorUtils;
+        const { notExists } = EditorSettings.defaultWarnings.controls.buttons;
+        const { element, controls: container, settings } = this;
+        const { controls: settingsControls } = settings;
 
-        this.container.insertBefore(this.controls, this.element.parentElement);
+        if (!settingsControls.length || !this.controls) return;
+
+        settingsControls.forEach((control) => {
+            const settings = control;
+
+            const args = [
+                element,
+                container,
+                settings,
+            ];
+
+            if (control.type === 'separator') {
+                new EditorControls.Separator(...args).init();
+            } else
+            if (control.type === 'button') {
+                const callee = capitalize(control.button);
+
+                if (
+                    EditorControls[callee] &&
+                    EditorControls[callee] instanceof Function
+                ) {
+                    new EditorControls[callee](...args).init();
+                } else {
+                    log(notExists, 'warn', [`"${callee}"`]);
+                }
+            }
+        })
     }
 
     _makeParams() {
-        const { capitalize, createElement } = EditorUtils;
-        const { params } = this.settings;
+        const { capitalize } = EditorUtils;
+        const { element, params: container, settings } = this;
+        const { params } = settings;
         const paramsTypes = Object.keys(params);
 
-        if (!paramsTypes.length) return;
+        if (!paramsTypes.length || !this.params) return;
 
-        this.params = createElement(
-            'div',
-            [...this.settings.classes.params]
-        );
-        this.container.appendChild(this.params);
-
-        paramsTypes.forEach((t) => {
-            const { element, params: container } = this;
-            const key = capitalize(t);
+        paramsTypes.forEach((type) => {
+            const key = capitalize(type);
             const settings = {
-                [t]: params[t],
+                [type]: params[type],
             };
 
             const args = [
@@ -83,14 +113,19 @@ export default class Editor {
                 settings,
             ];
 
-            new EditorParams[key](...args).init();
+            if (
+                EditorParams[key] &&
+                EditorParams[key] instanceof Function
+            ) {
+                new EditorParams[key](...args).init();
+            }
         })
     }
 
     init() {
         this._setSettings();
         this._makeLayout();
+        this._makeControls();
         this._makeParams();
-        this._makeButtons();
     }
 }

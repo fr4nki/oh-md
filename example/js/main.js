@@ -8,6 +8,6 @@ import Editor from '../../src/source/index';
         },
         classes: {
             container: ['ololo'],
-        }
+        },
     }).init());
 }())
