@@ -14,4 +14,22 @@ const log = (text, type, args) => {
     console[type](`${prefix}${text}`, ...args);
 }
 
-export default { createElement, capitalize, log }
+const detectOs = () => {
+    const platform = window.navigator.platform.toLowerCase();
+
+    if (platform.includes('win')) {
+        return 'win'
+    } else
+    if (platform.includes('mac')) {
+        return 'mac'
+    } else {
+        return 'other'
+    }
+}
+
+export default {
+    createElement,
+    capitalize,
+    log,
+    detectOs,
+}

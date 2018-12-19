@@ -15,6 +15,8 @@ export default class Editor {
     }
 
     _setSettings() {
+        // TODO: нормализовывать хоткеи
+
         const params = Object.assign(EditorSettings.defaultParams, this.settings.params || {});
         const theme = this.settings.theme || EditorSettings.defaultTheme;
         const controls = this.settings.controls || EditorSettings.defaultControls;
@@ -80,6 +82,8 @@ export default class Editor {
             } else
             if (control.type === 'button') {
                 const callee = capitalize(control.button);
+
+                console.log(args);
 
                 if (
                     EditorControls[callee] &&

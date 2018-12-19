@@ -19,92 +19,149 @@ const defaultControls = [
         type: 'button',
         button: 'heading',
         hotkey: {
-            win: 'ctrl+h',
-            osx: 'cmd+h',
+            win: {
+                modificator: 'ctrlKey',
+                key: 'h',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'h',
+            }
         },
     },
     {
         type: 'button',
         button: 'bold',
         hotkey: {
-            win: 'ctrl+b',
-            osx: 'cmd+b',
+            win: {
+                modificator: 'ctrlKey',
+                key: 'b',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'b',
+            }
         },
     },
     {
         type: 'button',
         button: 'italic',
         hotkey: {
-            win: 'ctrl+i',
-            osx: 'cmd+i',
+            win: {
+                modificator: 'ctrlKey',
+                key: 'i',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'i',
+            }
         },
     },
     {
         type: 'separator',
-        separator: true,
     },
     {
         type: 'button',
         button: 'ordered_list',
         hotkey: {
-            win: 'ctrl+o',
-            osx: 'cmd+o',
+            win: {
+                modificator: 'ctrlKey',
+                key: 'o',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'o',
+            }
         },
     },
     {
         type: 'button',
         button: 'unordered_list',
         hotkey: {
-            win: 'ctrl+u',
-            osx: 'cmd+u',
+            win: {
+                modificator: 'ctrlKey',
+                key: 'u',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'u',
+            }
         },
     },
     {
         type: 'separator',
-        separator: true,
     },
     {
         type: 'button',
         button: 'quote',
         hotkey: {
-            win: 'ctrl+q',
-            osx: 'cmd+q',
+            win: {
+                modificator: 'ctrlKey',
+                key: 'q',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'q',
+            }
         },
     },
     {
         type: 'button',
         button: 'link',
         hotkey: {
-            win: 'ctrl+l',
-            osx: 'cmd+l',
+            win: {
+                modificator: 'ctrlKey',
+                key: 'l',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'l',
+            }
         },
     },
     {
         type: 'button',
         button: 'image',
         hotkey: {
-            win: 'ctrl+g',
-            osx: 'cmd+g',
+            win: {
+                modificator: 'ctrlKey',
+                key: 'g',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'g',
+            }
         },
     },
     {
         type: 'separator',
-        separator: true,
     },
     {
         type: 'button',
         button: 'preview',
         hotkey: {
-            win: 'ctrl+p',
-            osx: 'cmd+p',
+            win: {
+                modificator: 'ctrlKey',
+                key: 'p',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'p',
+            }
         },
     },
     {
         type: 'button',
         button: 'fullscreen',
         hotkey: {
-            win: 'ctrl+f',
-            osx: 'cmd+f',
+            win: {
+                modificator: 'ctrlKey',
+                key: 'f',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'f',
+            }
         },
     }
 ];
@@ -124,6 +181,7 @@ const defaultWarnings = {
     controls: {
         buttons: {
             notExists: 'Button is not exists',
+            hotkeyWrong: 'Check your "hotkey" in settings. Seems it\'s wrong.'
         },
     },
 };
