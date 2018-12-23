@@ -1,8 +1,9 @@
-const defaultClassNamePrefix = 'oh-md'
+const defaultClassNamePrefix = 'oh-md';
 
 const defaultParams = {
     autosave: 0,
     counter: true,
+    wordwrap: false,
 };
 
 const defaultTheme = `${defaultClassNamePrefix}-theme-default`;

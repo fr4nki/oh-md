@@ -12,16 +12,14 @@ class Autosave {
     _getTextareaHash() {
         const { URL: url } = window.document;
         const { id } = this.settings;
-        const separator = '|||||'
+        const separator = '|||||';
 
         return `${url}${separator}${id}`;
     }
 
     _fillTextArea() {
         const hash = this._getTextareaHash();
-        const value = window.localStorage[hash] || '';
-
-        this.textarea.value = value;
+        this.textarea.value =  window.localStorage[hash] || '';
     }
 
     _saveText() {

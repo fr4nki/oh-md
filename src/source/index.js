@@ -9,8 +9,6 @@ export default class Editor {
         this.container = null;
         this.controls = null;
         this.params = null;
-        this.autosaveBlock = null;
-        this.counterBlock = null;
         this.settings = settings || {};
     }
 
@@ -31,9 +29,9 @@ export default class Editor {
     }
 
     _makeLayout() {
-        const { element, settings } = this;
-        const { layout, classes } = settings;
-        const { createElement } = EditorUtils;
+        const {element, settings} = this;
+        const {layout, classes} = settings;
+        const {createElement} = EditorUtils;
         const clone = element.cloneNode(true);
 
         this.container = EditorUtils.createElement(
@@ -43,8 +41,8 @@ export default class Editor {
 
         this.element.parentElement.insertBefore(this.container, this.element);
         this.element.parentElement.removeChild(this.element);
-        this.element = clone
-        this.element.classList.add(`${classes.area}--text`)
+        this.element = clone;
+        this.element.classList.add(`${classes.area}--text`);
 
         layout.forEach((layoutItem) => {
             this[layoutItem] = createElement(
@@ -68,20 +66,18 @@ export default class Editor {
 
         if (!settingsControls.length || !this.controls) return;
 
-        settingsControls.forEach((control) => {
-            const settings = control;
-
+        settingsControls.forEach((settings) => {
             const args = [
                 element,
                 container,
                 settings,
             ];
 
-            if (control.type === 'separator') {
+            if (settings.type === 'separator') {
                 new EditorControls.Separator(...args).init();
             } else
-            if (control.type === 'button') {
-                const callee = capitalize(control.button);
+            if (settings.type === 'button') {
+                const callee = capitalize(settings.button);
 
                 console.log(args);
 
@@ -98,13 +94,14 @@ export default class Editor {
     }
 
     _makeParams() {
-        const { capitalize } = EditorUtils;
-        const { element, params: container, settings } = this;
-        const { params } = settings;
+        const {capitalize} = EditorUtils;
+        const {element, params: container, settings} = this;
+        const {params} = settings;
         const paramsTypes = Object.keys(params);
 
         if (!paramsTypes.length || !this.params) return;
 
+        console.log(settings, paramsTypes);
         paramsTypes.forEach((type) => {
             const key = capitalize(type);
             const settings = {

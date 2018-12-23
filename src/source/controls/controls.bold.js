@@ -11,25 +11,57 @@ class Bold {
     }
 
     _settingsNormalize() {
-        const { log, detectOs } = EditorUtils
-        const { buttons } = EditorSettings.defaultWarnings.controls
+        const {log, detectOs} = EditorUtils;
+        const {buttons} = EditorSettings.defaultWarnings.controls;
         const os = detectOs();
-        const { hotkey } = this.settings;
+        const {hotkey} = this.settings;
         const currentHotkeys = hotkey[os];
 
         if (
             !currentHotkeys.modificator ||
             !currentHotkeys.key
         ) {
-            log(buttons.hotkey.hotkeyWrong, 'warn')
+            log(buttons.hotkey.hotkeyWrong, 'warn');
         }
 
         this.settings.hotkey = currentHotkeys
     }
 
-    _click(e) {
-        e.preventDefault();
-        console.log('click');
+    _insertTag() {
+        const {textarea} = this;
+        const {selectionStart, selectionEnd} = textarea;
+
+        if (selectionStart === selectionEnd) {
+            textarea.value = textarea.value.slice(0, selectionStart) +
+                Bold.mdTag + Bold.mdTag +
+                textarea.value.slice(selectionStart);
+
+            textarea.focus();
+            textarea.setSelectionRange(selectionStart + Bold.mdTag.length, selectionStart + Bold.mdTag.length);
+        } else {
+            const selection = textarea.value.slice(selectionStart, selectionEnd);
+
+            if (
+                selection.slice(0, Bold.mdTag.length) === Bold.mdTag &&
+                selection.slice(selection.length - Bold.mdTag.length) === Bold.mdTag
+            ) {
+                textarea.value = textarea.value.slice(0, selectionStart) +
+                    selection.slice(Bold.mdTag.length, selection.length - Bold.mdTag.length) +
+                    textarea.value.slice(selectionEnd);
+
+                textarea.focus();
+                textarea.setSelectionRange(selectionStart, selectionEnd - Bold.mdTag.length * 2);
+            } else {
+                textarea.value = textarea.value.slice(0, selectionStart) +
+                    Bold.mdTag +
+                    textarea.value.slice(selectionStart, selectionEnd) +
+                    Bold.mdTag +
+                    textarea.value.slice(selectionEnd);
+
+                textarea.focus();
+                textarea.setSelectionRange(selectionStart, selectionEnd + Bold.mdTag.length * 2);
+            }
+        }
     }
 
     _handle() {
@@ -37,42 +69,19 @@ class Bold {
         window.document.addEventListener('keydown', this._keydown.bind(this));
     }
 
+    _click(e) {
+        e.preventDefault();
+        this._insertTag();
+    }
+
     _keydown(e) {
-        const { hotkey } = this.settings;
+        const {hotkey} = this.settings;
 
-        if (window.document.activeElement === this.textarea) {
-            if (e[hotkey.modificator] && e.key === hotkey.key) {
-                // TODO: Перетащить в класс Controls. И отрефачить
-                const { textarea: a } = this;
-                const { selectionStart, selectionEnd } = a;
-
-                if (selectionStart === selectionEnd) {
-                    a.value = a.value.slice(0, selectionStart) + Bold.mdTag + a.value.slice(selectionStart);
-                    a.setSelectionRange(selectionStart, selectionEnd);
-                } else {
-                    const selection = a.value.slice(selectionStart, selectionEnd);
-
-                    if (
-                        selection.slice(0, Bold.mdTag.length) === Bold.mdTag &&
-                        selection.slice(selection.length - 2) === Bold.mdTag
-                    ) {
-                        a.value = a.value.slice(0, selectionStart) +
-                            selection.slice(Bold.mdTag.length, selection.length - Bold.mdTag.length) +
-                            a.value.slice(selectionEnd);
-
-                        a.setSelectionRange(selectionStart, selectionEnd - Bold.mdTag.length * 2);
-                    } else {
-                        a.value = a.value.slice(0, selectionStart) +
-                            Bold.mdTag +
-                            a.value.slice(selectionStart, selectionEnd) +
-                            Bold.mdTag +
-                            a.value.slice(selectionEnd);
-
-                        a.setSelectionRange(selectionStart, selectionEnd + Bold.mdTag.length * 2);
-                    }
-                }
-
-            }
+        if (
+            window.document.activeElement === this.textarea &&
+            e[hotkey.modificator] && e.key === hotkey.key
+        ) {
+            this._insertTag();
         }
     }
 
@@ -81,16 +90,16 @@ class Bold {
     }
 
     init() {
-        const { createElement } = EditorUtils;
-        const { controls } = EditorSettings.defaultClasses;
-        const { button } = this.settings;
+        const {createElement} = EditorUtils;
+        const {controls} = EditorSettings.defaultClasses;
+        const {button} = this.settings;
 
         this.button = createElement(
             'a',
             [`${controls}--button`, `${controls}--button__${button.toLowerCase()}`],
-            { href: "#" },
+            {href: "#"},
         );
-        this.button.innerText = button
+        this.button.innerText = button;
         this.container.appendChild(this.button);
 
         this._settingsNormalize();

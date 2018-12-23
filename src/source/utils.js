@@ -5,14 +5,14 @@ const createElement = (el, className = [''], args = {}) => {
     Object.keys(args).forEach(a => e[a] = args[a]);
 
     return e;
-}
+};
 
-const capitalize = str => str[0].toUpperCase() + str.slice(1, str.length)
+const capitalize = str => str[0].toUpperCase() + str.slice(1, str.length);
 
 const log = (text, type, args) => {
     const prefix = '# OH-MD: ';
     console[type](`${prefix}${text}`, ...args);
-}
+};
 
 const detectOs = () => {
     const platform = window.navigator.platform.toLowerCase();
@@ -25,7 +25,7 @@ const detectOs = () => {
     } else {
         return 'other'
     }
-}
+};
 
 export default {
     createElement,
