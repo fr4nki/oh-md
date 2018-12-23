@@ -7,7 +7,7 @@ class Wordwrap {
     }
 
     init() {
-        
+
     }
 }
 
