@@ -2,7 +2,11 @@ import EditorUtils from '../utils';
 import EditorSettings from '../settings';
 
 class Separator {
-    constructor(textarea, container, settings) {
+    textarea: Element;
+    container: Element;
+    settings: object;
+
+    constructor(textarea: Element, container: Element, settings: object) {
         this.textarea = textarea;
         this.container = container;
         this.settings = settings || {};

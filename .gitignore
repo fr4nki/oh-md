@@ -1,7 +1,7 @@
 dist
 .vscode
 .idea
-
+.rpt2_cache
 # Logs
 logs
 *.log

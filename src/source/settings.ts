@@ -27,7 +27,7 @@ const defaultControls = [
             mac: {
                 modificator: 'metaKey',
                 key: 'h',
-            }
+            },
         },
     },
     {
@@ -41,7 +41,7 @@ const defaultControls = [
             mac: {
                 modificator: 'metaKey',
                 key: 'b',
-            }
+            },
         },
     },
     {
@@ -55,7 +55,7 @@ const defaultControls = [
             mac: {
                 modificator: 'metaKey',
                 key: 'i',
-            }
+            },
         },
     },
     {
@@ -72,7 +72,7 @@ const defaultControls = [
             mac: {
                 modificator: 'metaKey',
                 key: 'o',
-            }
+            },
         },
     },
     {
@@ -86,7 +86,7 @@ const defaultControls = [
             mac: {
                 modificator: 'metaKey',
                 key: 'u',
-            }
+            },
         },
     },
     {
@@ -103,7 +103,7 @@ const defaultControls = [
             mac: {
                 modificator: 'metaKey',
                 key: 'q',
-            }
+            },
         },
     },
     {
@@ -117,7 +117,7 @@ const defaultControls = [
             mac: {
                 modificator: 'metaKey',
                 key: 'l',
-            }
+            },
         },
     },
     {
@@ -131,7 +131,7 @@ const defaultControls = [
             mac: {
                 modificator: 'metaKey',
                 key: 'g',
-            }
+            },
         },
     },
     {
@@ -148,7 +148,7 @@ const defaultControls = [
             mac: {
                 modificator: 'metaKey',
                 key: 'p',
-            }
+            },
         },
     },
     {
@@ -162,28 +162,20 @@ const defaultControls = [
             mac: {
                 modificator: 'metaKey',
                 key: 'f',
-            }
-        },
-    }
-];
-
-const defaultLayout = [
-    'controls',
-    'area',
-    'params',
-];
-
-const defaultWarnings = {
-    params: {
-        autosave: {
-            id: 'Textarea element doesn\'t contain id or name attribute. Autosave will not work.',
+            },
         },
     },
+];
+
+const defaultLayout = ['controls', 'area', 'params'];
+
+const defaultWarnings = {
+    autosave: {
+        id: "Textarea element doesn't contain id or name attribute. Autosave will not work.",
+    },
     controls: {
-        buttons: {
-            notExists: 'Button is not exists',
-            hotkeyWrong: 'Check your "hotkey" in settings. Seems it\'s wrong.'
-        },
+        notExists: 'Button is not implemented',
+        hotkeyWrong: 'Check your "hotkey" in settings. Seems it\'s wrong.',
     },
 };
 
@@ -195,4 +187,4 @@ export default {
     defaultControls,
     defaultWarnings,
     defaultLayout,
-}
+};

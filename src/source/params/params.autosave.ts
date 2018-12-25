@@ -1,25 +1,37 @@
 import EditorUtils from '../utils';
 import EditorSettings from '../settings';
 
+import { EditorParamsSettingsInterface } from './paramsInterface';
+
 class Autosave {
-    constructor(textarea, container, settings) {
+    textarea: HTMLTextAreaElement;
+    element: Element;
+    container: Element;
+    settings: EditorParamsSettingsInterface;
+
+    static separator = '|||||';
+
+    constructor(
+        textarea: HTMLTextAreaElement,
+        container: Element,
+        settings: EditorParamsSettingsInterface,
+    ) {
         this.element = null;
         this.textarea = textarea;
         this.container = container;
-        this.settings = settings || {};
+        this.settings = settings;
     }
 
     _getTextareaHash() {
         const { URL: url } = window.document;
         const { id } = this.settings;
-        const separator = '|||||';
 
-        return `${url}${separator}${id}`;
+        return `${url}${Autosave.separator}${id}`;
     }
 
     _fillTextArea() {
         const hash = this._getTextareaHash();
-        this.textarea.value =  window.localStorage[hash] || '';
+        this.textarea.value = window.localStorage[hash] || '';
     }
 
     _saveText() {
@@ -36,33 +48,29 @@ class Autosave {
     }
 
     init() {
-        const { defaultWarnings, defaultClasses } = EditorSettings
+        const { defaultWarnings, defaultClasses } = EditorSettings;
         const { createElement, log } = EditorUtils;
         const { params } = defaultClasses;
-        const { id: idWarning } = defaultWarnings.params.autosave;
+        const { id: idWarning } = defaultWarnings.autosave;
         const { autosave } = this.settings;
         const id = this.textarea.id || this.textarea.name || null;
 
         if (!autosave) return;
         if (!id) {
-            log(idWarning, 'warn', [this.textarea]);
+            log(idWarning, 'warn', [String(this.textarea)]);
             return;
         }
 
-        this.element = createElement(
-            'p',
-            [`${params}--autosave`]
-        );
-        this.element.innerText = 'Saved';
+        this.element = createElement('p', [`${params}--autosave`]);
+        this.element.innerHTML = 'Saved';
         this.container.appendChild(this.element);
         this.settings.id = id;
 
         this._fillTextArea();
 
-        setInterval(
-            () => { this._saveText() },
-            autosave * 1000,
-        );
+        setInterval(() => {
+            this._saveText();
+        }, autosave * 1000);
     }
 }
 

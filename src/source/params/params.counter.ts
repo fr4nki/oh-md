@@ -1,16 +1,27 @@
 import EditorUtils from '../utils';
 import EditorSettings from '../settings';
 
+import { EditorParamsSettingsInterface } from './paramsInterface';
+
 class Counter {
-    constructor(textarea, container, settings) {
+    textarea: HTMLTextAreaElement;
+    element: Element;
+    container: Element;
+    settings: EditorParamsSettingsInterface;
+
+    constructor(
+        textarea: HTMLTextAreaElement,
+        container: Element,
+        settings: EditorParamsSettingsInterface,
+    ) {
         this.element = null;
         this.textarea = textarea;
         this.container = container;
-        this.settings = settings || {};
+        this.settings = settings;
     }
 
     _counterUpdate() {
-        this.element.innerText = this.textarea.value.length;
+        this.element.innerHTML = String(this.textarea.value.length);
     }
 
     _setHandlers() {
