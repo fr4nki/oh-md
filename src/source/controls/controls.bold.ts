@@ -13,7 +13,7 @@ class Bold extends EditorControl {
     settings: EditorControlsSettingsInterface;
 
     private button: Element;
-    private static mdTag = '**';
+    private static mdTag = ['**', '##'];
 
     constructor(
         textarea: HTMLTextAreaElement,
@@ -30,60 +30,7 @@ class Bold extends EditorControl {
     }
 
     private insertTag(): void {
-        const { textarea } = this;
-        const { selectionStart, selectionEnd } = textarea;
-
-        if (selectionStart === selectionEnd) {
-            textarea.value =
-                textarea.value.slice(0, selectionStart) +
-                Bold.mdTag +
-                Bold.mdTag +
-                textarea.value.slice(selectionStart);
-
-            textarea.focus();
-            textarea.setSelectionRange(
-                selectionStart + Bold.mdTag.length,
-                selectionStart + Bold.mdTag.length
-            );
-        } else {
-            const selection = textarea.value.slice(
-                selectionStart,
-                selectionEnd
-            );
-
-            if (
-                selection.slice(0, Bold.mdTag.length) === Bold.mdTag &&
-                selection.slice(selection.length - Bold.mdTag.length) ===
-                    Bold.mdTag
-            ) {
-                textarea.value =
-                    textarea.value.slice(0, selectionStart) +
-                    selection.slice(
-                        Bold.mdTag.length,
-                        selection.length - Bold.mdTag.length
-                    ) +
-                    textarea.value.slice(selectionEnd);
-
-                textarea.focus();
-                textarea.setSelectionRange(
-                    selectionStart,
-                    selectionEnd - Bold.mdTag.length * 2
-                );
-            } else {
-                textarea.value =
-                    textarea.value.slice(0, selectionStart) +
-                    Bold.mdTag +
-                    textarea.value.slice(selectionStart, selectionEnd) +
-                    Bold.mdTag +
-                    textarea.value.slice(selectionEnd);
-
-                textarea.focus();
-                textarea.setSelectionRange(
-                    selectionStart,
-                    selectionEnd + Bold.mdTag.length * 2
-                );
-            }
-        }
+        super.insertTagInto(Bold.mdTag);
     }
 
     private handle(): void {
@@ -93,7 +40,7 @@ class Bold extends EditorControl {
             hotkey,
         };
 
-        this.addHandler(argument);
+        super.addHandler(argument);
         this.button.addEventListener('click', this.click.bind(this));
     }
 
