@@ -5,10 +5,10 @@ import { EditorParamsSettingsInterface } from './paramsInterface';
 
 class Autosave {
     textarea: HTMLTextAreaElement;
-    element: Element;
     container: Element;
     settings: EditorParamsSettingsInterface;
 
+    private element: Element;
     static separator = '|||||';
 
     constructor(
@@ -38,12 +38,13 @@ class Autosave {
         const { params } = EditorSettings.defaultClasses;
         const { value } = this.textarea;
         const hash = this._getTextareaHash();
+        const activeClass = `${params}--autosave__saved`
 
-        this.element.classList.add(`${params}--autosave__saved`);
+        this.element.classList.add(activeClass);
         window.localStorage[hash] = value;
 
         setTimeout(() => {
-            this.element.classList.remove('active');
+            this.element.classList.remove(activeClass);
         }, 2000);
     }
 
@@ -61,7 +62,10 @@ class Autosave {
             return;
         }
 
-        this.element = createElement('p', [`${params}--autosave`]);
+        this.element = createElement(
+            'p',
+            [`${params}--autosave`]
+        );
         this.element.innerHTML = 'Saved';
         this.container.appendChild(this.element);
         this.settings.id = id;

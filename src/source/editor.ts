@@ -6,7 +6,7 @@ import EditorUtils from './utils';
 import { EditorInterface, EditorSettingsInterface } from './editorInterface';
 
 class Editor implements EditorInterface {
-    element: Element;
+    element: HTMLTextAreaElement;
     settings: EditorSettingsInterface;
 
     private container: null | Element;
@@ -14,7 +14,7 @@ class Editor implements EditorInterface {
     private params: null | Element;
     private area: null | Element;
 
-    constructor(element: Element, settings: EditorSettingsInterface) {
+    constructor(element: HTMLTextAreaElement, settings: EditorSettingsInterface) {
         this.settings = settings;
         this.element = element;
 
@@ -30,7 +30,8 @@ class Editor implements EditorInterface {
             this.settings.params || {}
         );
         const theme = this.settings.theme || EditorSettings.defaultTheme;
-        const controls = this.settings.controls || EditorSettings.defaultControls;
+        const controls =
+            this.settings.controls || EditorSettings.defaultControls;
         const classes = EditorSettings.defaultClasses;
         const layout = Object.assign(
             EditorSettings.defaultLayout,
@@ -57,7 +58,7 @@ class Editor implements EditorInterface {
 
         this.element.parentElement.insertBefore(this.container, this.element);
         this.element.parentElement.removeChild(this.element);
-        this.element = <Element>clone;
+        this.element = <HTMLTextAreaElement>clone;
         this.element.classList.add(`${classes.area}--text`);
 
         layout.forEach((layoutItem) => {
@@ -79,29 +80,19 @@ class Editor implements EditorInterface {
         if (!settingsControls.length || !this.controls) return;
 
         settingsControls.forEach((settings) => {
-            if (settings.type === 'separator') {
-                new EditorControls.Separator(
-                    element,
-                    container,
-                    settings
-                ).init();
-            } else if (settings.type === 'button') {
-                const callee = capitalize(settings.button);
+            const callee = capitalize(settings.control);
 
-                if (
-                    EditorControls[callee] &&
-                    EditorControls[callee] instanceof Function
-                ) {
-                    new EditorControls[callee](
-                        element,
-                        container,
-                        settings
-                    ).init();
-                } else {
-                    log(notExists, 'warn', [`"${callee}"`]);
-                }
+            if (
+                EditorControls[callee] &&
+                EditorControls[callee] instanceof Function
+            ) {
+                new EditorControls[callee](element, container, settings).init();
+            } else {
+                log(notExists, 'warn', [`"${callee}"`]);
             }
         });
+
+        new EditorControls.Controls(element).init();
     }
 
     private makeParams(): void {
@@ -122,6 +113,10 @@ class Editor implements EditorInterface {
                 new EditorParams[key](element, container, settings).init();
             }
         });
+    }
+
+    public getContent() {
+        return this;
     }
 
     public init(): void {

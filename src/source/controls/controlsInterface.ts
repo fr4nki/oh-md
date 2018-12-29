@@ -4,11 +4,15 @@ interface EditorControlsHotkeyInterface {
 }
 
 export interface EditorControlsSettingsInterface {
-    type: string;
-    button?: string;
+    control?: string;
     hotkey?: {
         win?: EditorControlsHotkeyInterface;
         mac?: EditorControlsHotkeyInterface;
     };
     hotkeyCurrent?: EditorControlsHotkeyInterface;
+}
+
+export interface EditorControlsBinderInterface {
+    callback: Function;
+    hotkey: EditorControlsHotkeyInterface;
 }

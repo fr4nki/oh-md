@@ -12,7 +12,7 @@ class Separator {
         this.settings = settings || {};
     }
 
-    init() {
+    public init(): void {
         const { controls } = EditorSettings.defaultClasses;
         const { createElement } = EditorUtils;
         const element = createElement(

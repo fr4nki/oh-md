@@ -1,42 +1,35 @@
+import EditorControl from './controls';
 import EditorUtils from '../utils';
 import EditorSettings from '../settings';
 
-import { EditorControlsSettingsInterface } from './controlsInterface';
+import {
+    EditorControlsSettingsInterface,
+    EditorControlsBinderInterface,
+} from './controlsInterface';
 
-class Bold {
+class Bold extends EditorControl {
     textarea: HTMLTextAreaElement;
-    button: Element;
     container: Element;
     settings: EditorControlsSettingsInterface;
 
-    static mdTag = '**';
+    private button: Element;
+    private static mdTag = '**';
 
     constructor(
         textarea: HTMLTextAreaElement,
         container: Element,
-        settings: EditorControlsSettingsInterface,
+        settings: EditorControlsSettingsInterface
     ) {
+        super(textarea);
+
         this.textarea = textarea;
         this.container = container;
         this.settings = settings;
+
         this.button = undefined;
     }
 
-    _settingsNormalize() {
-        const { log, detectOs } = EditorUtils;
-        const { hotkeyWrong } = EditorSettings.defaultWarnings.controls;
-        const os = detectOs();
-        const { hotkey } = this.settings;
-        const currentHotkeys = hotkey[os];
-
-        if (!currentHotkeys.modificator || !currentHotkeys.key) {
-            log(hotkeyWrong, 'warn', null);
-        }
-
-        this.settings.hotkeyCurrent = currentHotkeys;
-    }
-
-    _insertTag() {
+    private insertTag(): void {
         const { textarea } = this;
         const { selectionStart, selectionEnd } = textarea;
 
@@ -93,46 +86,30 @@ class Bold {
         }
     }
 
-    _handle() {
-        this.button.addEventListener('click', this._click.bind(this));
-        window.document.addEventListener('keydown', this._keydown.bind(this));
+    private handle(): void {
+        const { hotkeyCurrent: hotkey } = this.settings;
+        const argument: EditorControlsBinderInterface = {
+            callback: this.insertTag.bind(this),
+            hotkey,
+        };
+
+        this.addHandler(argument);
+        this.button.addEventListener('click', this.click.bind(this));
     }
 
-    _click(e) {
+    private click(e: MouseEvent): void {
         e.preventDefault();
-        this._insertTag();
+        this.insertTag();
     }
 
-    _keydown(e) {
-        const { hotkeyCurrent } = this.settings;
+    public init(): void {
+        const { control, hotkey } = this.settings;
 
-        if (
-            window.document.activeElement === this.textarea &&
-            e[hotkeyCurrent.modificator] &&
-            e.key === hotkeyCurrent.key
-        ) {
-            this._insertTag();
-        }
-    }
-
-    init() {
-        const { createElement } = EditorUtils;
-        const { controls } = EditorSettings.defaultClasses;
-        const { button } = this.settings;
-
-        this.button = createElement(
-            'a',
-            [
-                `${controls}--button`,
-                `${controls}--button__${button.toLowerCase()}`,
-            ],
-            { href: '#' }
-        );
-        this.button.innerHTML = button;
+        this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
+        this.button = super.generateElement(control);
         this.container.appendChild(this.button);
 
-        this._settingsNormalize();
-        this._handle();
+        this.handle();
     }
 }
 

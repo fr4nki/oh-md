@@ -5,9 +5,10 @@ import { EditorParamsSettingsInterface } from './paramsInterface';
 
 class Counter {
     textarea: HTMLTextAreaElement;
-    element: Element;
     container: Element;
     settings: EditorParamsSettingsInterface;
+
+    private element: Element;
 
     constructor(
         textarea: HTMLTextAreaElement,
@@ -26,13 +27,9 @@ class Counter {
 
     _setHandlers() {
         document.addEventListener('DOMContentLoaded', () => {
-            this.textarea.addEventListener('input', () => {
-                this._counterUpdate();
-            });
-
+            this.textarea.addEventListener('input', this._counterUpdate.bind(this));
             this._counterUpdate();
         });
-
     }
 
     init() {

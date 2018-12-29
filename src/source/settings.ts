@@ -3,7 +3,10 @@ const defaultClassNamePrefix = 'oh-md';
 const defaultParams = {
     autosave: 0,
     counter: true,
-    wordwrap: false,
+    wordwrap: {
+        paramVisible: true,
+        active: true,
+    },
 };
 
 const defaultTheme = `${defaultClassNamePrefix}-theme-default`;
@@ -17,8 +20,7 @@ const defaultClasses = {
 
 const defaultControls = [
     {
-        type: 'button',
-        button: 'heading',
+        control: 'heading',
         hotkey: {
             win: {
                 modificator: 'ctrlKey',
@@ -31,8 +33,7 @@ const defaultControls = [
         },
     },
     {
-        type: 'button',
-        button: 'bold',
+        control: 'bold',
         hotkey: {
             win: {
                 modificator: 'ctrlKey',
@@ -45,8 +46,7 @@ const defaultControls = [
         },
     },
     {
-        type: 'button',
-        button: 'italic',
+        control: 'italic',
         hotkey: {
             win: {
                 modificator: 'ctrlKey',
@@ -59,11 +59,10 @@ const defaultControls = [
         },
     },
     {
-        type: 'separator',
+        control: 'separator',
     },
     {
-        type: 'button',
-        button: 'ordered_list',
+        control: 'ordered_list',
         hotkey: {
             win: {
                 modificator: 'ctrlKey',
@@ -76,8 +75,7 @@ const defaultControls = [
         },
     },
     {
-        type: 'button',
-        button: 'unordered_list',
+        control: 'unordered_list',
         hotkey: {
             win: {
                 modificator: 'ctrlKey',
@@ -90,11 +88,10 @@ const defaultControls = [
         },
     },
     {
-        type: 'separator',
+        control: 'separator',
     },
     {
-        type: 'button',
-        button: 'quote',
+        control: 'quote',
         hotkey: {
             win: {
                 modificator: 'ctrlKey',
@@ -107,8 +104,7 @@ const defaultControls = [
         },
     },
     {
-        type: 'button',
-        button: 'link',
+        control: 'link',
         hotkey: {
             win: {
                 modificator: 'ctrlKey',
@@ -121,8 +117,7 @@ const defaultControls = [
         },
     },
     {
-        type: 'button',
-        button: 'image',
+        control: 'image',
         hotkey: {
             win: {
                 modificator: 'ctrlKey',
@@ -135,11 +130,10 @@ const defaultControls = [
         },
     },
     {
-        type: 'separator',
+        control: 'separator',
     },
     {
-        type: 'button',
-        button: 'preview',
+        control: 'preview',
         hotkey: {
             win: {
                 modificator: 'ctrlKey',
@@ -152,8 +146,7 @@ const defaultControls = [
         },
     },
     {
-        type: 'button',
-        button: 'fullscreen',
+        control: 'fullscreen',
         hotkey: {
             win: {
                 modificator: 'ctrlKey',

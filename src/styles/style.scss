@@ -23,3 +23,12 @@ $__mdClass: 'oh-md';
         background: blue;
     }
 }
+
+.#{$__mdClass}-params {
+    &--wordwrap {
+        width: 44px;
+        height: 44px;
+        display: block;
+        background: yellow;
+    }
+}
