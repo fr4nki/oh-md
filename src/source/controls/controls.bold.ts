@@ -13,7 +13,7 @@ class Bold extends EditorControl {
     settings: EditorControlsSettingsInterface;
 
     private button: Element;
-    private static mdTag = ['**', '##'];
+    private static mdTag = ['**', '**'];
 
     constructor(
         textarea: HTMLTextAreaElement,
