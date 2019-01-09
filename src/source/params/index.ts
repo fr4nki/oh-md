@@ -5,5 +5,5 @@ import Wordwrap from './params.wordwrap';
 export default {
     Autosave,
     Counter,
-    Wordwrap,
-}
+    Wordwrap
+};

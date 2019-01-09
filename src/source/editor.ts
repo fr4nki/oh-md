@@ -10,11 +10,21 @@ class Editor implements EditorInterface {
     settings: EditorSettingsInterface;
 
     private container: null | Element;
-    private controls: null | Element;
-    private params: null | Element;
-    private area: null | Element;
+    readonly controls: null | Element;
+    readonly params: null | Element;
+    readonly area: null | Element;
 
-    constructor(element: HTMLTextAreaElement, settings: EditorSettingsInterface) {
+    private static textareaParams = {
+        autocomplete: 'off',
+        autocorrect: 'off',
+        autocapitalize: 'off',
+        spellcheck: 'false',
+    };
+
+    constructor(
+        element: HTMLTextAreaElement,
+        settings: EditorSettingsInterface
+    ) {
         this.settings = settings;
         this.element = element;
 
@@ -46,10 +56,10 @@ class Editor implements EditorInterface {
     }
 
     private makeLayout(): void {
-        const { element, settings } = this;
-        const { layout, classes } = settings;
+        const { layout, classes } = this.settings;
         const { createElement } = EditorUtils;
-        const clone = element.cloneNode(true);
+        const clone = this.element.cloneNode(true);
+        const textareaParamsKeys = Object.keys(Editor.textareaParams);
 
         this.container = EditorUtils.createElement('section', [
             ...this.settings.classes.container,
@@ -60,6 +70,10 @@ class Editor implements EditorInterface {
         this.element.parentElement.removeChild(this.element);
         this.element = <HTMLTextAreaElement>clone;
         this.element.classList.add(`${classes.area}--text`);
+
+        textareaParamsKeys.forEach((k) => {
+            this.element.setAttribute(k, Editor.textareaParams[k]);
+        });
 
         layout.forEach((layoutItem) => {
             this[layoutItem] = createElement('div', [...classes[layoutItem]]);
@@ -74,8 +88,7 @@ class Editor implements EditorInterface {
     private makeControls(): void {
         const { capitalize, log } = EditorUtils;
         const { notExists } = EditorSettings.defaultWarnings.controls;
-        const { element, controls: container, settings } = this;
-        const { controls: settingsControls } = settings;
+        const { controls: settingsControls } = this.settings;
 
         if (!settingsControls.length || !this.controls) return;
 
@@ -86,19 +99,18 @@ class Editor implements EditorInterface {
                 EditorControls[callee] &&
                 EditorControls[callee] instanceof Function
             ) {
-                new EditorControls[callee](element, container, settings).init();
+                new EditorControls[callee](this.element, this.controls, settings).init();
             } else {
                 log(notExists, 'warn', [`"${callee}"`]);
             }
         });
 
-        new EditorControls.Controls(element).init();
+        new EditorControls.Controls(this.element).init();
     }
 
     private makeParams(): void {
         const { capitalize } = EditorUtils;
-        const { element, params: container, settings } = this;
-        const { params } = settings;
+        const { params } = this.settings;
         const paramsTypes = Object.keys(params);
 
         if (!paramsTypes.length || !this.params) return;
@@ -110,13 +122,9 @@ class Editor implements EditorInterface {
             };
 
             if (EditorParams[key] && EditorParams[key] instanceof Function) {
-                new EditorParams[key](element, container, settings).init();
+                new EditorParams[key](this.element, this.container, settings).init();
             }
         });
-    }
-
-    public getContent() {
-        return this;
     }
 
     public init(): void {

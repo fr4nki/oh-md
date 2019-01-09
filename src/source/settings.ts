@@ -164,7 +164,7 @@ const defaultLayout = ['controls', 'area', 'params'];
 
 const defaultWarnings = {
     autosave: {
-        id: "Textarea element doesn't contain id or name attribute. Autosave will not work.",
+        id: 'Textarea element doesn\'t contain id or name attribute. Autosave will not work.',
     },
     controls: {
         notExists: 'Button is not implemented',

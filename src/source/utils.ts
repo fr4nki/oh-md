@@ -6,7 +6,7 @@ const createElement = (
     const e = document.createElement(el);
 
     e.classList.add(...className);
-    Object.keys(args).forEach((a) => (e[a] = args[a]));
+    Object.keys(args).forEach(a => (e[a] = args[a]));
 
     return e;
 };
@@ -26,16 +26,22 @@ const detectOs = (): string => {
 
     if (platform.includes(osWin)) {
         return osWin;
-    } else if (platform.includes(osMac)) {
-        return osMac;
-    } else {
-        return 'other';
     }
+
+    if (platform.includes(osMac)) {
+        return osMac;
+    }
+
+    return 'other';
 };
+
+const isExecSupported = document.queryCommandEnabled('insertText') &&
+        document.queryCommandSupported('insertText');
 
 export default {
     createElement,
     capitalize,
     log,
     detectOs,
+    isExecSupported,
 };

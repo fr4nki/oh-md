@@ -4,17 +4,76 @@ import EditorSettings from '../settings';
 import { EditorControlsBinderInterface } from './controlsInterface';
 
 class Controls {
-    textarea: HTMLTextAreaElement;
-
+    protected textarea: HTMLTextAreaElement;
     private static handlerList: EditorControlsBinderInterface[] = [];
+    private static insertCommand: string = 'insertText';
 
     constructor(textarea: HTMLTextAreaElement) {
         this.textarea = textarea;
     }
 
-    private setFocusToTextarea(start, finish) {
+    protected insertTextInto(text: string, slice: number[], focus: number[]) {
         this.textarea.focus();
-        this.textarea.setSelectionRange(start, finish);
+        this.textarea.setSelectionRange(slice[0], slice[1]);
+
+        if (
+            document.queryCommandEnabled(Controls.insertCommand) &&
+            document.queryCommandSupported(Controls.insertCommand)
+        ) {
+            console.log('===== exec');
+            document.execCommand(Controls.insertCommand, false, text);
+        } else {
+            console.log('===== value');
+            const { value } = this.textarea;
+
+            this.textarea.value = value.slice(0, slice[0]) + text + value.slice(slice[1]);
+        }
+
+        this.textarea.setSelectionRange(focus[0], focus[1]);
+    }
+
+    protected insertSimpleElement(tag: string[]) {
+        const {
+            selectionStart: sStart,
+            selectionEnd: sEnd,
+            value: taV
+        } = this.textarea;
+        const [tStart, tEnd] = tag;
+
+        const normalSlice = taV.slice(sStart, sEnd);
+        const innerSlice = normalSlice.slice(tStart.length, -tEnd.length);
+        const outerSlice = taV.slice(
+            sStart - tStart.length,
+            sEnd + tEnd.length
+        );
+
+        const isSelectionOutside =
+            outerSlice.slice(0, tStart.length) === tStart &&
+            outerSlice.slice(-tEnd.length) === tEnd;
+        const isSelectionInside =
+            normalSlice.slice(0, tStart.length) === tStart &&
+            normalSlice.slice(-tEnd.length) === tEnd;
+
+        if (isSelectionInside) {
+            this.insertTextInto(
+                innerSlice,
+                [sStart, sEnd],
+                [sStart, innerSlice.length + sStart],
+            );
+        } else
+        if (isSelectionOutside) {
+            this.insertTextInto(
+                normalSlice,
+                [sStart - tStart.length, sEnd + tEnd.length],
+                [sStart - tStart.length, sEnd - tEnd.length],
+            );
+        } else {
+            this.insertTextInto(
+                [tStart, normalSlice, tEnd].join(''),
+                [sStart, sEnd],
+                [sStart + tStart.length, sStart + tStart.length + normalSlice.length],
+            );
+        }
     }
 
     protected getCurrentHotkey(hotkeys: object) {
@@ -36,60 +95,18 @@ class Controls {
         const normalizedControlName = capitalize(controlType);
 
         const control = createElement(
-            'a',
+            'button',
             [
                 `${controls}--button`,
-                `${controls}--button__${controlType.toLowerCase()}`,
+                `${controls}--button__${controlType.toLowerCase()}`
             ],
-            { href: '#', title: normalizedControlName }
+            {
+                title: normalizedControlName,
+            }
         );
         control.innerHTML = normalizedControlName;
 
         return control;
-    }
-
-    protected insertTagInto(tagList: string[]) {
-        const [tStart, tEnd] = tagList;
-        const {
-            selectionStart: sStart,
-            selectionEnd: sEnd,
-            value: taV,
-        } = this.textarea;
-
-        const isSelectionEmpty = sStart === sEnd;
-
-        const isTagsOutside =
-            taV.slice(sStart - tStart.length, sStart) === tStart &&
-            taV.slice(sEnd, sEnd + tEnd.length) === tEnd;
-
-        const isTagsInside =
-            taV.slice(sStart, sStart + tStart.length) === tStart &&
-            taV.slice(sEnd - tEnd.length, sEnd) === tEnd;
-
-        if (isTagsInside && !isSelectionEmpty) {
-            this.textarea.value =
-                taV.slice(0, sStart) +
-                taV.slice(sStart + tStart.length, sEnd - tEnd.length) +
-                taV.slice(sEnd);
-
-            this.setFocusToTextarea(sStart, sEnd - tStart.length - tEnd.length);
-        } else if (isTagsOutside) {
-            this.textarea.value =
-                taV.slice(0, sStart - tStart.length) +
-                taV.slice(sStart, sEnd) +
-                taV.slice(sEnd + tEnd.length);
-
-            this.setFocusToTextarea(sStart - tStart.length, sEnd - tEnd.length);
-        } else {
-            this.textarea.value =
-                taV.slice(0, sStart) +
-                tStart +
-                taV.slice(sStart, sEnd) +
-                tEnd +
-                taV.slice(sEnd);
-
-            this.setFocusToTextarea(sStart + tStart.length, sEnd + tEnd.length);
-        }
     }
 
     protected addHandler(o: EditorControlsBinderInterface) {
@@ -105,9 +122,11 @@ class Controls {
                             e[handler.hotkey.modificator] &&
                             e.key === handler.hotkey.key
                         ) {
+                            e.preventDefault();
                             handler.callback();
                         }
                     } else {
+                        e.preventDefault();
                         handler.callback();
                     }
                 });

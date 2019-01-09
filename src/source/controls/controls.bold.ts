@@ -1,19 +1,17 @@
 import EditorControl from './controls';
-import EditorUtils from '../utils';
-import EditorSettings from '../settings';
 
 import {
-    EditorControlsSettingsInterface,
     EditorControlsBinderInterface,
+    EditorControlsSettingsInterface
 } from './controlsInterface';
 
 class Bold extends EditorControl {
+    private static mdTag = ['**', '**'];
+
     textarea: HTMLTextAreaElement;
     container: Element;
     settings: EditorControlsSettingsInterface;
-
-    private button: Element;
-    private static mdTag = ['**', '**'];
+    button: Element;
 
     constructor(
         textarea: HTMLTextAreaElement,
@@ -29,24 +27,24 @@ class Bold extends EditorControl {
         this.button = undefined;
     }
 
-    private insertTag(): void {
-        super.insertTagInto(Bold.mdTag);
-    }
-
     private handle(): void {
         const { hotkeyCurrent: hotkey } = this.settings;
         const argument: EditorControlsBinderInterface = {
-            callback: this.insertTag.bind(this),
             hotkey,
+            callback: this.insertTagInto.bind(this)
         };
 
         super.addHandler(argument);
         this.button.addEventListener('click', this.click.bind(this));
     }
 
+    private insertTagInto() {
+        super.insertSimpleElement(Bold.mdTag);
+    }
+
     private click(e: MouseEvent): void {
         e.preventDefault();
-        this.insertTag();
+        this.insertTagInto();
     }
 
     public init(): void {

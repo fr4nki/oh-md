@@ -1,20 +1,17 @@
 import EditorControl from './controls';
 
-import EditorUtils from '../utils';
-import EditorSettings from '../settings';
-
 import {
     EditorControlsSettingsInterface,
     EditorControlsBinderInterface,
 } from './controlsInterface';
 
 class Italic extends EditorControl {
+    private static mdTag = ['_', '_'];
+
     textarea: HTMLTextAreaElement;
     container: Element;
     settings: EditorControlsSettingsInterface;
-
     private button: Element;
-    private static mdTag = ['_', '_'];
 
     constructor(
         textarea: HTMLTextAreaElement,
@@ -23,22 +20,21 @@ class Italic extends EditorControl {
     ) {
         super(textarea);
 
+        this.button = undefined;
         this.textarea = textarea;
         this.container = container;
         this.settings = settings || {};
-
-        this.button = undefined;
     }
 
-    private insertTag(): void {
-        super.insertTagInto(Italic.mdTag);
+    private insertTagInto() {
+        super.insertSimpleElement(Italic.mdTag);
     }
 
     private handle(): void {
         const { hotkeyCurrent: hotkey } = this.settings;
         const argument: EditorControlsBinderInterface = {
-            callback: this.insertTag.bind(this),
             hotkey,
+            callback: this.insertTagInto.bind(this),
         };
 
         this.addHandler(argument);
@@ -47,7 +43,7 @@ class Italic extends EditorControl {
 
     private click(e: MouseEvent): void {
         e.preventDefault();
-        this.insertTag();
+        this.insertTagInto();
     }
 
     public init(): void {

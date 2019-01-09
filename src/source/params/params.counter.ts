@@ -4,11 +4,10 @@ import EditorSettings from '../settings';
 import { EditorParamsSettingsInterface } from './paramsInterface';
 
 class Counter {
-    textarea: HTMLTextAreaElement;
-    container: Element;
-    settings: EditorParamsSettingsInterface;
-
+    private textarea: HTMLTextAreaElement;
     private element: Element;
+    readonly container: Element;
+    readonly settings: EditorParamsSettingsInterface;
 
     constructor(
         textarea: HTMLTextAreaElement,
@@ -21,18 +20,19 @@ class Counter {
         this.settings = settings;
     }
 
-    _counterUpdate() {
-        this.element.innerHTML = String(this.textarea.value.length);
-    }
-
-    _setHandlers() {
+    private setHandlers(): void {
         document.addEventListener('DOMContentLoaded', () => {
-            this.textarea.addEventListener('input', this._counterUpdate.bind(this));
-            this._counterUpdate();
+            this.textarea.addEventListener('input', this.counterUpdate.bind(this));
+            this.textarea.addEventListener('keyup', this.counterUpdate.bind(this));
+            this.counterUpdate();
         });
     }
 
-    init() {
+    private counterUpdate(): void {
+        this.element.innerHTML = String(this.textarea.value.length);
+    }
+
+    public init() {
         const { params } = EditorSettings.defaultClasses;
         const { counter } = this.settings;
 
@@ -44,7 +44,7 @@ class Counter {
         );
         this.container.appendChild(this.element);
 
-        this._setHandlers();
+        this.setHandlers();
     }
 }
 
