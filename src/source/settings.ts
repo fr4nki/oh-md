@@ -104,6 +104,32 @@ const defaultControls = [
         },
     },
     {
+        control: 'code',
+        hotkey: {
+            win: {
+                modificator: 'ctrlKey',
+                key: 'k',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'k',
+            },
+        },
+    },
+    {
+        control: 'strike',
+        hotkey: {
+            win: {
+                modificator: 'ctrlKey',
+                key: 'd',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'd',
+            },
+        },
+    },
+    {
         control: 'link',
         hotkey: {
             win: {

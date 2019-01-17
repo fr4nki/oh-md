@@ -6,8 +6,8 @@ import {
     EditorControlsSettingsInterface
 } from './controlsInterface';
 
-class Quote extends EditorControl {
-    private static mdTag = ['>', ''];
+class UnorderedList extends EditorControl {
+    private static mdTag = ['-', ''];
 
     textarea: HTMLTextAreaElement;
     container: Element;
@@ -47,15 +47,17 @@ class Quote extends EditorControl {
         } = this.textarea;
 
         const { capitalize } = EditorUtils;
-        const [tStart] = Quote.mdTag;
+        const [tStart] = UnorderedList.mdTag;
         const isSomeSelected = sEnd - sStart;
         const normalSlice = taV.slice(sStart, sEnd);
         const outerSlice = taV.slice(sStart - tStart.length, sEnd);
         const isTagExists = outerSlice.includes(tStart);
-        const buttonTitle = capitalize(this.settings.control.split('_').join(''));
+        const buttonTitle = capitalize(this.settings.control.split('_').join(' '));
         const EOL = '\n';
         const tagOffset = 2;
         const space = ' ';
+
+        console.log(isTagExists)
 
         if (isSomeSelected) {
             if (isTagExists) {
@@ -69,7 +71,7 @@ class Quote extends EditorControl {
                         }
                     });
 
-                const r = new RegExp(/> /g);
+                const r = new RegExp(/- /g);
                 const val = outerSlice.replace(r, '');
 
                 const slice = [sStart - tStart.length, sEnd];
@@ -201,4 +203,4 @@ class Quote extends EditorControl {
     }
 }
 
-export default Quote;
+export default UnorderedList;

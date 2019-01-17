@@ -40,13 +40,9 @@ class Editor implements EditorInterface {
             this.settings.params || {}
         );
         const theme = this.settings.theme || EditorSettings.defaultTheme;
-        const controls =
-            this.settings.controls || EditorSettings.defaultControls;
+        const controls = this.settings.controls || EditorSettings.defaultControls;
         const classes = EditorSettings.defaultClasses;
-        const layout = Object.assign(
-            EditorSettings.defaultLayout,
-            this.settings.layout || []
-        );
+        const layout = Object.assign(EditorSettings.defaultLayout, this.settings.layout || []);
 
         Object.keys(this.settings.classes).forEach((c) => {
             classes[c].push(this.settings.classes[c].join(' '));
