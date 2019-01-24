@@ -7,7 +7,7 @@ import {
 } from './controlsInterface';
 
 class OrderedList extends EditorControl {
-    private static mdTag = ['$.', ''];
+    private static mdTag = ['$.', null];
 
     textarea: HTMLTextAreaElement;
     container: Element;
@@ -63,8 +63,6 @@ class OrderedList extends EditorControl {
         const eolSlices = outerSlice.split('\n').filter(s => s !== '');
         let eolSlicesCounter = 0;
 
-        console.log(eolSlices);
-
         eolSlices.forEach((slice) => {
             if (
                 slice !== '' &&
@@ -78,14 +76,10 @@ class OrderedList extends EditorControl {
             isTagExists = true;
         }
 
-        console.log(isTagExists);
-
         if (isSomeSelected) {
             if (isTagExists) {
                 const sliceArr = outerSlice.split('\n');
                 let counter: number = 0;
-
-                console.log(sliceArr);
 
                 const val = sliceArr.map((s: string) => {
                     if (
@@ -185,7 +179,6 @@ class OrderedList extends EditorControl {
             }());
 
             const prefix = EOL.repeat(preCount);
-
 
             const postSlice = taV.slice(sEnd, sEnd + tagOffset).split('');
             const postCount = (function () {

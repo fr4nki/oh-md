@@ -7,7 +7,7 @@ import {
 } from './controlsInterface';
 
 class Quote extends EditorControl {
-    private static mdTag = ['>', ''];
+    private static mdTag = ['>', null];
 
     textarea: HTMLTextAreaElement;
     container: Element;
@@ -156,7 +156,6 @@ class Quote extends EditorControl {
             }());
 
             const prefix = EOL.repeat(preCount);
-
 
             const postSlice = taV.slice(sEnd, sEnd + tagOffset).split('');
             const postCount = (function () {

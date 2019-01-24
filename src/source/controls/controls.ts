@@ -20,10 +20,10 @@ class Controls {
             document.queryCommandEnabled(Controls.insertCommand) &&
             document.queryCommandSupported(Controls.insertCommand)
         ) {
-            console.log('===== exec');
+            // console.log('===== exec');
             document.execCommand(Controls.insertCommand, false, text);
         } else {
-            console.log('===== value');
+            // console.log('===== value');
             const { value } = this.textarea;
 
             this.textarea.value = value.slice(0, slice[0]) + text + value.slice(slice[1]);
@@ -32,7 +32,7 @@ class Controls {
         this.textarea.setSelectionRange(focus[0], focus[1]);
     }
 
-    protected insertSimpleElement(tag: string[]) {
+    protected insertSimpleElement(tag: string[]): string[] {
         const {
             selectionStart: sStart,
             selectionEnd: sEnd,
@@ -41,39 +41,45 @@ class Controls {
         const [tStart, tEnd] = tag;
 
         const normalSlice = taV.slice(sStart, sEnd);
-        const innerSlice = normalSlice.slice(tStart.length, -tEnd.length);
+        const innerSlice = normalSlice.slice(
+            tStart.length,
+            (tEnd ? -tEnd.length : undefined)
+        );
         const outerSlice = taV.slice(
             sStart - tStart.length,
-            sEnd + tEnd.length
+            (sEnd + (tEnd ? tEnd.length : 0))
         );
 
         const isSelectionOutside =
-            outerSlice.slice(0, tStart.length) === tStart &&
-            outerSlice.slice(-tEnd.length) === tEnd;
+            (tStart ? outerSlice.slice(0, tStart.length) === tStart : true) &&
+            (tEnd ? outerSlice.slice(-tEnd.length) === tEnd : true);
+
         const isSelectionInside =
-            normalSlice.slice(0, tStart.length) === tStart &&
-            normalSlice.slice(-tEnd.length) === tEnd;
+            (tStart ? normalSlice.slice(0, tStart.length) === tStart : true) &&
+            (tEnd ? normalSlice.slice(-tEnd.length) === tEnd : true);
+
+        let value: string;
+        let slice: number[];
+        let focus: number[];
 
         if (isSelectionInside) {
-            this.insertTextInto(
-                innerSlice,
-                [sStart, sEnd],
-                [sStart, innerSlice.length + sStart],
-            );
+            value = innerSlice;
+            slice = [sStart, sEnd];
+            focus = [sStart, innerSlice.length + sStart];
         } else
         if (isSelectionOutside) {
-            this.insertTextInto(
-                normalSlice,
-                [sStart - tStart.length, sEnd + tEnd.length],
-                [sStart - tStart.length, sEnd - tEnd.length],
-            );
+            value = normalSlice;
+            slice = [sStart - tStart.length, sEnd + (tEnd ? tEnd.length : 0)];
+            focus = [sStart - tStart.length, sEnd - (tEnd ? tEnd.length : 0)];
         } else {
-            this.insertTextInto(
-                [tStart, normalSlice, tEnd].join(''),
-                [sStart, sEnd],
-                [sStart + tStart.length, sStart + tStart.length + normalSlice.length],
-            );
+            value = [tStart, normalSlice, tEnd].join('');
+            slice = [sStart, sEnd];
+            focus = [sStart + tStart.length, sStart + tStart.length + normalSlice.length];
         }
+
+        this.insertTextInto(value, slice, focus);
+
+        return [tStart, tEnd];
     }
 
     protected getCurrentHotkey(hotkeys: object) {

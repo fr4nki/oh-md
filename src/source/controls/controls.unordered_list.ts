@@ -7,7 +7,7 @@ import {
 } from './controlsInterface';
 
 class UnorderedList extends EditorControl {
-    private static mdTag = ['-', ''];
+    private static mdTag = ['-',  null];
 
     textarea: HTMLTextAreaElement;
     container: Element;
@@ -56,8 +56,6 @@ class UnorderedList extends EditorControl {
         const EOL = '\n';
         const tagOffset = 2;
         const space = ' ';
-
-        console.log(isTagExists)
 
         if (isSomeSelected) {
             if (isTagExists) {
@@ -158,7 +156,6 @@ class UnorderedList extends EditorControl {
             }());
 
             const prefix = EOL.repeat(preCount);
-
 
             const postSlice = taV.slice(sEnd, sEnd + tagOffset).split('');
             const postCount = (function () {
