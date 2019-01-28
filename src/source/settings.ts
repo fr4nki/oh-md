@@ -16,6 +16,7 @@ const defaultClasses = {
     area: [`${defaultClassNamePrefix}-area`],
     controls: [`${defaultClassNamePrefix}-controls`],
     params: [`${defaultClassNamePrefix}-params`],
+    popup: [`${defaultClassNamePrefix}-popup`],
 };
 
 const defaultControls = [

@@ -67,14 +67,18 @@ class Autosave {
             [`${params}--autosave`]
         );
         this.element.innerHTML = 'Saved';
+        console.log(this.container);
         this.container.appendChild(this.element);
         this.settings.id = id;
 
         this._fillTextArea();
 
-        setInterval(() => {
-            this._saveText();
-        }, autosave * 1000);
+        setInterval(() =>
+            {
+                this._saveText();
+            },
+            autosave * 1000
+        );
     }
 }
 

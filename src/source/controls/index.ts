@@ -1,5 +1,6 @@
 import Controls from './controls';
 
+import Link from './controls.link';
 import Bold from './controls.bold';
 import Italic from './controls.italic';
 import Strike from './controls.strike';
@@ -21,4 +22,5 @@ export default {
     Quote,
     Unordered_list,
     Ordered_list,
+    Link,
 };

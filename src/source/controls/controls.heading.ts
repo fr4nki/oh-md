@@ -134,17 +134,10 @@ class Heading extends EditorControl {
                 return;
             }
 
-            const value = tStart + space + normalSlice + EOL;
-            const slice = [sStart, sEnd];
-            const focus = [
-                sStart + space.length + tStart.length,
-                sEnd + space.length + tStart.length
-            ];
-
-            super.insertTextInto(value, slice, focus);
-        } else {
-            const tagOffset = 0;
+            const tagOffset = 1;
             const preSlice = taV.slice(sStart - tagOffset, sStart).split('').reverse();
+            // const isNeedToInsertPrefixEOL = tStar
+
             const preCount = (function () {
                 let offset = tagOffset;
 
@@ -160,8 +153,54 @@ class Heading extends EditorControl {
             }());
 
             const prefix = EOL.repeat(preCount);
-            const tagPostOffset = 2;
 
+            const tagPostOffset = 2;
+            const postSlice = taV.slice(sEnd, sEnd + tagPostOffset).split('');
+            const postCount = (function () {
+                let offset = tagPostOffset;
+
+                for (let i = 0; postSlice.length; i += 1) {
+                    if (postSlice[i] === EOL) {
+                        offset -= 1;
+                    } else {
+                        break;
+                    }
+                }
+
+                return offset;
+            }());
+
+            const postfix = EOL.repeat(postCount);
+
+            const value = prefix + tStart + space + normalSlice + postfix;
+            const slice = [sStart, sEnd];
+            const focus = [
+                sStart + prefix.length + tStart.length + space.length,
+                sStart + prefix.length + tStart.length + space.length + normalSlice.length,
+            ];
+
+            super.insertTextInto(value, slice, focus);
+        } else {
+            const tagOffset = 1;
+            const preSlice = taV.slice(sStart - tagOffset, sStart).split('').reverse();
+
+            const preCount = (function () {
+                let offset = tagOffset;
+
+                for (let i = 0; preSlice.length; i += 1) {
+                    if (preSlice[i] === EOL) {
+                        offset -= 1;
+                    } else {
+                        break;
+                    }
+                }
+
+                return offset;
+            }());
+
+            const prefix = EOL.repeat(preCount);
+
+            const tagPostOffset = 2;
             const postSlice = taV.slice(sEnd, sEnd + tagPostOffset).split('');
             const postCount = (function () {
                 let offset = tagPostOffset;

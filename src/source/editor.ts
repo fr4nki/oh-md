@@ -118,7 +118,7 @@ class Editor implements EditorInterface {
             };
 
             if (EditorParams[key] && EditorParams[key] instanceof Function) {
-                new EditorParams[key](this.element, this.container, settings).init();
+                new EditorParams[key](this.element, this.params, settings).init();
             }
         });
     }
