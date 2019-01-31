@@ -120,18 +120,14 @@ class Controls {
     }
 
     public init() {
-        window.document.addEventListener('keydown', (e) => {
+        this.textarea.addEventListener('keydown', (e) => {
             if (window.document.activeElement === this.textarea) {
                 Controls.handlerList.forEach((handler) => {
-                    if (handler.hotkey) {
-                        if (
-                            e[handler.hotkey.modificator] &&
-                            e.key === handler.hotkey.key
-                        ) {
-                            e.preventDefault();
-                            handler.callback();
-                        }
-                    } else {
+                    if (
+                        handler.hotkey &&
+                        e[handler.hotkey.modificator] &&
+                        e.key === handler.hotkey.key
+                    ) {
                         e.preventDefault();
                         handler.callback();
                     }

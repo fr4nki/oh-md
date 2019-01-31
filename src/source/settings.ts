@@ -163,11 +163,11 @@ const defaultControls = [
         control: 'preview',
         hotkey: {
             win: {
-                modificator: 'ctrlKey',
+                modificator: 'altKey',
                 key: 'p',
             },
             mac: {
-                modificator: 'metaKey',
+                modificator: 'altKey',
                 key: 'p',
             },
         },

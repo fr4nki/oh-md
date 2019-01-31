@@ -1,4 +1,6 @@
 import typescript from 'rollup-plugin-typescript2';
+import nodeResolve from 'rollup-plugin-node-resolve';
+import commonJS from 'rollup-plugin-commonjs';
 import pkg from './package.json';
 
 export default {
@@ -18,8 +20,13 @@ export default {
         ...Object.keys(pkg.peerDependencies || {}),
     ],
     plugins: [
+        nodeResolve({
+            jsnext: false,
+            extensions: [ '.ts', '.js', '.json' ]
+        }),
         typescript({
             typescript: require('typescript'),
         }),
+        commonJS(),
     ],
 };

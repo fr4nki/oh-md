@@ -12,6 +12,7 @@ import Heading from './controls.heading';
 import Unordered_list from './controls.unordered_list';
 import Ordered_list from './controls.ordered_list';
 import Fullscreen from './controls.fullscreen';
+import Preview from './controls.preview';
 
 export default {
     Controls,
@@ -27,4 +28,5 @@ export default {
     Link,
     Image,
     Fullscreen,
+    Preview,
 };

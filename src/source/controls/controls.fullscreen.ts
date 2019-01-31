@@ -34,7 +34,7 @@ class Fullscreen extends EditorControl {
 
     private toggleFullscreen() {
         const container = EditorSettings.defaultClasses.container[0];
-        const className = `${container}-status-fullscreen`;
+        const className = `${container}-mode-fullscreen`;
 
         if (this.isFullscreenEnabled) {
             this.wrapper.classList.remove(className);
