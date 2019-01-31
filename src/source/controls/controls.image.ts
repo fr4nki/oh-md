@@ -11,10 +11,10 @@ import {
     EditorPopupInterface,
 } from '../popup/popupInterface';
 
-class Link extends EditorControl {
+class Image extends EditorControl {
     private static mdTagText = '__text__';
     private static mdTagLink = '__href__';
-    private static mdTag = [`[${Link.mdTagText}](${Link.mdTagLink})`, null];
+    private static mdTag = [`![${Image.mdTagText}](${Image.mdTagLink})`, null];
 
     textarea: HTMLTextAreaElement;
     container: Element;
@@ -69,14 +69,14 @@ class Link extends EditorControl {
             {
                 value,
                 type: 'text',
-                id: Link.mdTagText,
-                title: 'Insert text',
+                id: Image.mdTagText,
+                title: 'Image title',
             },
             {
                 value: '',
                 type: 'text',
-                id: Link.mdTagLink,
-                title: 'Insert URL',
+                id: Image.mdTagLink,
+                title: 'Image URL',
             }
         ];
 
@@ -100,7 +100,7 @@ class Link extends EditorControl {
             selectionStart: sStart,
             selectionEnd: sEnd,
         } = this.textarea;
-        let value = Link.mdTag[0];
+        let value = Image.mdTag[0];
 
         this.popup = null;
 
@@ -129,4 +129,4 @@ class Link extends EditorControl {
     }
 }
 
-export default Link;
+export default Image;

@@ -33,7 +33,7 @@ class Counter {
     }
 
     public init() {
-        const { params } = EditorSettings.defaultClasses;
+        const params = EditorSettings.defaultClasses.params[0];
         const { counter } = this.settings;
 
         if (!counter) return;

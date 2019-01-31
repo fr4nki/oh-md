@@ -10,4 +10,6 @@ export interface EditorPopupInterface {
     settings: EditorPopupSettingsItem[];
     container: Element;
     submit(a: EditorPopupSettingsItem[]): EditorPopupSettingsItem[];
+    cancel(): void;
+    init(): EditorPopupInterface;
 }

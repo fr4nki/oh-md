@@ -97,7 +97,7 @@ class Controls {
 
     protected generateElement(controlType: string) {
         const { createElement, capitalize } = EditorUtils;
-        const { controls } = EditorSettings.defaultClasses;
+        const controls = EditorSettings.defaultClasses.controls[0];
         const normalizedControlName = capitalize(controlType);
 
         const control = createElement(

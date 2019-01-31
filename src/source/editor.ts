@@ -95,7 +95,12 @@ class Editor implements EditorInterface {
                 EditorControls[callee] &&
                 EditorControls[callee] instanceof Function
             ) {
-                new EditorControls[callee](this.element, this.controls, settings).init();
+                new EditorControls[callee](
+                    this.element,
+                    this.controls,
+                    settings,
+                    this.container,
+                ).init();
             } else {
                 log(notExists, 'warn', [`"${callee}"`]);
             }

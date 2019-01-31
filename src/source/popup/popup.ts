@@ -9,25 +9,37 @@ import {
 class EditorPopup implements EditorPopupInterface {
     form: Element;
     submit: (a: EditorPopupSettingsItem[]) => EditorPopupSettingsItem[];
+    cancel: () => void;
+    btnSubmit: HTMLButtonElement;
+    btnCancel: HTMLButtonElement;
+
     readonly settings: EditorPopupSettingsItem[];
     readonly container: Element;
-
     private static prefixPopupId = 'popup-item-';
 
     constructor(
         settings: EditorPopupSettingsItem[],
         container: Element,
         submit: (a: EditorPopupSettingsItem[]) => EditorPopupSettingsItem[],
+        cancel: () => void,
     ) {
         this.settings = settings;
         this.container = container.parentElement;
         this.submit = submit;
+        this.cancel = cancel;
+
         this.form = null;
+        this.btnSubmit = null;
+        this.btnCancel = null;
+
+        this.keyHandler = this.keyHandler.bind(this);
+        this.removePopup = this.removePopup.bind(this);
+        this.submitPopup = this.submitPopup.bind(this);
     }
 
-    private generateFormItem(settingsItem: EditorPopupSettingsItem): Node {
+    private generateFormItem(settingsItem: EditorPopupSettingsItem): HTMLElement {
         const { createElement } = EditorUtils;
-        const { popup } = EditorSettings.defaultClasses;
+        const popup = EditorSettings.defaultClasses.popup[0];
 
         const itemClassname = `${popup}-item`;
         const idPrefix = EditorPopup.prefixPopupId;
@@ -48,6 +60,7 @@ class EditorPopup implements EditorPopupInterface {
             {
                 id: inputId,
                 type: settingsItem.type,
+                value: settingsItem.value,
             }
         );
 
@@ -61,7 +74,7 @@ class EditorPopup implements EditorPopupInterface {
 
     private generateControls(): Node {
         const { createElement } = EditorUtils;
-        const { popup } = EditorSettings.defaultClasses;
+        const popup = EditorSettings.defaultClasses.popup[0];
         const controlClassname = `${popup}-controls`;
 
         const wrapper = createElement(
@@ -69,45 +82,50 @@ class EditorPopup implements EditorPopupInterface {
             [controlClassname],
         );
 
-        const btnSubmit = createElement(
+        this.btnSubmit = <HTMLButtonElement>createElement(
             'button',
             [`${controlClassname}-button`, `${controlClassname}-button__submit`],
         );
 
-        const btnCancel = createElement(
+        this.btnCancel = <HTMLButtonElement>createElement(
             'button',
             [`${controlClassname}-button`, `${controlClassname}-button__cancel`],
         );
 
-        btnCancel.innerText = 'Cancel';
-        btnSubmit.innerText = 'OK';
+        this.btnCancel.innerText = 'Cancel';
+        this.btnSubmit.innerText = 'OK';
 
-        btnCancel.addEventListener('click', this.removePopup.bind(this));
-        btnSubmit.addEventListener('click', this.submitPopup.bind(this));
+        this.btnCancel.addEventListener('click', this.removePopup);
+        this.btnSubmit.addEventListener('click', this.submitPopup);
 
-        wrapper.appendChild(btnCancel);
-        wrapper.appendChild(btnSubmit);
+        wrapper.appendChild(this.btnCancel);
+        wrapper.appendChild(this.btnSubmit);
 
         return wrapper;
     }
 
-    private generateForm() {
+    private generateForm(): void {
         const { createElement } = EditorUtils;
         const { popup } = EditorSettings.defaultClasses;
 
         this.form = createElement('div', popup);
 
-        this.settings.forEach(s => this.form.appendChild(
-            this.generateFormItem(s))
-        );
+        this.settings.forEach((s, num) => {
+            const item = this.generateFormItem(s);
+
+            this.form.appendChild(item);
+        });
+
         this.form.appendChild(this.generateControls());
         this.container.appendChild(this.form);
+        this.form.querySelector('input').focus();
+
+        document.addEventListener('keydown', this.keyHandler);
     }
 
     private collectData(): EditorPopupSettingsItem[] {
         const result = [];
         const idPrefix = EditorPopup.prefixPopupId;
-        // let errors = 0;
 
         this.settings.forEach((s) => {
             const currentId = `#${idPrefix}${s.id}`;
@@ -122,14 +140,30 @@ class EditorPopup implements EditorPopupInterface {
         return result;
     }
 
-    public removePopup(e: Event) {
-        e.preventDefault();
+    private keyHandler(e: KeyboardEvent) {
+        if (e.keyCode === 27) {
+            this.removePopup(e);
+        }
 
-        this.container.removeChild(this.form);
-        this.form = null;
+        if (e.keyCode === 13) {
+            this.submitPopup(e);
+        }
     }
 
-    public submitPopup(e: Event) {
+    public removePopup(e: Event): void {
+        e.preventDefault();
+
+        document.removeEventListener('keydown', this.keyHandler);
+        this.btnCancel.removeEventListener('click', this.removePopup);
+        this.btnSubmit.removeEventListener('click', this.submitPopup);
+
+        this.container.removeChild(this.form);
+        this.keyHandler = null;
+
+        this.cancel();
+    }
+
+    public submitPopup(e: Event): void {
         e.preventDefault();
 
         const data = this.collectData();
@@ -138,8 +172,10 @@ class EditorPopup implements EditorPopupInterface {
         this.removePopup(e);
     }
 
-    public init() {
+    public init(): EditorPopupInterface {
         this.generateForm();
+
+        return this;
     }
 }
 

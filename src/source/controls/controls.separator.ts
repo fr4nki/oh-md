@@ -13,11 +13,11 @@ class Separator {
     }
 
     public init(): void {
-        const { controls } = EditorSettings.defaultClasses;
+        const controls = EditorSettings.defaultClasses.controls[0];
         const { createElement } = EditorUtils;
         const element = createElement(
             'p',
-            [`${controls}--separator`]
+            [`${controls[0]}--separator`]
         );
 
         this.container.appendChild(element);

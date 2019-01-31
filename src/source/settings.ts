@@ -21,19 +21,6 @@ const defaultClasses = {
 
 const defaultControls = [
     {
-        control: 'heading',
-        hotkey: {
-            win: {
-                modificator: 'ctrlKey',
-                key: 'h',
-            },
-            mac: {
-                modificator: 'metaKey',
-                key: 'h',
-            },
-        },
-    },
-    {
         control: 'bold',
         hotkey: {
             win: {
@@ -56,6 +43,19 @@ const defaultControls = [
             mac: {
                 modificator: 'metaKey',
                 key: 'i',
+            },
+        },
+    },
+    {
+        control: 'heading',
+        hotkey: {
+            win: {
+                modificator: 'ctrlKey',
+                key: 'h',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'h',
             },
         },
     },

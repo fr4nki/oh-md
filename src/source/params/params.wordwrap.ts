@@ -25,22 +25,21 @@ class Wordwrap {
     }
 
     private setWordwrapStatus() {
-        const { wordwrapStatus, textarea } = this
-        const { params } = EditorSettings.defaultClasses;
-        const wordwrapClassname = `${params}--wordwrap__off`
+        const params = EditorSettings.defaultClasses.params[0];
+        const wordwrapClassname = `${params}--wordwrap__off`;
 
-        this.wordwrapStatus = !wordwrapStatus
+        this.wordwrapStatus = !this.wordwrapStatus;
 
-        if (!wordwrapStatus) {
-            textarea.classList.add(wordwrapClassname);
+        if (!this.wordwrapStatus) {
+            this.textarea.classList.add(wordwrapClassname);
         } else {
-            textarea.classList.remove(wordwrapClassname);
+            this.textarea.classList.remove(wordwrapClassname);
         }
     }
 
     public init() {
         const { createElement } = EditorUtils;
-        const { params } = EditorSettings.defaultClasses;
+        const params = EditorSettings.defaultClasses.params[0];
         const { paramVisible, active } = this.settings.wordwrap;
 
         this.wordwrapStatus = active;

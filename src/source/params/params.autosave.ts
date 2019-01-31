@@ -35,23 +35,26 @@ class Autosave {
     }
 
     _saveText() {
-        const { params } = EditorSettings.defaultClasses;
+        const params = EditorSettings.defaultClasses.params[0];
         const { value } = this.textarea;
         const hash = this._getTextareaHash();
-        const activeClass = `${params}--autosave__saved`
+        const activeClass = `${params}--autosave__saved`;
 
         this.element.classList.add(activeClass);
         window.localStorage[hash] = value;
 
-        setTimeout(() => {
-            this.element.classList.remove(activeClass);
-        }, 2000);
+        setTimeout(
+            () => {
+                this.element.classList.remove(activeClass);
+            },
+            2000
+        );
     }
 
     init() {
         const { defaultWarnings, defaultClasses } = EditorSettings;
         const { createElement, log } = EditorUtils;
-        const { params } = defaultClasses;
+        const params = defaultClasses.params[0];
         const { id: idWarning } = defaultWarnings.autosave;
         const { autosave } = this.settings;
         const id = this.textarea.id || this.textarea.name || null;

@@ -1,6 +1,7 @@
 import Controls from './controls';
 
 import Link from './controls.link';
+import Image from './controls.image';
 import Bold from './controls.bold';
 import Italic from './controls.italic';
 import Strike from './controls.strike';
@@ -10,6 +11,7 @@ import Quote from './controls.quote';
 import Heading from './controls.heading';
 import Unordered_list from './controls.unordered_list';
 import Ordered_list from './controls.ordered_list';
+import Fullscreen from './controls.fullscreen';
 
 export default {
     Controls,
@@ -23,4 +25,6 @@ export default {
     Unordered_list,
     Ordered_list,
     Link,
+    Image,
+    Fullscreen,
 };
