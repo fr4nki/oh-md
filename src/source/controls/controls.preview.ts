@@ -1,6 +1,8 @@
 import marked from 'marked';
 
 import EditorControl from './controls';
+import EditorUtils from '../utils';
+import EditorSettings from '../settings';
 
 import {
     EditorControlsBinderInterface,
@@ -27,12 +29,14 @@ class Preview extends EditorControl {
 
         this.previewContainer = null;
         this.button = undefined;
+
+        this.handleAreaInput = EditorUtils.debounce(this.handleAreaInput.bind(this), 250);
     }
 
     private handle(): void {
         const { hotkeyCurrent: hotkey } = this.settings;
         const argument: EditorControlsBinderInterface = {
-            hotkey: null,
+            hotkey,
             callback: this.handlePreview.bind(this)
         };
 
@@ -40,15 +44,41 @@ class Preview extends EditorControl {
         this.button.addEventListener('click', this.click.bind(this));
     }
 
-    private handlePreview() {
-        const { value } = this.textarea;
-
-        this.previewContainer.innerHTML = marked(value);
-    }
-
     private click(e: MouseEvent): void {
         e.preventDefault();
         this.handlePreview();
+    }
+
+    private handlePreview(): void {
+        if (this.previewContainer === null) {
+            this.initPreview();
+        } else {
+            this.removePreview();
+        }
+    }
+
+    private initPreview() {
+        const { createElement } = EditorUtils;
+        const area = EditorSettings.defaultClasses.area[0];
+
+        this.previewContainer = createElement(
+            'div',
+            [`${area}--container__preview`],
+        );
+
+        this.textarea.parentElement.appendChild(this.previewContainer);
+        this.textarea.addEventListener('keyup', this.handleAreaInput);
+        this.handleAreaInput();
+    }
+
+    private removePreview() {
+        this.textarea.parentElement.removeChild(this.previewContainer);
+        this.previewContainer = null;
+        this.textarea.removeEventListener('keyup', this.handleAreaInput);
+    }
+
+    private handleAreaInput() {
+        this.previewContainer.innerHTML = marked(this.textarea.value);
     }
 
     public init(): void {
@@ -57,13 +87,6 @@ class Preview extends EditorControl {
         this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
         this.button = super.generateElement(control);
         this.container.appendChild(this.button);
-        this.previewContainer = document.createElement('div');
-
-        this.textarea.parentElement.appendChild(this.previewContainer);
-
-        this.textarea.addEventListener('keydown', this.handlePreview.bind(this));
-
-        console.log(this);
 
         this.handle();
     }

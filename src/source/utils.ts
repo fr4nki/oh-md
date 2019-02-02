@@ -38,10 +38,22 @@ const detectOs = (): string => {
 const isExecSupported = document.queryCommandEnabled('insertText') &&
         document.queryCommandSupported('insertText');
 
+const debounce = (fn: () => {}, time: number) => {
+    let timeout: number;
+
+    return function<T>(...args: T[]) {
+        const functionCall = () => fn.apply(this, ...args);
+
+        window.clearTimeout(timeout);
+        timeout = window.setTimeout(functionCall, time);
+    }
+}
+
 export default {
     createElement,
     capitalize,
     log,
+    debounce,
     detectOs,
     isExecSupported,
 };

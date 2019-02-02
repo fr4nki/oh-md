@@ -4,7 +4,6 @@ import EditorSettings from './settings';
 import EditorUtils from './utils';
 
 import { EditorInterface, EditorSettingsInterface } from './editorInterface';
-
 class Editor implements EditorInterface {
     element: HTMLTextAreaElement;
     settings: EditorSettingsInterface;
@@ -56,6 +55,7 @@ class Editor implements EditorInterface {
         const { createElement } = EditorUtils;
         const clone = this.element.cloneNode(true);
         const textareaParamsKeys = Object.keys(Editor.textareaParams);
+        const elementContainer = createElement('div', [`${classes.area}--container__text`]);
 
         this.container = EditorUtils.createElement('section', [
             ...this.settings.classes.container,
@@ -76,9 +76,8 @@ class Editor implements EditorInterface {
             this.container.appendChild(this[layoutItem]);
         });
 
-        if (this.area) {
-            this.area.appendChild(this.element);
-        }
+        elementContainer.appendChild(this.element);
+        this.area.appendChild(elementContainer);
     }
 
     private makeControls(): void {
