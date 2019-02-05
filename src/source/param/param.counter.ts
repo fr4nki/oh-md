@@ -29,8 +29,13 @@ class Counter {
     }
 
     private counterUpdate(): void {
-        const counter =  String(this.textarea.value.length)
-        this.element.innerHTML = `Count: ${counter}`;
+        window.setTimeout(
+            () => {
+                const counter =  String(this.textarea.value.length);
+                this.element.innerHTML = `Count: ${counter}`;
+            },
+            0,
+        );
     }
 
     public init() {

@@ -27,17 +27,17 @@ class Wordwrap {
     private setWordwrapStatus() {
         const area = EditorSettings.defaultClasses.area[0];
         const params = EditorSettings.defaultClasses.params[0];
-        const wordwrapAreaClassname = `${area}--wordwrap__off`;
+        const wordwrapAreaClassname = `${area}--text--wordwrap__off`;
         const wordwrapParamsClassname = `${params}--wordwrap__off`;
 
         this.wordwrapStatus = !this.wordwrapStatus;
 
         if (!this.wordwrapStatus) {
-            this.textarea.classList.add(wordwrapAreaClassname);
-            this.element.classList.add(wordwrapParamsClassname);
-        } else {
             this.textarea.classList.remove(wordwrapAreaClassname);
             this.element.classList.remove(wordwrapParamsClassname);
+        } else {
+            this.textarea.classList.add(wordwrapAreaClassname);
+            this.element.classList.add(wordwrapParamsClassname);
         }
     }
 

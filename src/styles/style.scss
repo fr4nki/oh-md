@@ -8,6 +8,7 @@ $__size-offset: 10px;
 $__size-icon: $__size-offset * 3;
 $__size-area-ffamily: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
 $__size-area-font: 14px;
+$__size-area-height: 500px;
 
 $__color-default: #ccc;
 $__color-default__light: rgba-to-rgb(rgba($__color-default, .65));
@@ -47,6 +48,19 @@ $__color-success: #04cc04;
 }
 
 .#{$__mdClass} {
+    // Root mode statuses
+    &-mode {
+        &-preview {
+            .#{$__mdClass}-area--container__text {
+                display: none;
+            }
+
+            .#{$__mdClass}-area--container__preview {
+                display: block;
+            }
+        }
+    }
+
     // Controls panel
     &-controls {
         margin-bottom: $__size-offset;
@@ -60,16 +74,41 @@ $__color-success: #04cc04;
 
             &__bold             { background-image: url('./images/bold.svg') }
             &__code             { background-image: url('./images/code.svg') }
-            &__fullscreen       { background-image: url('./images/fullscreen.svg') }
             &__heading          { background-image: url('./images/heading.svg') }
             &__image            { background-image: url('./images/image.svg') }
             &__italic           { background-image: url('./images/italic.svg') }
             &__link             { background-image: url('./images/link.svg') }
             &__ordered_list     { background-image: url('./images/ordered_list.svg') }
-            &__preview          { background-image: url('./images/preview.svg') }
             &__quote            { background-image: url('./images/quote.svg') }
             &__strike           { background-image: url('./images/strike.svg') }
             &__unordered_list   { background-image: url('./images/unordered_list.svg') }
+
+            &__fullscreen       {
+                background-image: url('./images/fullscreen.svg');
+
+                &__active {
+                    background-color: $__color-default;
+                    background-image: url('./images/fullscreen_active.svg');
+
+                    &:focus,
+                    &:active {
+                        background-color: $__color-default;
+                    }
+                }
+            }
+            &__preview          {
+                background-image: url('./images/preview.svg');
+
+                &__active {
+                    background-color: $__color-default;
+                    background-image: url('./images/preview_active.svg');
+
+                    &:focus,
+                    &:active {
+                        background-color: $__color-default;
+                    }
+                }
+            }
         }
 
         &--separator {
@@ -83,8 +122,19 @@ $__color-success: #04cc04;
     // Input and preview container
     &-area {
         &--container {
-            &__text {}
-            &__preview {}
+            &__text {
+                height: $__size-area-height;
+            }
+
+            &__preview {
+                height: $__size-area-height;
+                padding: 10px 15px;
+                background: $__color-default__lightest;
+                border: 1px solid $__color-default__light;
+                max-height: 600px;
+                overflow-y: auto;
+                box-sizing: border-box;
+            }
         }
 
         &--text {
@@ -93,6 +143,7 @@ $__color-success: #04cc04;
             min-width: 100%;
             max-width: 100%;
             width: 100%;
+            height: 100%;
             display: block;
             font-family: $__size-area-ffamily;
             font-size: $__size-area-font;
@@ -102,9 +153,15 @@ $__color-success: #04cc04;
             outline: none;
             margin: 0;
             padding: $__size-offset $__size-offset * 1.5;
+            box-sizing: border-box;
+            white-space: normal;
 
             &:focus {
                 border-color: $__color-default;
+            }
+
+            &--wordwrap__off {
+                white-space: pre;
             }
         }
 

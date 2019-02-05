@@ -15,17 +15,20 @@ class Preview extends EditorControl {
     settings: EditorControlsSettingsInterface;
     button: Element;
     previewContainer: Element;
+    wrapper: Element;
 
     constructor(
         textarea: HTMLTextAreaElement,
         container: Element,
-        settings: EditorControlsSettingsInterface
+        settings: EditorControlsSettingsInterface,
+        wrapper: Element,
     ) {
         super(textarea);
 
         this.textarea = textarea;
         this.container = container;
         this.settings = settings;
+        this.wrapper = wrapper;
 
         this.previewContainer = null;
         this.button = undefined;
@@ -58,8 +61,31 @@ class Preview extends EditorControl {
     }
 
     private initPreview() {
+        // const { defaultClasses } = EditorSettings;
+
+        // const controls = defaultClasses.controls[0];
+        // const container = defaultClasses.container[0];
+
+        // const wrapperClassname = `${container}-mode-fullscreen`;
+        // const buttonClassname = `${controls}--button__fullscreen__active`;
+
+        // if (this.isFullscreenEnabled) {
+        //     this.wrapper.classList.remove(wrapperClassname);
+        //     this.button.classList.remove(buttonClassname);
+        // } else {
+        //     this.wrapper.classList.add(wrapperClassname);
+        //     this.button.classList.add(buttonClassname);
+        // }
+
+        const { defaultClasses } = EditorSettings;
         const { createElement } = EditorUtils;
-        const area = EditorSettings.defaultClasses.area[0];
+
+        const area = defaultClasses.area[0];
+        const controls = defaultClasses.controls[0];
+        const container = defaultClasses.container[0];
+
+        const buttonClassname = `${controls}--button__preview__active`;
+        const wrapperClassname = `${container}-mode-preview`;
 
         this.previewContainer = createElement(
             'div',
@@ -67,14 +93,28 @@ class Preview extends EditorControl {
         );
 
         this.textarea.parentElement.parentElement.appendChild(this.previewContainer);
-        this.textarea.addEventListener('keyup', this.handleAreaInput);
+        this.textarea.addEventListener('input', this.handleAreaInput);
+
+        this.button.classList.add(buttonClassname);
+        this.wrapper.classList.add(wrapperClassname);
+
         this.handleAreaInput();
     }
 
     private removePreview() {
+        const { defaultClasses } = EditorSettings;
+
+        const controls = defaultClasses.controls[0];
+        const container = defaultClasses.container[0];
+
+        const buttonClassname = `${controls}--button__preview__active`;
+        const wrapperClassname = `${container}-mode-preview`;
+
         this.textarea.parentElement.parentElement.removeChild(this.previewContainer);
         this.previewContainer = null;
-        this.textarea.removeEventListener('keyup', this.handleAreaInput);
+        this.textarea.removeEventListener('input', this.handleAreaInput);
+        this.button.classList.remove(buttonClassname);
+        this.wrapper.classList.remove(wrapperClassname);
     }
 
     private handleAreaInput() {
