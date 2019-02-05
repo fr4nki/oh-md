@@ -1,9 +1,15 @@
-import EditorControls from './controls/index';
-import EditorParams from './params/index';
+import EditorControls from './control/index';
+import EditorParams from './param/index';
 import EditorSettings from './settings';
 import EditorUtils from './utils';
 
-import { EditorInterface, EditorSettingsInterface } from './editorInterface';
+import {
+    EditorInterface,
+    EditorSettingsInterface,
+} from './editorInterface';
+
+import '../styles/style.scss';
+
 class Editor implements EditorInterface {
     element: HTMLTextAreaElement;
     settings: EditorSettingsInterface;

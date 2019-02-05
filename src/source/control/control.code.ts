@@ -1,12 +1,13 @@
-import EditorControl from './controls';
+import EditorControl from './control';
 
 import {
     EditorControlsBinderInterface,
     EditorControlsSettingsInterface
-} from './controlsInterface';
+} from './controlInterface';
 
-class Bold extends EditorControl {
-    private static mdTag = ['**', '**'];
+class Code extends EditorControl {
+    private static mdTag = ['`', '`'];
+    private static fullMdTag = ['```\n', '\n```'];
 
     textarea: HTMLTextAreaElement;
     container: Element;
@@ -39,9 +40,20 @@ class Bold extends EditorControl {
     }
 
     private insertTagInto() {
-        this.button.classList.add('active');
-        super.insertSimpleElement(Bold.mdTag);
-        this.button.classList.remove('active');
+        const {
+            selectionStart: sStart,
+            selectionEnd: sEnd,
+            value: taV
+        } = this.textarea;
+
+        const slice = taV.slice(sStart, sEnd);
+        const EOL = '\n';
+        const tag = slice.includes(EOL)
+            ? Code.fullMdTag
+            : Code.mdTag
+        ;
+
+        super.insertSimpleElement(tag);
     }
 
     private click(e: MouseEvent): void {
@@ -53,11 +65,11 @@ class Bold extends EditorControl {
         const { control, hotkey } = this.settings;
 
         this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
-        this.button = super.generateElement(control);
+        this.button = super.generateElement(control, this.settings.hotkeyCurrent);
         this.container.appendChild(this.button);
 
         this.handle();
     }
 }
 
-export default Bold;
+export default Code;

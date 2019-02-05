@@ -1,13 +1,13 @@
-import EditorControl from './controls';
+import EditorControl from './control';
 import EditorUtils from '../utils';
 
 import {
     EditorControlsBinderInterface,
     EditorControlsSettingsInterface
-} from './controlsInterface';
+} from './controlInterface';
 
-class UnorderedList extends EditorControl {
-    private static mdTag = ['-',  null];
+class OrderedList extends EditorControl {
+    private static mdTag = ['$.', null];
 
     textarea: HTMLTextAreaElement;
     container: Element;
@@ -47,30 +47,51 @@ class UnorderedList extends EditorControl {
         } = this.textarea;
 
         const { capitalize } = EditorUtils;
-        const [tStart] = UnorderedList.mdTag;
+        const [tStart] = OrderedList.mdTag;
         const isSomeSelected = sEnd - sStart;
         const normalSlice = taV.slice(sStart, sEnd);
         const outerSlice = taV.slice(sStart - tStart.length, sEnd);
-        const isTagExists = outerSlice.includes(tStart);
+
+        let isTagExists = false;
+
         const buttonTitle = capitalize(this.settings.control.split('_').join(' '));
         const EOL = '\n';
         const tagOffset = 2;
         const space = ' ';
+        const tagNumStartCounter = new RegExp(/^\d. /);
+
+        const eolSlices = outerSlice.split('\n').filter(s => s !== '');
+        let eolSlicesCounter = 0;
+
+        eolSlices.forEach((slice) => {
+            if (
+                slice !== '' &&
+                slice.match(tagNumStartCounter)
+            ) {
+                eolSlicesCounter += 1;
+            }
+        });
+
+        if (eolSlices.length === eolSlicesCounter) {
+            isTagExists = true;
+        }
 
         if (isSomeSelected) {
             if (isTagExists) {
+                const sliceArr = outerSlice.split('\n');
                 let counter: number = 0;
 
-                outerSlice
-                    .split('')
-                    .forEach((r, num) => {
-                        if (r === tStart && outerSlice[num + 1] === space) {
-                            counter += 1;
-                        }
-                    });
+                const val = sliceArr.map((s: string) => {
+                    if (
+                        s !== '' &&
+                        s.match(tagNumStartCounter)
+                    ) {
+                        counter += 1;
+                        return s.replace(tagNumStartCounter, '');
+                    }
 
-                const r = new RegExp(/- /g);
-                const val = outerSlice.replace(r, '');
+                    return s;
+                }).join('\n');
 
                 const slice = [sStart - tStart.length, sEnd];
                 const isTagInside = outerSlice.slice(0, tStart.length) !== tStart;
@@ -122,7 +143,7 @@ class UnorderedList extends EditorControl {
                     .map((word) => {
                         if (word !== '') {
                             counter += 1;
-                            return tStart + space + word;
+                            return tStart.replace('$', String(counter)) + space + word;
                         }
 
                         return word;
@@ -130,11 +151,13 @@ class UnorderedList extends EditorControl {
                     .join('\n')
                 ;
 
+                const focusLastOffset = (tStart[0].length + space.length) * counter;
+
                 const value = prefix + val + postfix;
                 const slice = [sStart, sEnd];
                 const focus = [
                     sStart + prefix.length,
-                    sEnd + postfix.length + counter + counter * space.length,
+                    sEnd + postfix.length + focusLastOffset + counter,
                 ];
 
                 super.insertTextInto(value, slice, focus);
@@ -173,7 +196,8 @@ class UnorderedList extends EditorControl {
             }());
 
             const postfix = EOL.repeat(postCount);
-            const val = prefix + tStart + space + buttonTitle + postfix;
+            const tStartNormalized = tStart.replace('$', '1');
+            const val = prefix + tStartNormalized + space + buttonTitle + postfix;
             const slice = [sStart, sEnd];
             const focus = [
                 sStart + prefix.length + tStart.length + space.length,
@@ -193,11 +217,11 @@ class UnorderedList extends EditorControl {
         const { control, hotkey } = this.settings;
 
         this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
-        this.button = super.generateElement(control);
+        this.button = super.generateElement(control, this.settings.hotkeyCurrent);
         this.container.appendChild(this.button);
 
         this.handle();
     }
 }
 
-export default UnorderedList;
+export default OrderedList;

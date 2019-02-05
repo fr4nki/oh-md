@@ -1,10 +1,10 @@
-import EditorControl from './controls';
+import EditorControl from './control';
 import EditorUtils from '../utils';
 
 import {
     EditorControlsSettingsInterface,
     EditorControlsBinderInterface,
-} from './controlsInterface';
+} from './controlInterface';
 
 class Heading extends EditorControl {
     private static mdTag = ['#', null];
@@ -248,7 +248,7 @@ class Heading extends EditorControl {
         const { control, hotkey } = this.settings;
 
         this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
-        this.button = super.generateElement(control);
+        this.button = super.generateElement(control, this.settings.hotkeyCurrent);
         this.container.appendChild(this.button);
 
         this.handle();

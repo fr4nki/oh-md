@@ -1,10 +1,10 @@
-import EditorControl from './controls';
+import EditorControl from './control';
 import EditorPopup from '../popup/popup';
 
 import {
     EditorControlsBinderInterface,
     EditorControlsSettingsInterface,
-} from './controlsInterface';
+} from './controlInterface';
 
 import {
     EditorPopupSettingsItem,
@@ -122,7 +122,7 @@ class Image extends EditorControl {
         const { control, hotkey } = this.settings;
 
         this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
-        this.button = super.generateElement(control);
+        this.button = super.generateElement(control, this.settings.hotkeyCurrent);
         this.container.appendChild(this.button);
 
         this.handle();

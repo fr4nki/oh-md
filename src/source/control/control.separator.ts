@@ -17,7 +17,7 @@ class Separator {
         const { createElement } = EditorUtils;
         const element = createElement(
             'p',
-            [`${controls[0]}--separator`]
+            [`${controls}--separator`]
         );
 
         this.container.appendChild(element);

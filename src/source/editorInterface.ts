@@ -1,4 +1,4 @@
-import { EditorControlsSettingsInterface } from './controls/controlsInterface';
+import { EditorControlsSettingsInterface } from './control/controlInterface';
 
 interface EditorClassesInterface {
     container: string[];

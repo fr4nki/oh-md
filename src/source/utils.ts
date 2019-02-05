@@ -35,6 +35,22 @@ const detectOs = (): string => {
     return 'other';
 };
 
+const getNormalizedKey = (key: string): string => {
+    const meta = {
+        win: '⊞',
+        mac: '⌘',
+        other: 'Meta',
+    };
+
+    const keys = {
+        metaKey: meta[detectOs()],
+        altKey: 'Alt',
+        ctrlKey: 'Ctrl',
+    };
+
+    return keys[key];
+};
+
 const isExecSupported = document.queryCommandEnabled('insertText') &&
         document.queryCommandSupported('insertText');
 
@@ -56,4 +72,5 @@ export default {
     debounce,
     detectOs,
     isExecSupported,
+    getNormalizedKey,
 };

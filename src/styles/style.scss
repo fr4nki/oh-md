@@ -1,34 +1,147 @@
+@function rgba-to-rgb($rgba, $background: #fff) {
+    @return mix(rgb(red($rgba), green($rgba), blue($rgba)), $background, alpha($rgba) * 100%)
+}
+
 $__mdClass: 'oh-md';
 
+$__size-offset: 10px;
+$__size-icon: $__size-offset * 3;
+$__size-area-ffamily: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+$__size-area-font: 14px;
+
+$__color-default: #ccc;
+$__color-default__light: rgba-to-rgb(rgba($__color-default, .65));
+$__color-default__lightest: rgba-to-rgb(rgba($__color-default, .15));
+
+$__color-success: #04cc04;
+
+@mixin key($size: $__size-icon) {
+    display: inline-block;
+    width: $__size-icon;
+    height: $__size-icon;
+    border: none;
+    text-indent: -9999px;
+    cursor: pointer;
+    margin-right: $__size-offset / 2;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    transition: background-color .1s ease-out, opacity .05s ease-in;
+    border-radius: $__size-offset / 5;
+    outline: none;
+
+    &:focus {
+        background-color: $__color-default__light;
+    }
+
+    &:hover,
+    &:active {
+        background-color: $__color-default;
+    }
+}
+
+@mixin param($opacity: .5) {
+    font-family: $__size-area-ffamily;
+    font-size: 12px;
+    opacity: $opacity;
+}
+
 .#{$__mdClass} {
-    textarea {
-        min-width: 100%;
-        max-width: 100%;
-        width: 100%;
-        display: block;
-        padding: 10px 15px;
-        margin: 2em 0;
-        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-        font-size: inherit;
-        line-height: 1.75;
-        box-sizing: border-box;
-    }
-}
+    // Controls panel
+    &-controls {
+        margin-bottom: $__size-offset;
 
-.#{$__mdClass}-controls {
-    &--button {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        background: blue;
-    }
-}
+        &--button {
+            @include key();
 
-.#{$__mdClass}-params {
-    &--wordwrap {
-        width: 44px;
-        height: 44px;
-        display: block;
-        background: yellow;
+            &:last-child {
+                margin-right: 0;
+            }
+
+            &__bold             { background-image: url('./images/bold.svg') }
+            &__code             { background-image: url('./images/code.svg') }
+            &__fullscreen       { background-image: url('./images/fullscreen.svg') }
+            &__heading          { background-image: url('./images/heading.svg') }
+            &__image            { background-image: url('./images/image.svg') }
+            &__italic           { background-image: url('./images/italic.svg') }
+            &__link             { background-image: url('./images/link.svg') }
+            &__ordered_list     { background-image: url('./images/ordered_list.svg') }
+            &__preview          { background-image: url('./images/preview.svg') }
+            &__quote            { background-image: url('./images/quote.svg') }
+            &__strike           { background-image: url('./images/strike.svg') }
+            &__unordered_list   { background-image: url('./images/unordered_list.svg') }
+        }
+
+        &--separator {
+            display: inline-block;
+            width: $__size-offset * 2;
+            height: 100%;
+            vertical-align: middle;
+        }
+    }
+
+    // Input and preview container
+    &-area {
+        &--container {
+            &__text {}
+            &__preview {}
+        }
+
+        &--text {
+            margin: 0;
+            background: $__color-default__lightest;
+            min-width: 100%;
+            max-width: 100%;
+            width: 100%;
+            display: block;
+            font-family: $__size-area-ffamily;
+            font-size: $__size-area-font;
+            line-height: 1.75;
+            box-sizing: border-box;
+            border: 1px solid $__color-default__light;
+            outline: none;
+            margin: 0;
+            padding: $__size-offset $__size-offset * 1.5;
+
+            &:focus {
+                border-color: $__color-default;
+            }
+        }
+
+        &--preview {}
+    }
+
+    // Block with additional information
+    &-params {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &--wordwrap {
+            @include key();
+            margin: 0;
+            background-image: url('./images/word_wrap.svg');
+
+            &__off {
+                opacity: .5;
+            }
+        }
+
+        &--counter {
+            @include param(0.5);
+        }
+
+        &--autosave {
+            @include param(0);
+            transition: opacity 1s ease-in;
+            margin-left: 10px;
+            margin-right: auto;
+            color: $__color-success;
+
+            &__saved {
+                opacity: .5;
+                transition: opacity .25s ease-in;
+            }
+        }
     }
 }

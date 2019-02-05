@@ -1,17 +1,17 @@
-import EditorControl from './controls';
+import EditorControl from './control';
 
 import {
+    EditorControlsSettingsInterface,
     EditorControlsBinderInterface,
-    EditorControlsSettingsInterface
-} from './controlsInterface';
+} from './controlInterface';
 
-class Strike extends EditorControl {
-    private static mdTag = ['~~', '~~'];
+class Italic extends EditorControl {
+    private static mdTag = ['_', '_'];
 
     textarea: HTMLTextAreaElement;
     container: Element;
     settings: EditorControlsSettingsInterface;
-    button: Element;
+    private button: Element;
 
     constructor(
         textarea: HTMLTextAreaElement,
@@ -20,26 +20,25 @@ class Strike extends EditorControl {
     ) {
         super(textarea);
 
+        this.button = undefined;
         this.textarea = textarea;
         this.container = container;
-        this.settings = settings;
+        this.settings = settings || {};
+    }
 
-        this.button = undefined;
+    private insertTagInto() {
+        super.insertSimpleElement(Italic.mdTag);
     }
 
     private handle(): void {
         const { hotkeyCurrent: hotkey } = this.settings;
         const argument: EditorControlsBinderInterface = {
             hotkey,
-            callback: this.insertTagInto.bind(this)
+            callback: this.insertTagInto.bind(this),
         };
 
-        super.addHandler(argument);
+        this.addHandler(argument);
         this.button.addEventListener('click', this.click.bind(this));
-    }
-
-    private insertTagInto() {
-        super.insertSimpleElement(Strike.mdTag);
     }
 
     private click(e: MouseEvent): void {
@@ -51,11 +50,11 @@ class Strike extends EditorControl {
         const { control, hotkey } = this.settings;
 
         this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
-        this.button = super.generateElement(control);
+        this.button = super.generateElement(control, this.settings.hotkeyCurrent);
         this.container.appendChild(this.button);
 
         this.handle();
     }
 }
 
-export default Strike;
+export default Italic;

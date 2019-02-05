@@ -1,7 +1,7 @@
 import EditorUtils from '../utils';
 import EditorSettings from '../settings';
 
-import { EditorParamsSettingsInterface } from './paramsInterface';
+import { EditorParamsSettingsInterface } from './paramInterface';
 
 class Autosave {
     textarea: HTMLTextAreaElement;
@@ -22,22 +22,22 @@ class Autosave {
         this.settings = settings;
     }
 
-    _getTextareaHash() {
+    private getTextareaHash(): string {
         const { URL: url } = window.document;
         const { id } = this.settings;
 
         return `${url}${Autosave.separator}${id}`;
     }
 
-    _fillTextArea() {
-        const hash = this._getTextareaHash();
+    private fillTextArea(): void {
+        const hash = this.getTextareaHash();
         this.textarea.value = window.localStorage[hash] || '';
     }
 
-    _saveText() {
+    private saveText(): void {
         const params = EditorSettings.defaultClasses.params[0];
         const { value } = this.textarea;
-        const hash = this._getTextareaHash();
+        const hash = this.getTextareaHash();
         const activeClass = `${params}--autosave__saved`;
 
         this.element.classList.add(activeClass);
@@ -51,7 +51,7 @@ class Autosave {
         );
     }
 
-    init() {
+    public init(): void {
         const { defaultWarnings, defaultClasses } = EditorSettings;
         const { createElement, log } = EditorUtils;
         const params = defaultClasses.params[0];
@@ -73,11 +73,11 @@ class Autosave {
         this.container.appendChild(this.element);
         this.settings.id = id;
 
-        this._fillTextArea();
+        this.fillTextArea();
 
         setInterval(
             () => {
-                this._saveText();
+                this.saveText();
             },
             autosave * 1000
         );

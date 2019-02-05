@@ -1,4 +1,4 @@
-interface EditorControlsHotkeyInterface {
+export interface EditorControlsHotkeyInterface {
     modificator: string;
     key: string;
 }

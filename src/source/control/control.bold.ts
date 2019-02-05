@@ -1,17 +1,17 @@
-import EditorControl from './controls';
+import EditorControl from './control';
 
 import {
-    EditorControlsSettingsInterface,
     EditorControlsBinderInterface,
-} from './controlsInterface';
+    EditorControlsSettingsInterface
+} from './controlInterface';
 
-class Italic extends EditorControl {
-    private static mdTag = ['_', '_'];
+class Bold extends EditorControl {
+    private static mdTag = ['**', '**'];
 
     textarea: HTMLTextAreaElement;
     container: Element;
     settings: EditorControlsSettingsInterface;
-    private button: Element;
+    button: Element;
 
     constructor(
         textarea: HTMLTextAreaElement,
@@ -20,25 +20,28 @@ class Italic extends EditorControl {
     ) {
         super(textarea);
 
-        this.button = undefined;
         this.textarea = textarea;
         this.container = container;
-        this.settings = settings || {};
-    }
+        this.settings = settings;
 
-    private insertTagInto() {
-        super.insertSimpleElement(Italic.mdTag);
+        this.button = undefined;
     }
 
     private handle(): void {
         const { hotkeyCurrent: hotkey } = this.settings;
         const argument: EditorControlsBinderInterface = {
             hotkey,
-            callback: this.insertTagInto.bind(this),
+            callback: this.insertTagInto.bind(this)
         };
 
-        this.addHandler(argument);
+        super.addHandler(argument);
         this.button.addEventListener('click', this.click.bind(this));
+    }
+
+    private insertTagInto() {
+        this.button.classList.add('active');
+        super.insertSimpleElement(Bold.mdTag);
+        this.button.classList.remove('active');
     }
 
     private click(e: MouseEvent): void {
@@ -50,11 +53,11 @@ class Italic extends EditorControl {
         const { control, hotkey } = this.settings;
 
         this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
-        this.button = super.generateElement(control);
+        this.button = super.generateElement(control, this.settings.hotkeyCurrent);
         this.container.appendChild(this.button);
 
         this.handle();
     }
 }
 
-export default Italic;
+export default Bold;

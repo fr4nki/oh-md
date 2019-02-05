@@ -1,7 +1,7 @@
 import EditorUtils from '../utils';
 import EditorSettings from '../settings';
 
-import { EditorParamsSettingsInterface } from './paramsInterface';
+import { EditorParamsSettingsInterface } from './paramInterface';
 
 class Wordwrap {
     textarea: HTMLTextAreaElement;
@@ -25,15 +25,19 @@ class Wordwrap {
     }
 
     private setWordwrapStatus() {
+        const area = EditorSettings.defaultClasses.area[0];
         const params = EditorSettings.defaultClasses.params[0];
-        const wordwrapClassname = `${params}--wordwrap__off`;
+        const wordwrapAreaClassname = `${area}--wordwrap__off`;
+        const wordwrapParamsClassname = `${params}--wordwrap__off`;
 
         this.wordwrapStatus = !this.wordwrapStatus;
 
         if (!this.wordwrapStatus) {
-            this.textarea.classList.add(wordwrapClassname);
+            this.textarea.classList.add(wordwrapAreaClassname);
+            this.element.classList.add(wordwrapParamsClassname);
         } else {
-            this.textarea.classList.remove(wordwrapClassname);
+            this.textarea.classList.remove(wordwrapAreaClassname);
+            this.element.classList.remove(wordwrapParamsClassname);
         }
     }
 
@@ -43,7 +47,6 @@ class Wordwrap {
         const { paramVisible, active } = this.settings.wordwrap;
 
         this.wordwrapStatus = active;
-        this.setWordwrapStatus();
 
         if (!paramVisible) {
             return;
@@ -51,8 +54,13 @@ class Wordwrap {
 
         this.element = createElement(
             'a',
-            [`${params}--wordwrap`]
+            [`${params}--wordwrap`],
+            {
+                title: 'Word wrap',
+            }
         );
+
+        this.setWordwrapStatus();
 
         this.element.addEventListener('click', this.setWordwrapStatus.bind(this));
         this.container.appendChild(this.element);

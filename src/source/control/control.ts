@@ -1,7 +1,10 @@
 import EditorUtils from '../utils';
 import EditorSettings from '../settings';
 
-import { EditorControlsBinderInterface } from './controlsInterface';
+import {
+    EditorControlsBinderInterface,
+    EditorControlsHotkeyInterface,
+} from './controlInterface';
 
 class Controls {
     protected textarea: HTMLTextAreaElement;
@@ -83,22 +86,22 @@ class Controls {
     }
 
     protected getCurrentHotkey(hotkeys: object) {
-        const { log, detectOs } = EditorUtils;
-        const { hotkeyWrong } = EditorSettings.defaultWarnings.controls;
+        const { detectOs } = EditorUtils;
         const os = detectOs();
         const currentHotkeys = hotkeys[os];
-
-        if (!currentHotkeys.modificator || !currentHotkeys.key) {
-            log(hotkeyWrong, 'warn', null);
-        }
 
         return currentHotkeys;
     }
 
-    protected generateElement(controlType: string) {
-        const { createElement, capitalize } = EditorUtils;
+    protected generateElement(controlType: string, hotKeys: EditorControlsHotkeyInterface) {
+        const { createElement, capitalize, getNormalizedKey } = EditorUtils;
+
         const controls = EditorSettings.defaultClasses.controls[0];
-        const normalizedControlName = capitalize(controlType);
+        const normalizedControlName = capitalize(controlType.split('_').join(' '));
+        const normalizedHotKeyText = [
+            getNormalizedKey(hotKeys.modificator),
+            hotKeys.key.toUpperCase(),
+        ];
 
         const control = createElement(
             'button',
@@ -107,7 +110,7 @@ class Controls {
                 `${controls}--button__${controlType.toLowerCase()}`
             ],
             {
-                title: normalizedControlName,
+                title: `${normalizedControlName} (${normalizedHotKeyText.join(' + ')})`,
             }
         );
         control.innerHTML = normalizedControlName;

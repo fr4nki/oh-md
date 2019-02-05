@@ -1,75 +1,61 @@
-import EditorControl from './controls';
-import EditorSettings from '../settings';
+import EditorControl from './control';
 
 import {
     EditorControlsBinderInterface,
     EditorControlsSettingsInterface
-} from './controlsInterface';
+} from './controlInterface';
 
-class Fullscreen extends EditorControl {
+class Strike extends EditorControl {
+    private static mdTag = ['~~', '~~'];
+
     textarea: HTMLTextAreaElement;
     container: Element;
     settings: EditorControlsSettingsInterface;
-    wrapper: Element;
-
     button: Element;
-    isFullscreenEnabled: Boolean;
 
     constructor(
         textarea: HTMLTextAreaElement,
         container: Element,
-        settings: EditorControlsSettingsInterface,
-        wrapper: Element,
+        settings: EditorControlsSettingsInterface
     ) {
         super(textarea);
 
         this.textarea = textarea;
         this.container = container;
         this.settings = settings;
-        this.wrapper = wrapper;
 
-        this.button = null;
-        this.isFullscreenEnabled = false;
-    }
-
-    private toggleFullscreen() {
-        const container = EditorSettings.defaultClasses.container[0];
-        const className = `${container}-mode-fullscreen`;
-
-        if (this.isFullscreenEnabled) {
-            this.wrapper.classList.remove(className);
-        } else {
-            this.wrapper.classList.add(className);
-        }
-
-        this.isFullscreenEnabled = !this.isFullscreenEnabled;
+        this.button = undefined;
     }
 
     private handle(): void {
         const { hotkeyCurrent: hotkey } = this.settings;
         const argument: EditorControlsBinderInterface = {
             hotkey,
-            callback: this.toggleFullscreen.bind(this)
+            callback: this.insertTagInto.bind(this)
         };
 
         super.addHandler(argument);
         this.button.addEventListener('click', this.click.bind(this));
     }
 
+    private insertTagInto() {
+        super.insertSimpleElement(Strike.mdTag);
+    }
+
     private click(e: MouseEvent): void {
         e.preventDefault();
-        this.toggleFullscreen();
+        this.insertTagInto();
     }
 
     public init(): void {
         const { control, hotkey } = this.settings;
 
         this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
-        this.button = super.generateElement(control);
+        this.button = super.generateElement(control, this.settings.hotkeyCurrent);
         this.container.appendChild(this.button);
 
         this.handle();
     }
 }
 
-export default Fullscreen;
+export default Strike;

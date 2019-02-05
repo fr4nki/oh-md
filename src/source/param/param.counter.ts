@@ -1,7 +1,7 @@
 import EditorUtils from '../utils';
 import EditorSettings from '../settings';
 
-import { EditorParamsSettingsInterface } from './paramsInterface';
+import { EditorParamsSettingsInterface } from './paramInterface';
 
 class Counter {
     private textarea: HTMLTextAreaElement;
@@ -29,7 +29,8 @@ class Counter {
     }
 
     private counterUpdate(): void {
-        this.element.innerHTML = String(this.textarea.value.length);
+        const counter =  String(this.textarea.value.length)
+        this.element.innerHTML = `Count: ${counter}`;
     }
 
     public init() {

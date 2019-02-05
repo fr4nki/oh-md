@@ -1,75 +1,75 @@
-import EditorControl from './controls';
+import EditorControl from './control';
+import EditorSettings from '../settings';
 
 import {
     EditorControlsBinderInterface,
     EditorControlsSettingsInterface
-} from './controlsInterface';
+} from './controlInterface';
 
-class Code extends EditorControl {
-    private static mdTag = ['`', '`'];
-    private static fullMdTag = ['```\n', '\n```'];
-
+class Fullscreen extends EditorControl {
     textarea: HTMLTextAreaElement;
     container: Element;
     settings: EditorControlsSettingsInterface;
+    wrapper: Element;
+
     button: Element;
+    isFullscreenEnabled: Boolean;
 
     constructor(
         textarea: HTMLTextAreaElement,
         container: Element,
-        settings: EditorControlsSettingsInterface
+        settings: EditorControlsSettingsInterface,
+        wrapper: Element,
     ) {
         super(textarea);
 
         this.textarea = textarea;
         this.container = container;
         this.settings = settings;
+        this.wrapper = wrapper;
 
-        this.button = undefined;
+        this.button = null;
+        this.isFullscreenEnabled = false;
+    }
+
+    private toggleFullscreen() {
+        const container = EditorSettings.defaultClasses.container[0];
+        const className = `${container}-mode-fullscreen`;
+
+        if (this.isFullscreenEnabled) {
+            this.wrapper.classList.remove(className);
+        } else {
+            this.wrapper.classList.add(className);
+        }
+
+        this.isFullscreenEnabled = !this.isFullscreenEnabled;
     }
 
     private handle(): void {
         const { hotkeyCurrent: hotkey } = this.settings;
         const argument: EditorControlsBinderInterface = {
             hotkey,
-            callback: this.insertTagInto.bind(this)
+            callback: this.toggleFullscreen.bind(this)
         };
 
         super.addHandler(argument);
         this.button.addEventListener('click', this.click.bind(this));
     }
 
-    private insertTagInto() {
-        const {
-            selectionStart: sStart,
-            selectionEnd: sEnd,
-            value: taV
-        } = this.textarea;
-
-        const slice = taV.slice(sStart, sEnd);
-        const EOL = '\n';
-        const tag = slice.includes(EOL)
-            ? Code.fullMdTag
-            : Code.mdTag
-        ;
-
-        super.insertSimpleElement(tag);
-    }
-
     private click(e: MouseEvent): void {
         e.preventDefault();
-        this.insertTagInto();
+        this.toggleFullscreen();
     }
 
     public init(): void {
         const { control, hotkey } = this.settings;
 
         this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
-        this.button = super.generateElement(control);
+        this.button = super.generateElement(control, this.settings.hotkeyCurrent);
         this.container.appendChild(this.button);
 
         this.handle();
     }
 }
 
-export default Code;
+export default Fullscreen;

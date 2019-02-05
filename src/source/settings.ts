@@ -1,8 +1,8 @@
 const defaultClassNamePrefix = 'oh-md';
 
 const defaultParams = {
-    autosave: 0,
     counter: true,
+    autosave: 0,
     wordwrap: {
         paramVisible: true,
         active: true,
@@ -129,6 +129,9 @@ const defaultControls = [
                 key: 'd',
             },
         },
+    },
+    {
+        control: 'separator',
     },
     {
         control: 'link',

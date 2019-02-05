@@ -1,13 +1,13 @@
 import marked from 'marked';
 
-import EditorControl from './controls';
+import EditorControl from './control';
 import EditorUtils from '../utils';
 import EditorSettings from '../settings';
 
 import {
     EditorControlsBinderInterface,
     EditorControlsSettingsInterface
-} from './controlsInterface';
+} from './controlInterface';
 
 class Preview extends EditorControl {
     textarea: HTMLTextAreaElement;
@@ -66,13 +66,13 @@ class Preview extends EditorControl {
             [`${area}--container__preview`],
         );
 
-        this.textarea.parentElement.appendChild(this.previewContainer);
+        this.textarea.parentElement.parentElement.appendChild(this.previewContainer);
         this.textarea.addEventListener('keyup', this.handleAreaInput);
         this.handleAreaInput();
     }
 
     private removePreview() {
-        this.textarea.parentElement.removeChild(this.previewContainer);
+        this.textarea.parentElement.parentElement.removeChild(this.previewContainer);
         this.previewContainer = null;
         this.textarea.removeEventListener('keyup', this.handleAreaInput);
     }
@@ -85,7 +85,7 @@ class Preview extends EditorControl {
         const { control, hotkey } = this.settings;
 
         this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
-        this.button = super.generateElement(control);
+        this.button = super.generateElement(control, this.settings.hotkeyCurrent);
         this.container.appendChild(this.button);
 
         this.handle();
