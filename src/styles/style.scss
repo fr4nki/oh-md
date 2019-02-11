@@ -10,6 +10,7 @@ $__size-area-ffamily: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Cour
 $__size-area-font: 14px;
 $__size-area-height: 500px;
 
+$__color-icon: #505050;
 $__color-default: #ccc;
 $__color-default__light: rgba-to-rgb(rgba($__color-default, .65));
 $__color-default__lightest: rgba-to-rgb(rgba($__color-default, .15));
@@ -45,11 +46,26 @@ $__color-success: #04cc04;
     font-family: $__size-area-ffamily;
     font-size: 12px;
     opacity: $opacity;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .#{$__mdClass} {
+    position: relative;
+
     // Root mode statuses
     &-mode {
+        &-fullscreen {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: $__color-default__lightest;
+        }
+
         &-preview {
             .#{$__mdClass}-area--container__text {
                 display: none;
@@ -64,6 +80,10 @@ $__color-success: #04cc04;
     // Controls panel
     &-controls {
         margin-bottom: $__size-offset;
+
+        .#{$__mdClass}-mode-fullscreen & {
+            margin: $__size-offset ($__size-offset + $__size-offset / 4);
+        }
 
         &--button {
             @include key();
@@ -150,7 +170,7 @@ $__color-success: #04cc04;
             line-height: 1.75;
             box-sizing: border-box;
             border: 1px solid $__color-default__light;
-            outline: none;
+            outline: inherit;
             margin: 0;
             padding: $__size-offset $__size-offset * 1.5;
             box-sizing: border-box;
@@ -173,6 +193,11 @@ $__color-success: #04cc04;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin: ($__size-offset / 2) 0;
+
+        .#{$__mdClass}-mode-fullscreen & {
+            margin: $__size-offset ($__size-offset + $__size-offset / 4);
+        }
 
         &--wordwrap {
             @include key();
@@ -198,6 +223,65 @@ $__color-success: #04cc04;
             &__saved {
                 opacity: .5;
                 transition: opacity .25s ease-in;
+            }
+        }
+    }
+
+    &-popup {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #f7f7f7;
+        padding: $__size-offset * 2;
+        border: 1px solid $__color-default;
+        border-radius: $__size-offset / 5;
+
+        &-item {
+            font-family: $__size-area-ffamily;
+            font-size: $__size-area-font;
+            margin-bottom: $__size-offset;
+
+            &-label {
+                display: block;
+                color: $__color-icon;
+            }
+
+            &-input {
+                outline: none;
+                min-width: 200px;
+                font-size: $__size-area-font;
+                padding: ($__size-offset / 2) $__size-offset;
+                color: $__color-icon;
+                border: 1px solid $__color-default__light;
+
+                @media screen and (min-width: 600px) {
+                    min-width: 300px;
+                }
+
+                &:focus {
+                    border-color: $__color-default;
+                }
+            }
+
+        }
+
+        &-controls {
+            margin-top: $__size-offset * 2;
+
+            &-button {
+                font-family: $__size-area-ffamily;
+                font-size: $__size-area-font;
+                color: $__color-icon;
+
+                &__cancel {
+                    background: transparent;
+                    border: none;
+                    border-bottom: 1px dotted $__color-icon;
+                    padding: ($__size-offset / 5) 0;
+                    margin-right: $__size-offset;
+                    cursor: pointer;
+                }
             }
         }
     }
