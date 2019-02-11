@@ -1,0 +1,288 @@
+@function rgba-to-rgb($rgba, $background: #fff) {
+    @return mix(rgb(red($rgba), green($rgba), blue($rgba)), $background, alpha($rgba) * 100%)
+}
+
+$__mdClass: 'oh-md';
+
+$__size-offset: 10px;
+$__size-icon: $__size-offset * 3;
+$__size-area-ffamily: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+$__size-area-font: 14px;
+$__size-area-height: 500px;
+
+$__color-icon: #505050;
+$__color-default: #ccc;
+$__color-default__light: rgba-to-rgb(rgba($__color-default, .65));
+$__color-default__lightest: rgba-to-rgb(rgba($__color-default, .15));
+
+$__color-success: #04cc04;
+
+@mixin key($size: $__size-icon) {
+    display: inline-block;
+    width: $__size-icon;
+    height: $__size-icon;
+    border: none;
+    text-indent: -9999px;
+    cursor: pointer;
+    margin-right: $__size-offset / 2;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    transition: background-color .1s ease-out, opacity .05s ease-in;
+    border-radius: $__size-offset / 5;
+    outline: none;
+
+    &:focus {
+        background-color: $__color-default__light;
+    }
+
+    &:hover,
+    &:active {
+        background-color: $__color-default;
+    }
+}
+
+@mixin param($opacity: .5) {
+    font-family: $__size-area-ffamily;
+    font-size: 12px;
+    opacity: $opacity;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.#{$__mdClass} {
+    position: relative;
+
+    // Root mode statuses
+    &-mode {
+        &-fullscreen {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: $__color-default__lightest;
+        }
+
+        &-preview {
+            .#{$__mdClass}-area--container__text {
+                display: none;
+            }
+
+            .#{$__mdClass}-area--container__preview {
+                display: block;
+            }
+        }
+    }
+
+    // Controls panel
+    &-controls {
+        margin-bottom: $__size-offset;
+
+        .#{$__mdClass}-mode-fullscreen & {
+            margin: $__size-offset ($__size-offset + $__size-offset / 4);
+        }
+
+        &--button {
+            @include key();
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            &__bold             { background-image: url('./images/bold.svg') }
+            &__code             { background-image: url('./images/code.svg') }
+            &__heading          { background-image: url('./images/heading.svg') }
+            &__image            { background-image: url('./images/image.svg') }
+            &__italic           { background-image: url('./images/italic.svg') }
+            &__link             { background-image: url('./images/link.svg') }
+            &__ordered_list     { background-image: url('./images/ordered_list.svg') }
+            &__quote            { background-image: url('./images/quote.svg') }
+            &__strike           { background-image: url('./images/strike.svg') }
+            &__unordered_list   { background-image: url('./images/unordered_list.svg') }
+
+            &__fullscreen       {
+                background-image: url('./images/fullscreen.svg');
+
+                &__active {
+                    background-color: $__color-default;
+                    background-image: url('./images/fullscreen_active.svg');
+
+                    &:focus,
+                    &:active {
+                        background-color: $__color-default;
+                    }
+                }
+            }
+            &__preview          {
+                background-image: url('./images/preview.svg');
+
+                &__active {
+                    background-color: $__color-default;
+                    background-image: url('./images/preview_active.svg');
+
+                    &:focus,
+                    &:active {
+                        background-color: $__color-default;
+                    }
+                }
+            }
+        }
+
+        &--separator {
+            display: inline-block;
+            width: $__size-offset * 2;
+            height: 100%;
+            vertical-align: middle;
+        }
+    }
+
+    // Input and preview container
+    &-area {
+        &--container {
+            &__text {
+                height: $__size-area-height;
+            }
+
+            &__preview {
+                height: $__size-area-height;
+                padding: 10px 15px;
+                background: $__color-default__lightest;
+                border: 1px solid $__color-default__light;
+                max-height: 600px;
+                overflow-y: auto;
+                box-sizing: border-box;
+            }
+        }
+
+        &--text {
+            margin: 0;
+            background: $__color-default__lightest;
+            min-width: 100%;
+            max-width: 100%;
+            width: 100%;
+            height: 100%;
+            display: block;
+            font-family: $__size-area-ffamily;
+            font-size: $__size-area-font;
+            line-height: 1.75;
+            box-sizing: border-box;
+            border: 1px solid $__color-default__light;
+            outline: inherit;
+            margin: 0;
+            padding: $__size-offset $__size-offset * 1.5;
+            box-sizing: border-box;
+            white-space: normal;
+
+            &:focus {
+                border-color: $__color-default;
+            }
+
+            &--wordwrap__off {
+                white-space: pre;
+            }
+        }
+
+        &--preview {}
+    }
+
+    // Block with additional information
+    &-params {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: ($__size-offset / 2) 0;
+
+        .#{$__mdClass}-mode-fullscreen & {
+            margin: $__size-offset ($__size-offset + $__size-offset / 4);
+        }
+
+        &--wordwrap {
+            @include key();
+            margin: 0;
+            background-image: url('./images/word_wrap.svg');
+
+            &__off {
+                opacity: .5;
+            }
+        }
+
+        &--counter {
+            @include param(0.5);
+        }
+
+        &--autosave {
+            @include param(0);
+            transition: opacity 1s ease-in;
+            margin-left: 10px;
+            margin-right: auto;
+            color: $__color-success;
+
+            &__saved {
+                opacity: .5;
+                transition: opacity .25s ease-in;
+            }
+        }
+    }
+
+    &-popup {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #f7f7f7;
+        padding: $__size-offset * 2;
+        border: 1px solid $__color-default;
+        border-radius: $__size-offset / 5;
+
+        &-item {
+            font-family: $__size-area-ffamily;
+            font-size: $__size-area-font;
+            margin-bottom: $__size-offset;
+
+            &-label {
+                display: block;
+                color: $__color-icon;
+            }
+
+            &-input {
+                outline: none;
+                min-width: 200px;
+                font-size: $__size-area-font;
+                padding: ($__size-offset / 2) $__size-offset;
+                color: $__color-icon;
+                border: 1px solid $__color-default__light;
+
+                @media screen and (min-width: 600px) {
+                    min-width: 300px;
+                }
+
+                &:focus {
+                    border-color: $__color-default;
+                }
+            }
+
+        }
+
+        &-controls {
+            margin-top: $__size-offset * 2;
+
+            &-button {
+                font-family: $__size-area-ffamily;
+                font-size: $__size-area-font;
+                color: $__color-icon;
+
+                &__cancel {
+                    background: transparent;
+                    border: none;
+                    border-bottom: 1px dotted $__color-icon;
+                    padding: ($__size-offset / 5) 0;
+                    margin-right: $__size-offset;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
