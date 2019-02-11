@@ -54,7 +54,7 @@ $__color-success: #04cc04;
     position: relative;
 
     // Root mode statuses
-    &-mode {
+    &.#{$__mdClass}-mode {
         &-fullscreen {
             position: fixed;
             top: 0;
@@ -64,6 +64,33 @@ $__color-success: #04cc04;
             width: 100%;
             height: 100%;
             background-color: $__color-default__lightest;
+            display: flex;
+            align-items: stretch;
+            flex-direction: column;
+            max-height: 100%;
+
+            .#{$__mdClass}-controls,
+            .#{$__mdClass}-area,
+            .#{$__mdClass}-params {
+                width: 100%;
+            }
+
+            .#{$__mdClass}-area {
+                flex: 1;
+
+                &--container__text,
+                &--container__preview {
+                    height: 100%;
+                    max-height: unset;
+                }
+            }
+
+            .#{$__mdClass}-params,
+            .#{$__mdClass}-controls {
+                padding: $__size-offset ($__size-offset + ($__size-offset / 4));
+                box-sizing: border-box;
+                margin: 0;
+            }
         }
 
         &-preview {
