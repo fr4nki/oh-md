@@ -98,10 +98,14 @@ class Controls {
 
         const controls = EditorSettings.defaultClasses.controls[0];
         const normalizedControlName = capitalize(controlType.split('_').join(' '));
-        const normalizedHotKeyText = [
-            getNormalizedKey(hotKeys.modificator),
-            hotKeys.key.toUpperCase(),
-        ];
+        const normalizedHotKeyText = [];
+
+        if (hotKeys && hotKeys.modificator) {
+            normalizedHotKeyText.push(
+                getNormalizedKey(hotKeys.modificator),
+                hotKeys.key.toUpperCase(),
+            );
+        }
 
         const control = createElement(
             'button',
@@ -113,6 +117,7 @@ class Controls {
                 title: `${normalizedControlName} (${normalizedHotKeyText.join(' + ')})`,
             }
         );
+
         control.innerHTML = normalizedControlName;
 
         return control;
