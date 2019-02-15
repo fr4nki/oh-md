@@ -32,7 +32,7 @@ class Counter {
         window.setTimeout(
             () => {
                 const counter =  String(this.textarea.value.length);
-                this.element.innerHTML = `Count: ${counter}`;
+                this.element.innerHTML = counter;
             },
             0,
         );

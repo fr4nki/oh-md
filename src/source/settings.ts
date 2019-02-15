@@ -60,6 +60,19 @@ const defaultControls = [
         },
     },
     {
+        control: 'strike',
+        hotkey: {
+            win: {
+                modificator: 'ctrlKey',
+                key: 'd',
+            },
+            mac: {
+                modificator: 'metaKey',
+                key: 'd',
+            },
+        },
+    },
+    {
         control: 'separator',
     },
     {
@@ -118,22 +131,6 @@ const defaultControls = [
         },
     },
     {
-        control: 'strike',
-        hotkey: {
-            win: {
-                modificator: 'ctrlKey',
-                key: 'd',
-            },
-            mac: {
-                modificator: 'metaKey',
-                key: 'd',
-            },
-        },
-    },
-    {
-        control: 'separator',
-    },
-    {
         control: 'link',
         hotkey: {
             win: {
@@ -166,12 +163,12 @@ const defaultControls = [
         control: 'preview',
         hotkey: {
             win: {
-                modificator: 'altKey',
-                key: 'p',
+                modificator: 'ctrlKey',
+                key: 'i',
             },
             mac: {
-                modificator: 'altKey',
-                key: 'p',
+                modificator: 'metaKey',
+                key: 'i',
             },
         },
     },

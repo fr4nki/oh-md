@@ -113,9 +113,10 @@ class Link extends EditorControl {
         const {
             selectionStart: sStart,
             selectionEnd: sEnd,
+            value,
         } = this.textarea;
 
-        super.insertTextInto('', [sStart, sEnd], [sStart, sStart]);
+        super.insertTextInto(value.slice(sStart, sEnd), [sStart, sEnd], [sStart, sStart]);
     }
 
     public init(): void {
