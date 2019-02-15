@@ -78,11 +78,16 @@ $__color-success: #04cc04;
             .#{$__mdClass}-area {
                 flex: 1;
 
+                &--text,
                 &--container__text,
                 &--container__preview {
                     height: 100%;
                     max-height: unset;
                 }
+            }
+
+            .#{$__mdClass}-params {
+                margin: $__size-offset ($__size-offset + $__size-offset / 4);
             }
 
             .#{$__mdClass}-params,
@@ -163,6 +168,7 @@ $__color-success: #04cc04;
             width: $__size-offset * 2;
             height: 100%;
             vertical-align: middle;
+            margin: 0;
         }
     }
 
@@ -170,7 +176,7 @@ $__color-success: #04cc04;
     &-area {
         &--container {
             &__text {
-                height: $__size-area-height;
+                height: auto;
             }
 
             &__preview {
@@ -190,10 +196,12 @@ $__color-success: #04cc04;
             min-width: 100%;
             max-width: 100%;
             width: 100%;
-            height: 100%;
+            min-height: 150px;
+            height: $__size-area-height;
             display: block;
             font-family: $__size-area-ffamily;
             font-size: $__size-area-font;
+            font-weight: normal;
             line-height: 1.75;
             box-sizing: border-box;
             border: 1px solid $__color-default__light;
@@ -222,10 +230,6 @@ $__color-success: #04cc04;
         justify-content: space-between;
         margin: ($__size-offset / 2) 0;
 
-        .#{$__mdClass}-mode-fullscreen & {
-            margin: $__size-offset ($__size-offset + $__size-offset / 4);
-        }
-
         &--wordwrap {
             @include key();
             margin: 0;
@@ -242,6 +246,7 @@ $__color-success: #04cc04;
 
         &--autosave {
             @include param(0);
+            display: none;
             transition: opacity 1s ease-in;
             margin-left: 10px;
             margin-right: auto;
@@ -272,6 +277,7 @@ $__color-success: #04cc04;
             &-label {
                 display: block;
                 color: $__color-icon;
+                margin-bottom: $__size-offset / 4;
             }
 
             &-input {

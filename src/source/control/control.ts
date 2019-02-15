@@ -129,15 +129,25 @@ class Controls {
 
     public init() {
         this.textarea.addEventListener('keydown', (e) => {
+            console.log(e);
             if (window.document.activeElement === this.textarea) {
                 Controls.handlerList.forEach((handler) => {
+                    console.log(handler.hotkey);
+
                     if (
                         handler.hotkey &&
                         e[handler.hotkey.modificator] &&
                         e.key === handler.hotkey.key
                     ) {
                         e.preventDefault();
+
+                        console.log(handler.hotkey);
+                        console.log(e[handler.hotkey.modificator]);
+                        console.log(e.key === handler.hotkey.key);
+
                         handler.callback();
+
+                        return;
                     }
                 });
             }
