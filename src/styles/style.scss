@@ -187,6 +187,7 @@ $__color-success: #04cc04;
                 max-height: 600px;
                 overflow-y: auto;
                 box-sizing: border-box;
+                word-wrap: break-word;
             }
         }
 
@@ -209,7 +210,6 @@ $__color-success: #04cc04;
             margin: 0;
             padding: $__size-offset $__size-offset * 1.5;
             box-sizing: border-box;
-            white-space: normal;
 
             &:focus {
                 border-color: $__color-default;
@@ -219,8 +219,6 @@ $__color-success: #04cc04;
                 white-space: pre;
             }
         }
-
-        &--preview {}
     }
 
     // Block with additional information

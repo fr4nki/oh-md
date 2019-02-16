@@ -24,6 +24,7 @@ class Controls {
             document.queryCommandSupported(Controls.insertCommand)
         ) {
             document.execCommand(Controls.insertCommand, false, text);
+
         } else {
             const { value } = this.textarea;
 

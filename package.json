@@ -25,6 +25,7 @@
         "livereload": "^0.7.0",
         "marked": "^0.6.0",
         "rollup": "^0.68.2",
+        "rollup-plugin-babel": "^4.3.2",
         "rollup-plugin-commonjs": "^9.2.0",
         "rollup-plugin-cpy": "^1.1.0",
         "rollup-plugin-node-resolve": "^4.0.0",

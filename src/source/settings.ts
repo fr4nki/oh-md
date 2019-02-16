@@ -164,11 +164,11 @@ const defaultControls = [
         hotkey: {
             win: {
                 modificator: 'ctrlKey',
-                key: 'i',
+                key: 'm',
             },
             mac: {
                 modificator: 'metaKey',
-                key: 'i',
+                key: 'm',
             },
         },
     },

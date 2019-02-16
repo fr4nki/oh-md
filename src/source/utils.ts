@@ -51,8 +51,9 @@ const getNormalizedKey = (key: string): string => {
     return keys[key];
 };
 
-const isExecSupported = document.queryCommandEnabled('insertText') &&
-        document.queryCommandSupported('insertText');
+// const isExecSupported = document.queryCommandEnabled && document.queryCommandSupported
+//     ? document.queryCommandEnabled('insertText') && document.queryCommandSupported('insertText')
+//     : false;
 
 const debounce = (fn: () => {}, time: number) => {
     let timeout: number;
@@ -71,6 +72,6 @@ export default {
     log,
     debounce,
     detectOs,
-    isExecSupported,
+    // isExecSupported,
     getNormalizedKey,
 };

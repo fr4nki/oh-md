@@ -1,6 +1,7 @@
 import typescript from 'rollup-plugin-typescript2';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonJS from 'rollup-plugin-commonjs';
+import babel from 'rollup-plugin-babel';
 import copy from 'rollup-plugin-cpy';
 import scss from 'rollup-plugin-scss'
 import pkg from './package.json';
@@ -30,11 +31,14 @@ export default {
             typescript: require('typescript'),
         }),
         commonJS(),
+        babel({
+            exclude: 'node_modules/**'
+        }),
         scss({
             output: 'dist/style.css',
         }),
         copy([
             { files: 'src/images/*.*', dest: './dist/images' },
-          ])
+        ])
     ],
 };
