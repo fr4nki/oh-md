@@ -1,10 +1,10 @@
 import EditorSettings from '../settings';
-import EditorUtils from '../utils';
+import EditorUtils from '../utils/utils';
 
 import {
     EditorPopupInterface,
     EditorPopupSettingsItem,
-} from './popupInterface';
+} from '../types';
 
 class EditorPopup implements EditorPopupInterface {
     form: Element;
@@ -110,7 +110,7 @@ class EditorPopup implements EditorPopupInterface {
 
         this.form = createElement('div', popup);
 
-        this.settings.forEach((s, num) => {
+        this.settings.forEach((s) => {
             const item = this.generateFormItem(s);
 
             this.form.appendChild(item);

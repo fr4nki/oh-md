@@ -1,4 +1,4 @@
-import EditorUtils from '../utils';
+import EditorUtils from '../utils/utils';
 import EditorSettings from '../settings';
 
 import { EditorParamsSettingsInterface } from './paramInterface';
@@ -52,16 +52,17 @@ class Autosave {
     }
 
     public init(): void {
-        const { defaultWarnings, defaultClasses } = EditorSettings;
-        const { createElement, log } = EditorUtils;
+        const { defaultClasses } = EditorSettings;
+        const { createElement } = EditorUtils;
         const params = defaultClasses.params[0];
-        const { id: idWarning } = defaultWarnings.autosave;
         const { autosave } = this.settings;
         const id = this.textarea.id || this.textarea.name || null;
 
-        if (!autosave) return;
         if (!id) {
-            log(idWarning, 'warn', [String(this.textarea)]);
+            console.log('Id is not exists');
+        }
+
+        if (!autosave || !id) {
             return;
         }
 

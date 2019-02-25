@@ -6,4 +6,8 @@ export interface EditorParamsSettingsInterface {
         active: boolean;
     };
     id?: string;
+    doubleReturn?: {
+        modificatorKey: string;
+        active: boolean;
+    };
 }

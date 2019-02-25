@@ -2,9 +2,13 @@ const defaultClassNamePrefix = 'oh-md';
 
 const defaultParams = {
     counter: true,
-    autosave: 0,
+    autosave: 10000,
     wordwrap: {
         paramVisible: true,
+        active: true,
+    },
+    doubleReturn: {
+        modificatorKey: 'ctrlKey',
         active: true,
     },
 };

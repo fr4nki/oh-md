@@ -1,4 +1,4 @@
-import EditorUtils from '../utils';
+import EditorUtils from '../utils/utils';
 import EditorSettings from '../settings';
 
 import { EditorParamsSettingsInterface } from './paramInterface';

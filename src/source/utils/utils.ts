@@ -14,11 +14,6 @@ const createElement = (
 const capitalize = (str: string): string =>
     str[0].toUpperCase() + str.slice(1, str.length);
 
-const log = (text: string, type: string, args: any[]): void => {
-    const prefix = '# OH-MD: ';
-    console[type](`${prefix}${text}`, ...args);
-};
-
 const detectOs = (): string => {
     const platform: string = window.navigator.platform.toLowerCase();
     const osWin: string = 'win';
@@ -51,10 +46,6 @@ const getNormalizedKey = (key: string): string => {
     return keys[key];
 };
 
-// const isExecSupported = document.queryCommandEnabled && document.queryCommandSupported
-//     ? document.queryCommandEnabled('insertText') && document.queryCommandSupported('insertText')
-//     : false;
-
 const debounce = (fn: () => {}, time: number) => {
     let timeout: number;
 
@@ -63,15 +54,13 @@ const debounce = (fn: () => {}, time: number) => {
 
         window.clearTimeout(timeout);
         timeout = window.setTimeout(functionCall, time);
-    }
-}
+    };
+};
 
 export default {
     createElement,
     capitalize,
-    log,
     debounce,
     detectOs,
-    // isExecSupported,
     getNormalizedKey,
 };

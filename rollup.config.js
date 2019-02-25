@@ -7,7 +7,7 @@ import scss from 'rollup-plugin-scss'
 import pkg from './package.json';
 
 export default {
-    input: './src/source/editor.ts',
+    input: './src/source/index.ts',
     output: [
         {
             file: pkg.main,
