@@ -31,8 +31,7 @@ class Counter {
     private counterUpdate(): void {
         window.setTimeout(
             () => {
-                const counter =  String(this.textarea.value.length);
-                this.element.innerHTML = counter;
+                this.element.innerHTML = String(this.textarea.value.length);
             },
             0,
         );

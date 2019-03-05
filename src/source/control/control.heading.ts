@@ -1,37 +1,41 @@
 import EditorControl from './control';
+import EditorButton from '../button/button';
 import EditorUtils from '../utils/utils';
 
 import {
-    EditorControlsSettingsInterface,
-    EditorControlsBinderInterface,
-} from './controlInterface';
+    EditorControlsBinder,
+    EditorControlsSettings,
+    EditorAreaInterface,
+} from '../types';
 
-class Heading extends EditorControl {
+class EditorControlHeading extends EditorControl {
     private static mdTag = ['#', null];
     private static mdTagMaxLength = 6;
 
-    protected textarea: HTMLTextAreaElement;
-    private container: Element;
-    private settings: EditorControlsSettingsInterface;
-    private button: Element;
+    controlContainer: HTMLElement;
+    settings: EditorControlsSettings;
+    area: EditorAreaInterface;
+
+    button: HTMLElement;
 
     constructor(
-        textarea: HTMLTextAreaElement,
-        container: Element,
-        settings: EditorControlsSettingsInterface
+        controlContainer: HTMLElement,
+        settings: EditorControlsSettings,
+        area: EditorAreaInterface,
     ) {
-        super(textarea);
+        super(area);
 
-        this.button = undefined;
-        this.textarea = textarea;
-        this.container = container;
-        this.settings = settings || {};
+        this.controlContainer = controlContainer;
+        this.settings = settings;
+        this.area = area;
+
+        this.button = null;
     }
 
     private getNextQuantity (qty: number) {
         const qtyToIncrement = 1;
 
-        if (qty + qtyToIncrement <= Heading.mdTagMaxLength) {
+        if (qty + qtyToIncrement <= EditorControlHeading.mdTagMaxLength) {
             return qty + qtyToIncrement;
         }
 
@@ -42,11 +46,12 @@ class Heading extends EditorControl {
         const prefix = slice.slice(0, qty);
         const qtyToIncrement = 1;
 
-        if (prefix.length + qtyToIncrement <= Heading.mdTagMaxLength) {
-            return (Heading.mdTag[0]).repeat(prefix.length + qtyToIncrement) + slice.slice(qty);
+        if (prefix.length + qtyToIncrement <= EditorControlHeading.mdTagMaxLength) {
+            return (EditorControlHeading.mdTag[0])
+                .repeat(prefix.length + qtyToIncrement) + slice.slice(qty);
         }
 
-        return Heading.mdTag[0] + slice.slice(qty);
+        return EditorControlHeading.mdTag[0] + slice.slice(qty);
     }
 
     private getTagsQuantity(slice: string) {
@@ -55,7 +60,7 @@ class Heading extends EditorControl {
         const sliceArray = slice.split('');
 
         for (let i = 0; sliceArray.length > i; i += 1) {
-            if (sliceArray[i] === Heading.mdTag[0]) {
+            if (sliceArray[i] === EditorControlHeading.mdTag[0]) {
                 counter += 1;
             } else {
                 break;
@@ -70,13 +75,14 @@ class Heading extends EditorControl {
     }
 
     private getPrefixQty(start: number, end: number) {
-        const tStart = Heading.mdTag[0];
+        const tStart = EditorControlHeading.mdTag[0];
         const space = ' ';
         const st = start - space.length;
         let counter = 0;
+        const { value } = this.area.selection;
 
         for (let i = 0; start > i; i += 1) {
-            const sl = this.textarea.value.slice(st - i, st).split('');
+            const sl = value.slice(st - i, st).split('');
 
             if (sl.length) {
                 if (sl.every(s => s === tStart)) {
@@ -92,18 +98,19 @@ class Heading extends EditorControl {
 
     private insertTagInto() {
         const {
-            selectionStart: sStart,
-            selectionEnd: sEnd,
-            value: taV
-        } = this.textarea;
+            value: taV,
+            slice,
+            selectedValue,
+        } = this.area.selection;
+        const { start: sStart, end: sEnd } = slice;
 
         const space = ' ';
         const EOL = '\n';
-        const tStart = Heading.mdTag[0];
+        const tStart = EditorControlHeading.mdTag[0];
         const buttonTitle = EditorUtils.capitalize(this.settings.control.split('_').join(''));
 
-        const isSomeSelected = sEnd - sStart;
-        const normalSlice = taV.slice(sStart, sEnd);
+        const isSomeSelected = selectedValue.length;
+        const normalSlice = selectedValue;
         const isInside = normalSlice.startsWith(tStart);
         const outerStartSlice = taV.slice(sStart - space.length - tStart.length, sEnd);
         const isOutside = outerStartSlice.startsWith(tStart);
@@ -114,10 +121,17 @@ class Heading extends EditorControl {
                 const nextQty = this.getNextQuantity(tagsQuantity);
 
                 const value = this.setTagPrefix(normalSlice, tagsQuantity);
-                const slice = [sStart, sEnd];
-                const focus = [sStart + nextQty + space.length, sEnd - tagsQuantity + nextQty];
 
-                super.insertTextInto(value, slice, focus);
+                const slice = {
+                    start: sStart,
+                    end: sEnd,
+                };
+                const focus = {
+                    start: sStart + nextQty + space.length,
+                    end: sEnd - tagsQuantity + nextQty,
+                };
+
+                this.area.selection = { value, slice, focus };
                 return;
             }
 
@@ -127,16 +141,23 @@ class Heading extends EditorControl {
                 const fullSlice = taV.slice(sStart - space.length - qty, sEnd);
 
                 const value = this.setTagPrefix(fullSlice, qty);
-                const slice = [sStart - space.length - qty, sEnd];
-                const focus = [sStart - qty + nextQty, sEnd - qty + nextQty];
 
-                super.insertTextInto(value, slice, focus);
+                const slice = {
+                    start: sStart - space.length - qty,
+                    end: sEnd,
+                };
+
+                const focus = {
+                    start: sStart - qty + nextQty,
+                    end: sEnd - qty + nextQty,
+                };
+
+                this.area.selection = { value, slice, focus };
                 return;
             }
 
             const tagOffset = 1;
             const preSlice = taV.slice(sStart - tagOffset, sStart).split('').reverse();
-            // const isNeedToInsertPrefixEOL = tStar
 
             const preCount = (function () {
                 let offset = tagOffset;
@@ -173,13 +194,18 @@ class Heading extends EditorControl {
             const postfix = EOL.repeat(postCount);
 
             const value = prefix + tStart + space + normalSlice + postfix;
-            const slice = [sStart, sEnd];
-            const focus = [
-                sStart + prefix.length + tStart.length + space.length,
-                sStart + prefix.length + tStart.length + space.length + normalSlice.length,
-            ];
 
-            super.insertTextInto(value, slice, focus);
+            const slice = {
+                start: sStart,
+                end: sEnd
+            };
+
+            const focus = {
+                start: sStart + prefix.length + tStart.length + space.length,
+                end: sStart + prefix.length + tStart.length + space.length + normalSlice.length,
+            };
+
+            this.area.selection = { value, slice, focus };
         } else {
             const tagOffset = 1;
             const preSlice = taV.slice(sStart - tagOffset, sStart).split('').reverse();
@@ -217,42 +243,33 @@ class Heading extends EditorControl {
             }());
 
             const postfix = EOL.repeat(postCount);
-            const val = prefix + tStart + space + buttonTitle + postfix;
-            const slice = [sStart, sEnd];
-            const focus = [
-                sStart + prefix.length + tStart.length + space.length,
-                sStart + prefix.length + tStart.length + space.length + buttonTitle.length,
-            ];
+            const value = prefix + tStart + space + buttonTitle + postfix;
 
-            super.insertTextInto(val, slice, focus);
+            const slice = {
+                start: sStart,
+                end: sEnd
+            };
+
+            const focus = {
+                start: sStart + prefix.length + tStart.length + space.length,
+                end: sStart + prefix.length + tStart.length + space.length + buttonTitle.length,
+            };
+
+            this.area.selection = { value, slice, focus };
         }
     }
 
-    private handle(): void {
-        const { hotkeyCurrent: hotkey } = this.settings;
-        const argument: EditorControlsBinderInterface = {
-            hotkey,
+    public init(): void {
+        const handler: EditorControlsBinder = {
+            settings: this.settings,
             callback: this.insertTagInto.bind(this),
         };
 
-        this.addHandler(argument);
-        this.button.addEventListener('click', this.click.bind(this));
-    }
+        this.button = new EditorButton(handler).init();
+        this.area.addHandler(handler);
 
-    private click(e: MouseEvent): void {
-        e.preventDefault();
-        this.insertTagInto();
-    }
-
-    public init(): void {
-        const { control, hotkey } = this.settings;
-
-        this.settings.hotkeyCurrent = super.getCurrentHotkey(hotkey);
-        this.button = super.generateElement(control, this.settings.hotkeyCurrent);
-        this.container.appendChild(this.button);
-
-        this.handle();
+        this.controlContainer.appendChild(this.button);
     }
 }
 
-export default Heading;
+export default EditorControlHeading;

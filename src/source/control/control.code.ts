@@ -7,8 +7,9 @@ import {
     EditorAreaInterface,
 } from '../types';
 
-class EditorControlBold extends EditorControl {
-    private static mdTag = ['**', '**'];
+class EditorControlStrike extends EditorControl {
+    private static mdTag = ['`', '`'];
+    private static fullMdTag = ['```\n', '\n```'];
 
     controlContainer: HTMLElement;
     settings: EditorControlsSettings;
@@ -31,7 +32,12 @@ class EditorControlBold extends EditorControl {
     }
 
     private insertTagInto() {
-        super.insertSimpleElement(EditorControlBold.mdTag);
+        const tag = this.area.hasEndOfLine()
+            ? EditorControlStrike.fullMdTag
+            : EditorControlStrike.mdTag
+        ;
+
+        super.insertSimpleElement(tag);
     }
 
     public init(): void {
@@ -47,4 +53,4 @@ class EditorControlBold extends EditorControl {
     }
 }
 
-export default EditorControlBold;
+export default EditorControlStrike;

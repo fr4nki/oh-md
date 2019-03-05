@@ -7,8 +7,8 @@ import {
     EditorAreaInterface,
 } from '../types';
 
-class EditorControlBold extends EditorControl {
-    private static mdTag = ['**', '**'];
+class EditorControlStrike extends EditorControl {
+    private static mdTag = ['~~', '~~'];
 
     controlContainer: HTMLElement;
     settings: EditorControlsSettings;
@@ -31,7 +31,7 @@ class EditorControlBold extends EditorControl {
     }
 
     private insertTagInto() {
-        super.insertSimpleElement(EditorControlBold.mdTag);
+        super.insertSimpleElement(EditorControlStrike.mdTag);
     }
 
     public init(): void {
@@ -47,4 +47,4 @@ class EditorControlBold extends EditorControl {
     }
 }
 
-export default EditorControlBold;
+export default EditorControlStrike;

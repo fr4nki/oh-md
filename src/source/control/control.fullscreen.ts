@@ -1,5 +1,6 @@
 import EditorControl from './control';
 import EditorButton from '../button/button';
+import EditorSettings from '../settings';
 
 import {
     EditorControlsBinder,
@@ -7,9 +8,7 @@ import {
     EditorAreaInterface,
 } from '../types';
 
-class EditorControlBold extends EditorControl {
-    private static mdTag = ['**', '**'];
-
+class EditorControlFullscreen extends EditorControl {
     controlContainer: HTMLElement;
     settings: EditorControlsSettings;
     area: EditorAreaInterface;
@@ -30,14 +29,24 @@ class EditorControlBold extends EditorControl {
         this.button = null;
     }
 
-    private insertTagInto() {
-        super.insertSimpleElement(EditorControlBold.mdTag);
+    private toggleFullscreen() {
+        const [controlClassname] = EditorSettings.defaultClasses.controls;
+        const buttonClassname = `${controlClassname}--button__fullscreen__active`;
+        const { enabledFullscreen } = this.area;
+
+        if (!enabledFullscreen) {
+            this.button.classList.add(buttonClassname);
+            this.area.enabledFullscreen = true;
+        } else {
+            this.button.classList.remove(buttonClassname);
+            this.area.enabledFullscreen = false;
+        }
     }
 
     public init(): void {
         const handler: EditorControlsBinder = {
             settings: this.settings,
-            callback: this.insertTagInto.bind(this),
+            callback: this.toggleFullscreen.bind(this),
         };
 
         this.button = new EditorButton(handler).init();
@@ -47,4 +56,4 @@ class EditorControlBold extends EditorControl {
     }
 }
 
-export default EditorControlBold;
+export default EditorControlFullscreen;

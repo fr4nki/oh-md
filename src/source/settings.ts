@@ -8,7 +8,7 @@ const defaultParams = {
         active: true,
     },
     doubleReturn: {
-        modificatorKey: 'ctrlKey',
+        modificatorKey: 'shiftKey',
         active: true,
     },
 };
@@ -20,7 +20,6 @@ const defaultClasses = {
     area: [`${defaultClassNamePrefix}-area`],
     controls: [`${defaultClassNamePrefix}-controls`],
     params: [`${defaultClassNamePrefix}-params`],
-    popup: [`${defaultClassNamePrefix}-popup`],
 };
 
 const defaultControls = [

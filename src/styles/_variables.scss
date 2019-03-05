@@ -1,0 +1,52 @@
+// === VARIABLES =============================
+$__mdClass: 'oh-md';
+
+$__ffamily: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+
+$__size-offset: 10px;
+$__size-icon: $__size-offset * 3;
+$__size-area-font: 14px;
+$__size-area-height: 500px;
+
+$__color-default: #505050;
+$__color-lightest: rgba($__color-default, .15);
+$__color-light: rgba($__color-default, .3);
+$__color-light_deep: rgba($__color-default, .65);
+$__color-dark: #252525;
+$__color-success: #04cc04;
+
+// === FUNCTIONS =============================
+@function rgba-to-rgb($rgba, $background: #fff) {
+    @return mix(rgb(red($rgba), green($rgba), blue($rgba)), $background, alpha($rgba) * 100%)
+};
+
+// === MIXINS ================================
+@mixin key($size: $__size-icon) {
+    display: inline-block;
+    width: $__size-icon;
+    height: $__size-icon;
+    border: none;
+    text-indent: -9999px;
+    cursor: pointer;
+    margin-right: $__size-offset / 2;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    transition: background-color .1s ease-out, opacity .05s ease-in;
+    border-radius: $__size-offset / 5;
+    outline: none;
+
+    &:active,
+    &:hover,
+    &:focus {
+        background-color: $__color-lightest;
+    }
+}
+
+@mixin param($opacity: .5) {
+    font-family: $__ffamily;
+    font-size: 12px;
+    opacity: $opacity;
+    margin-top: 0;
+    margin-bottom: 0;
+}

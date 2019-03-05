@@ -4,7 +4,11 @@ import EditorControls from '../control/index';
 import EditorParams from '../param/index';
 import EditorArea from '../area/area';
 
-import { EditorSettings as EditorSettingsInterface, EditorLayout } from '../types';
+import {
+    EditorSettings as EditorSettingsInterface,
+    EditorLayout,
+    EditorControlsSettings,
+} from '../types';
 
 class EditorController {
     public element: HTMLTextAreaElement;
@@ -36,6 +40,8 @@ class EditorController {
             this.settings.params || {}
         );
 
+        const os = EditorUtils.detectOs();
+
         const theme = this.settings.theme || DefaultSettings.defaultTheme;
         const controls = this.settings.controls || DefaultSettings.defaultControls;
         const classes = DefaultSettings.defaultClasses;
@@ -43,6 +49,12 @@ class EditorController {
 
         Object.keys(this.settings.classes).forEach((c) => {
             classes[c].push(this.settings.classes[c].join(' '));
+        });
+
+        controls.forEach((control: EditorControlsSettings) => {
+            if (control.hotkey) {
+                control.hotkeyCurrent = control.hotkey[os];
+            }
         });
 
         this.settings = { theme, params, controls, classes, layout };
@@ -67,9 +79,13 @@ class EditorController {
 
     private generateInput(): void {
         this.input = new EditorArea(
+            this.container,
             this.layout.area,
             this.element,
+            this.settings,
         ).init();
+
+        this.element = this.input.areaElement;
     }
 
     private generateControls(): void {
@@ -86,17 +102,14 @@ class EditorController {
                 EditorControls[callee] instanceof Function
             ) {
                 new EditorControls[callee](
-                    this.element,
                     this.layout.controls,
                     settings,
-                    this.container,
+                    this.input,
                 ).init();
             } else {
-                console.log('not exists', 'warn', [`"${callee}"`]);
+                console.log('Button is not exists:', callee);
             }
         });
-
-        new EditorControls.Control().init();
     }
 
     private generateParams(): void {
@@ -117,8 +130,6 @@ class EditorController {
             }
         });
     }
-
-    // ====
 
     public get html(): string {
         return this.input.html;

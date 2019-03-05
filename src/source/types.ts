@@ -1,12 +1,3 @@
-
-
-interface EditorClassesInterface {
-    container: string[];
-    area: string[];
-    controls: string[];
-    params: string[];
-}
-
 export interface EditorControlsHotkeyInterface {
     modificator: string;
     key: string;
@@ -14,7 +5,8 @@ export interface EditorControlsHotkeyInterface {
 
 export interface EditorControlsBinder {
     callback: Function;
-    hotkey: EditorControlsHotkeyInterface;
+    settings: EditorControlsSettings;
+    // hotkey: EditorControlsHotkeyInterface;
 }
 
 interface EditorClassesInterface {
@@ -22,11 +14,6 @@ interface EditorClassesInterface {
     area: string[];
     controls: string[];
     params: string[];
-}
-
-export interface EditorControllerInterface {
-    element: HTMLElement | Node;
-    settings: EditorSettingsInterface;
 }
 
 export interface EditorSettingsInterface {
@@ -35,11 +22,6 @@ export interface EditorSettingsInterface {
     controls: EditorControlsSettings[];
     classes: EditorClassesInterface;
     layout: string[];
-}
-
-export interface EditorInputInterface {
-    input: HTMLTextAreaElement;
-    settings: object;
 }
 
 export interface EditorPopupSettingsItem {
@@ -55,16 +37,9 @@ export interface EditorPopupInterface {
     container: Element;
     submit(a: EditorPopupSettingsItem[]): EditorPopupSettingsItem[];
     cancel(): void;
-    init(): EditorPopupInterface;
+    init(): void;
 }
 
-
-
-
-
-
-
-// a
 export interface EditorControlsSettings {
     control?: string;
     hotkey?: {
@@ -96,16 +71,43 @@ export interface EditorSettings {
     layout: string[];
 }
 
-export interface EditorInterface {
-
-}
-
-export interface EditorInputInterface {
-
-}
-
 export interface EditorLayout {
     controls?: Element;
     area?: Element;
     params?: Element;
+}
+
+export interface EditorSelectionSlice {
+    start: number;
+    end: number;
+}
+
+export interface EditorSelection {
+    value: string | null;
+    slice: EditorSelectionSlice | null;
+    selectedValue?: string | null;
+    focus?: EditorSelectionSlice | null;
+}
+
+export interface EditorAreaInterface {
+    container: Element;
+    element: HTMLTextAreaElement;
+    settings: EditorSettingsInterface;
+    areaContainer: HTMLElement;
+    previewContainer: HTMLElement;
+    handlerList?: EditorControlsBinder[];
+    insertCommand?: string;
+    addHandler: (a: EditorControlsBinder) => void;
+    init: () => EditorAreaInterface;
+    hasEndOfLine: () => boolean;
+    enabledFullscreen?: boolean;
+    enabledPreview?: boolean;
+    html: string;
+    text: string;
+    areaElement: HTMLTextAreaElement;
+    selection: EditorSelection;
+}
+
+export interface EditorButton {
+
 }

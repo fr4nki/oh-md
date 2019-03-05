@@ -1,7 +1,7 @@
 import { EditorParamsSettingsInterface } from './paramInterface';
 
 class DoubleReturn {
-    private textarea: HTMLTextAreaElement;
+    readonly textarea: HTMLTextAreaElement;
     readonly container: Element;
     readonly settings: EditorParamsSettingsInterface;
 
@@ -25,12 +25,11 @@ class DoubleReturn {
                 value: taV
             } = this.textarea;
 
-            const EOLcount = e[modificatorKey] ? 1 : 2;
-            const EOL = '\n'.repeat(EOLcount);
+            const EOL_COUNT = e[modificatorKey] ? 1 : 2;
+            const EOL = '\n'.repeat(EOL_COUNT);
 
             e.preventDefault();
 
-            console.log(e);
             if (
                 document.queryCommandEnabled('insertText') &&
                 document.queryCommandSupported('insertText')
