@@ -37,16 +37,19 @@ class EditorController {
     private collectSettings(): void {
         const params = Object.assign(
             DefaultSettings.defaultParams,
-            this.settings.params || {}
+            ((this.settings || {}) || (this.settings.params || {}))
         );
 
         const os = EditorUtils.detectOs();
-        const theme = this.settings.theme || DefaultSettings.defaultTheme;
-        const controls = this.settings.controls || DefaultSettings.defaultControls;
+        const theme = this.settings && this.settings.theme || DefaultSettings.defaultTheme;
+        const controls = this.settings && this.settings.controls || DefaultSettings.defaultControls;
         const classes = DefaultSettings.defaultClasses;
-        const layout = Object.assign(DefaultSettings.defaultLayout, this.settings.layout || []);
+        const layout = Object.assign(
+            DefaultSettings.defaultLayout,
+            this.settings && this.settings.layout || []
+        );
 
-        Object.keys(this.settings.classes).forEach((c) => {
+        Object.keys(this.settings && this.settings.classes || {}).forEach((c) => {
             classes[c].push(...this.settings.classes[c]);
         });
 
