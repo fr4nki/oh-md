@@ -49,9 +49,7 @@ editor.init();
 
 
 ### Settings
-Settings - the object can be provided as the second argument into editor instance.
-
-Settings object can contain _optional_ nested objects: `params`, `classes` and `controls`.
+Settings - the object can be provided as the second argument into editor instance, and it can contain _optional_ nested objects: `params`, `classes` and `controls`.
 
 **`params`**:
 
