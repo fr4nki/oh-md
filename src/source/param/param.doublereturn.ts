@@ -35,7 +35,6 @@ class DoubleReturn {
                 document.queryCommandSupported('insertText')
             ) {
                 document.execCommand('insertText', false, EOL);
-
             } else {
                 this.textarea.value = taV.slice(0, sStart) + EOL + taV.slice(sEnd);
             }
