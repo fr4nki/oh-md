@@ -26,7 +26,7 @@ const defaultControls = [
     {
         control: 'bold',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: 'b',
             },
@@ -39,7 +39,7 @@ const defaultControls = [
     {
         control: 'italic',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: 'i',
             },
@@ -52,7 +52,7 @@ const defaultControls = [
     {
         control: 'heading',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: 'h',
             },
@@ -65,7 +65,7 @@ const defaultControls = [
     {
         control: 'strike',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: 'd',
             },
@@ -81,7 +81,7 @@ const defaultControls = [
     {
         control: 'ordered_list',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: 'o',
             },
@@ -94,7 +94,7 @@ const defaultControls = [
     {
         control: 'unordered_list',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: 'u',
             },
@@ -110,7 +110,7 @@ const defaultControls = [
     {
         control: 'quote',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: '\'',
             },
@@ -123,7 +123,7 @@ const defaultControls = [
     {
         control: 'code',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: 'k',
             },
@@ -136,7 +136,7 @@ const defaultControls = [
     {
         control: 'link',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: 'l',
             },
@@ -149,7 +149,7 @@ const defaultControls = [
     {
         control: 'image',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: 'g',
             },
@@ -165,7 +165,7 @@ const defaultControls = [
     {
         control: 'preview',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: 'm',
             },
@@ -178,7 +178,7 @@ const defaultControls = [
     {
         control: 'fullscreen',
         hotkey: {
-            win: {
+            default: {
                 modificator: 'ctrlKey',
                 key: 'f',
             },

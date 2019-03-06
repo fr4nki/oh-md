@@ -16,7 +16,7 @@ class DoubleReturn {
     }
 
     private keyHandler(e: KeyboardEvent): void {
-        const { modificatorKey } = this.settings.doubleReturn;
+        const { modificator } = this.settings.doubleReturn;
 
         if (e.keyCode === 13) {
             const {
@@ -25,7 +25,7 @@ class DoubleReturn {
                 value: taV
             } = this.textarea;
 
-            const EOL_COUNT = e[modificatorKey] ? 1 : 2;
+            const EOL_COUNT = e[modificator] ? 1 : 2;
             const EOL = '\n'.repeat(EOL_COUNT);
 
             e.preventDefault();

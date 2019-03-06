@@ -41,14 +41,13 @@ class EditorController {
         );
 
         const os = EditorUtils.detectOs();
-
         const theme = this.settings.theme || DefaultSettings.defaultTheme;
         const controls = this.settings.controls || DefaultSettings.defaultControls;
         const classes = DefaultSettings.defaultClasses;
         const layout = Object.assign(DefaultSettings.defaultLayout, this.settings.layout || []);
 
         Object.keys(this.settings.classes).forEach((c) => {
-            classes[c].push(this.settings.classes[c].join(' '));
+            classes[c].push(...this.settings.classes[c]);
         });
 
         controls.forEach((control: EditorControlsSettings) => {
