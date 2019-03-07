@@ -17,13 +17,13 @@ npm install --save oh-md
 Insert css file in your `<head>`:
 
 ```
-<link rel="stylesheet" type="text/css" href="//unkpg.com"/>
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/oh-md@latest/dist/style.css"/>
 ```
 
 Before closing `</body>` add js file:
 
 ```
-<script type="text/javascript" src="//unpkg.com"></script>
+<script type="text/javascript" src="https://unpkg.com/oh-md@latest/dist/index.js"></script>
 ```
 
 
