@@ -158,11 +158,10 @@ class EditorArea implements EditorAreaInterface {
             document.queryCommandSupported(EditorArea.insertCommand)
         ) {
             document.execCommand(EditorArea.insertCommand, false, value);
-
         } else {
-            const { value } = this.element;
+            const { value: val } = this.element;
 
-            this.element.value = value.slice(0, slice.start) + value + value.slice(slice.end);
+            this.element.value = val.slice(0, slice.start) + value + val.slice(slice.end);
         }
 
         this.element.setSelectionRange(focus.start, focus.end);
@@ -179,17 +178,17 @@ class EditorArea implements EditorAreaInterface {
     }
 
     public init(): EditorArea {
-        const { classes } = this.settings;
+        const areaClassname = this.settings.classes.area[0];
         const { createElement } = EditorUtils;
         const clone = this.element.cloneNode(true);
         const textareaParamsKeys = Object.keys(EditorArea.areaParams);
 
-        this.areaContainer = createElement('div', [`${classes.area}--text`]);
-        this.previewContainer = createElement('div', [`${classes.area}--preview`]);
+        this.areaContainer = createElement('div', [`${areaClassname}--text`]);
+        this.previewContainer = createElement('div', [`${areaClassname}--preview`]);
 
         this.element.parentElement.removeChild(this.element);
         this.element = <HTMLTextAreaElement>clone;
-        this.element.classList.add(`${classes.area}--text__element`);
+        this.element.classList.add(`${areaClassname}--text__element`);
 
         textareaParamsKeys.forEach((k) => {
             this.element.setAttribute(k, EditorArea.areaParams[k]);

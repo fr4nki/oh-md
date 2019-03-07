@@ -43,7 +43,7 @@ export interface EditorPopupInterface {
 export interface EditorControlsSettings {
     control?: string;
     hotkey?: {
-        win?: EditorControlsHotkeyInterface;
+        default?: EditorControlsHotkeyInterface;
         mac?: EditorControlsHotkeyInterface;
     };
     hotkeyCurrent?: EditorControlsHotkeyInterface;

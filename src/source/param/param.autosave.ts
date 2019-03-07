@@ -56,7 +56,7 @@ class Autosave {
         const { createElement } = EditorUtils;
         const params = defaultClasses.params[0];
         const { autosave } = this.settings;
-        const id = this.textarea.id || this.textarea.name || null;
+        const id = this.textarea.name || this.textarea.id || null;
 
         if (!id) {
             console.log('Id is not exists');

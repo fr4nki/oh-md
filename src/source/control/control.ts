@@ -75,36 +75,6 @@ class EditorControl {
 
         this.area.selection = { value, slice, focus };
     }
-
-    protected generateElement(controlType: string, hotKeys: EditorControlsHotkeyInterface) {
-        const { createElement, capitalize, getNormalizedKey } = EditorUtils;
-
-        const controls = EditorSettings.defaultClasses.controls[0];
-        const normalizedControlName = capitalize(controlType.split('_').join(' '));
-        const normalizedHotKeyText = [];
-
-        if (hotKeys && hotKeys.modificator) {
-            normalizedHotKeyText.push(
-                getNormalizedKey(hotKeys.modificator),
-                hotKeys.key.toUpperCase(),
-            );
-        }
-
-        const control = createElement(
-            'button',
-            [
-                `${controls}--button`,
-                `${controls}--button__${controlType.toLowerCase()}`
-            ],
-            {
-                title: `${normalizedControlName} (${normalizedHotKeyText.join(' + ')})`,
-            }
-        );
-
-        control.innerHTML = normalizedControlName;
-
-        return control;
-    }
 }
 
 export default EditorControl;

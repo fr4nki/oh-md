@@ -16,31 +16,26 @@ const capitalize = (str: string): string =>
 
 const detectOs = (): string => {
     const platform: string = window.navigator.platform.toLowerCase();
-    const osWin: string = 'win';
     const osMac: string = 'mac';
-
-    if (platform.includes(osWin)) {
-        return osWin;
-    }
 
     if (platform.includes(osMac)) {
         return osMac;
     }
 
-    return 'other';
+    return 'default';
 };
 
 const getNormalizedKey = (key: string): string => {
     const meta = {
-        win: '⊞',
         mac: '⌘',
-        other: 'Meta',
+        default: 'Meta',
     };
 
     const keys = {
         metaKey: meta[detectOs()],
         altKey: 'Alt',
         ctrlKey: 'Ctrl',
+        shiftKey: 'Shift',
     };
 
     return keys[key];
