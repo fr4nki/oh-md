@@ -5,7 +5,7 @@ _"Oh-md" - simplest md editor._
 
 ### Installation
 
-You can use editor via npm or insert css and js from unpkg.com directly to your html.
+You can install editor via npm or use css and js directly from unpkg.com.
 
 **Using npm**
 ```
@@ -20,7 +20,7 @@ Insert css file in your `<head>`:
 <link rel="stylesheet" type="text/css" href="//unkpg.com"/>
 ```
 
-Then, before closing `</body>` add js file:
+Before closing `</body>` add js file:
 
 ```
 <script type="text/javascript" src="//unpkg.com"></script>
@@ -49,17 +49,19 @@ editor.init();
 
 
 ### Settings
-Settings - the object can be provided as the second argument into editor instance, and it can contain _optional_ nested objects: `params`, `classes` and `controls`.
+
+Settings obejct can be provided as the second argument into editor instance, and it can contain _optional_ nested objects: `params`, `classes` and `controls`.
 
 **`params`**:
 
-- `counter: true` - Symbol counter.
+- `counter: true` - Show symbol counter.
 
-- `autosave: 30` -  Autosave current <textarea> value to local storage if name or id attribute is provided. Sets in seconds.
+<!-- - `autosave: 30` -  Autosave current <textarea> value to local storage if name or id attribute is provided. Sets in seconds. -->
+- `autosave: 30` -  If name or id attribute is provided to <textarea> element, value will be stored to local storage in specified interval. Sets in seconds.
 
-- `wordwrap: { paramVisible: true, active: true }` -  Is word wrap button shown (paramVisible) and sets default status (active).
+- `wordwrap: { paramVisible: true, active: true }` -  Show word wrap button (paramVisible) and set activity status (active).
 
-- `doubleReturn: { modificator: 'shiftKey', active: true }` - In case of active params is sets to true, click on Enter button inserts double end of line (\n\n). Pressing modificator and Enter button insert single end of line (\n).
+- `doubleReturn: { modificator: 'shiftKey', active: true }` - In case of active param is sets to true, click on Enter button inserts double end of line (\n\n). Pressing modificator key and Enter button insert single end of line (\n).
 
 **`classes`**:
 
@@ -74,7 +76,7 @@ params: ['someClassName'],
 
 **`controls`**:
 
-An array of controls should contain objects of type Control with the following structure:
+An array of controls should contain objects of type Control with this following structure:
 
 ```
 {
@@ -93,8 +95,8 @@ An array of controls should contain objects of type Control with the following s
 ```
 
 List of possible controls: `bold`, `italic`, `strike`, `code`, `ordered_list`, `unordered_list`, `quote`, `heading`, `fullscreen`, `preview`, `image`, `link`.
-`separator` control can be used as a controls button delimiter.
-Each controls `modificator` can be `ctrlKey` or `altKey`, or `shiftKey` or `metaKey`.
+`separator` control can be used as a delimiter to separate controls by groups.
+`modificator` can be `ctrlKey` or `altKey`, or `shiftKey` or `metaKey`.
 
 <details>
 <summary>Initialization example.</summary>
@@ -301,7 +303,7 @@ console.log(editor.html);
 
 ### Methods
 
-You can use api of editor via call one of these functions:
+Editor provide small api:
 
 - `editor.html` - getter, return current textarea value as html.
 
