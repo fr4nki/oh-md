@@ -2,6 +2,8 @@
 
 _"Oh-md" - simplest md editor._
 
+![Preview image]('https://github.com/fr4nki/oh-md/pic.jpg')
+
 
 ### Installation
 

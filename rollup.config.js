@@ -35,10 +35,10 @@ export default {
             exclude: 'node_modules/**'
         }),
         scss({
-            output: 'dist/style.css',
+            output: `${pkg.output}/style.css`,
         }),
         copy([
-            { files: 'src/images/*.*', dest: './dist/images' },
+            { files: 'src/images/*.*', dest: `${pkg.output}/images` },
         ])
     ],
 };
