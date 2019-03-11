@@ -2,7 +2,7 @@
 
 _"Oh-md" - simplest md editor._
 
-![oh-md preview](https://github.com/fr4nki/oh-md/blob/master/pic.jpg)
+![oh-md preview](https://github.com/fr4nki/oh-md/blob/master/pic.jpg?raw=true)
 
 ### Installation
 
