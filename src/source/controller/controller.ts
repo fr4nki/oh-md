@@ -128,7 +128,7 @@ class EditorController {
             };
 
             if (EditorParams[key] && EditorParams[key] instanceof Function) {
-                new EditorParams[key](this.element, this.layout.params, settings).init();
+                new EditorParams[key](this.input, this.layout.params, settings).init();
             }
         });
     }

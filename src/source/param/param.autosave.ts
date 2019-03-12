@@ -1,23 +1,22 @@
 import EditorUtils from '../utils/utils';
 import EditorSettings from '../settings';
 
-import { EditorParamsSettingsInterface } from './paramInterface';
+import { EditorAreaInterface, EditorParamsSettingsInterface } from '../types';
 
 class Autosave {
-    textarea: HTMLTextAreaElement;
-    container: Element;
-    settings: EditorParamsSettingsInterface;
-
+    private area: EditorAreaInterface;
+    private container: Element;
+    private settings: EditorParamsSettingsInterface;
     private element: Element;
     static separator = '|||||';
 
     constructor(
-        textarea: HTMLTextAreaElement,
+        area: EditorAreaInterface,
         container: Element,
-        settings: EditorParamsSettingsInterface,
+        settings: EditorParamsSettingsInterface
     ) {
         this.element = null;
-        this.textarea = textarea;
+        this.area = area;
         this.container = container;
         this.settings = settings;
     }
@@ -31,12 +30,17 @@ class Autosave {
 
     private fillTextArea(): void {
         const hash = this.getTextareaHash();
-        this.textarea.value = window.localStorage[hash] || '';
+
+        this.area.selection = {
+            focus: { start: 0, end: 0 },
+            slice: { start: 0, end: 0 },
+            value: window.localStorage[hash] || '',
+        };
     }
 
     private saveText(): void {
         const params = EditorSettings.defaultClasses.params[0];
-        const { value } = this.textarea;
+        const { value } = this.area.selection;
         const hash = this.getTextareaHash();
         const activeClass = `${params}--autosave__saved`;
 
@@ -56,20 +60,21 @@ class Autosave {
         const { createElement } = EditorUtils;
         const params = defaultClasses.params[0];
         const { autosave } = this.settings;
-        const id = this.textarea.name || this.textarea.id || null;
+        const id =
+            this.area.areaElement.name ||
+            this.area.areaElement.id ||
+            null
+        ;
 
         if (!id) {
-            console.log('Id is not exists');
+            console.log('Id or name is not exists');
         }
 
         if (!autosave || !id) {
             return;
         }
 
-        this.element = createElement(
-            'p',
-            [`${params}--autosave`]
-        );
+        this.element = createElement('p', [`${params}--autosave`]);
         this.element.innerHTML = 'Saved';
         this.container.appendChild(this.element);
         this.settings.id = id;

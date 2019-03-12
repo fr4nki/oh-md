@@ -1,49 +1,44 @@
-import { EditorParamsSettingsInterface } from './paramInterface';
+import { EditorAreaInterface, EditorParamsSettingsInterface } from '../types';
 
 class DoubleReturn {
-    readonly textarea: HTMLTextAreaElement;
+    private area: EditorAreaInterface;
     readonly container: Element;
     readonly settings: EditorParamsSettingsInterface;
 
     constructor(
-        textarea: HTMLTextAreaElement,
+        area: EditorAreaInterface,
         container: Element,
         settings: EditorParamsSettingsInterface,
     ) {
-        this.textarea = textarea;
+        this.area = area;
         this.container = container;
         this.settings = settings;
     }
 
     private keyHandler(e: KeyboardEvent): void {
-        const { modificator } = this.settings.doubleReturn;
+        const { modificatorKey } = this.settings.doubleReturn;
 
         if (e.keyCode === 13) {
-            const {
-                selectionStart: sStart,
-                selectionEnd: sEnd,
-                value: taV
-            } = this.textarea;
-
-            const EOL_COUNT = e[modificator] ? 1 : 2;
+            const { slice } = this.area.selection;
+            const EOL_COUNT = e[modificatorKey] ? 1 : 2;
             const EOL = '\n'.repeat(EOL_COUNT);
 
             e.preventDefault();
 
-            if (
-                document.queryCommandEnabled('insertText') &&
-                document.queryCommandSupported('insertText')
-            ) {
-                document.execCommand('insertText', false, EOL);
-            } else {
-                this.textarea.value = taV.slice(0, sStart) + EOL + taV.slice(sEnd);
-            }
+            this.area.selection = {
+                slice,
+                focus: { start: slice.start + EOL_COUNT, end: slice.end + EOL_COUNT },
+                value: EOL,
+            };
         }
     }
 
     private setHandlers(): void {
         document.addEventListener('DOMContentLoaded', () => {
-            this.textarea.addEventListener('keydown', this.keyHandler.bind(this));
+            this.area.areaElement.addEventListener(
+                'keydown',
+                this.keyHandler.bind(this)
+            );
         });
     }
 

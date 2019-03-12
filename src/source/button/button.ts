@@ -2,12 +2,11 @@ import EditorSettings from '../settings';
 import EditorUtils from '../utils/utils';
 
 import {
-    EditorButton as EditorButtonInterface,
     EditorControlsBinder,
     EditorControlsHotkeyInterface as EditorHotkey,
 } from '../types';
 
-class EditorButton implements EditorButtonInterface {
+class EditorButton {
     button: HTMLElement;
     handler : EditorControlsBinder;
 

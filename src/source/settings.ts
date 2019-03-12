@@ -9,7 +9,7 @@ const defaultParams = {
     },
     doubleReturn: {
         modificatorKey: 'shiftKey',
-        active: true,
+        active: false,
     },
 };
 

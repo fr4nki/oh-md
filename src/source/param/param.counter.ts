@@ -1,29 +1,35 @@
 import EditorUtils from '../utils/utils';
 import EditorSettings from '../settings';
 
-import { EditorParamsSettingsInterface } from './paramInterface';
+import { EditorAreaInterface, EditorParamsSettingsInterface } from '../types';
 
 class Counter {
-    private textarea: HTMLTextAreaElement;
+    private area: EditorAreaInterface;
     private element: Element;
     readonly container: Element;
     readonly settings: EditorParamsSettingsInterface;
 
     constructor(
-        textarea: HTMLTextAreaElement,
+        area: EditorAreaInterface,
         container: Element,
-        settings: EditorParamsSettingsInterface,
+        settings: EditorParamsSettingsInterface
     ) {
         this.element = null;
-        this.textarea = textarea;
+        this.area = area;
         this.container = container;
         this.settings = settings;
     }
 
     private setHandlers(): void {
         document.addEventListener('DOMContentLoaded', () => {
-            this.textarea.addEventListener('input', this.counterUpdate.bind(this));
-            this.textarea.addEventListener('keyup', this.counterUpdate.bind(this));
+            this.area.areaElement.addEventListener(
+                'input',
+                this.counterUpdate.bind(this)
+            );
+            this.area.areaElement.addEventListener(
+                'keyup',
+                this.counterUpdate.bind(this)
+            );
             this.counterUpdate();
         });
     }
@@ -31,9 +37,9 @@ class Counter {
     private counterUpdate(): void {
         window.setTimeout(
             () => {
-                this.element.innerHTML = String(this.textarea.value.length);
+                this.element.innerHTML = String(this.area.text.length);
             },
-            0,
+            0
         );
     }
 
@@ -43,10 +49,7 @@ class Counter {
 
         if (!counter) return;
 
-        this.element = EditorUtils.createElement(
-            'p',
-            [`${params}--counter`],
-        );
+        this.element = EditorUtils.createElement('p', [`${params}--counter`]);
         this.container.appendChild(this.element);
 
         this.setHandlers();

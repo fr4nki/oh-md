@@ -17,7 +17,6 @@ class EditorArea implements EditorAreaInterface {
     areaContainer: HTMLElement;
     previewContainer: HTMLElement;
     controller: Element;
-    // elementKeyPress: () => {};
     fullscreenEnabled: boolean;
     previewEnabled: boolean;
     private static handlerList: EditorControlsBinder[] = [];

@@ -33,9 +33,9 @@ class Editor {
     public init(): Editor {
         if (!this.controller) {
             this.controller = new EditorController(
-                    this.element,
-                    this.settings,
-                ).init();
+                this.element,
+                this.settings,
+            ).init();
         }
 
         return this;

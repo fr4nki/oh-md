@@ -1,22 +1,21 @@
-import EditorUtils from '../utils/utils';
-import EditorSettings from '../settings';
+import EditorUtils from "../utils/utils";
+import EditorSettings from "../settings";
 
-import { EditorParamsSettingsInterface } from './paramInterface';
+import { EditorAreaInterface, EditorParamsSettingsInterface } from "../types";
 
 class Wordwrap {
-    textarea: HTMLTextAreaElement;
-    container: Element;
-    settings: EditorParamsSettingsInterface;
-
+    private area: EditorAreaInterface;
+    private container: Element;
+    private settings: EditorParamsSettingsInterface;
     private wordwrapStatus: boolean;
     private element: Element;
 
     constructor(
-        textarea: HTMLTextAreaElement,
+        area: EditorAreaInterface,
         container: Element,
-        settings: EditorParamsSettingsInterface,
+        settings: EditorParamsSettingsInterface
     ) {
-        this.textarea = textarea;
+        this.area = area;
         this.container = container;
         this.settings = settings;
 
@@ -33,11 +32,11 @@ class Wordwrap {
         this.wordwrapStatus = !this.wordwrapStatus;
 
         if (!this.wordwrapStatus) {
-            this.textarea.classList.remove(wordwrapAreaClassname);
-            this.element.classList.remove(wordwrapParamsClassname);
+            this.area.areaElement.classList.remove(wordwrapAreaClassname);
+            this.area.areaElement.classList.remove(wordwrapParamsClassname);
         } else {
-            this.textarea.classList.add(wordwrapAreaClassname);
-            this.element.classList.add(wordwrapParamsClassname);
+            this.area.areaElement.classList.add(wordwrapAreaClassname);
+            this.area.areaElement.classList.add(wordwrapParamsClassname);
         }
     }
 
@@ -52,17 +51,16 @@ class Wordwrap {
             return;
         }
 
-        this.element = createElement(
-            'a',
-            [`${params}--wordwrap`],
-            {
-                title: 'Word wrap',
-            }
-        );
+        this.element = createElement('a', [`${params}--wordwrap`], {
+            title: 'Word wrap'
+        });
 
         this.setWordwrapStatus();
 
-        this.element.addEventListener('click', this.setWordwrapStatus.bind(this));
+        this.element.addEventListener(
+            'click',
+            this.setWordwrapStatus.bind(this)
+        );
         this.container.appendChild(this.element);
     }
 }
