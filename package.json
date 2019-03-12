@@ -1,6 +1,6 @@
 {
     "name": "oh-md",
-    "version": "2.1.15",
+    "version": "2.1.16",
     "description": "oh-md: simplest markdown js editor",
     "output": "./",
     "main": "index.min.js",
@@ -17,8 +17,8 @@
     "author": "Anton Krivonos <i@fr4nki.ru>",
     "license": "MIT",
     "scripts": {
-        "watch": "rollup -c --watch",
-        "build": "rollup -cw"
+        "watch": "rollup -c -w --environment dev",
+        "build": "rollup -c"
     },
     "devDependencies": {
         "@babel/core": "^7.2.0",
