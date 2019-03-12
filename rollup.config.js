@@ -3,15 +3,21 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import commonJS from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import copy from 'rollup-plugin-cpy';
-import scss from 'rollup-plugin-scss'
+import uglify from 'rollup-plugin-uglify-es';
+import cssnano from 'cssnano';
+import sass from 'rollup-plugin-sass'
+import autoprefixer from 'autoprefixer'
+import postcss from 'postcss'
+
 import pkg from './package.json';
 
-export default {
+const params = {
     input: './src/source/index.ts',
     output: [
         {
             file: pkg.main,
-            format: 'cjs',
+            format: 'iife',
+            name: 'Editor',
         },
         {
             file: pkg.module,
@@ -34,11 +40,18 @@ export default {
         babel({
             exclude: 'node_modules/**'
         }),
-        scss({
-            output: `${pkg.output}/style.css`,
-        }),
+        uglify(),
         copy([
             { files: 'src/images/*.*', dest: `${pkg.output}/images` },
-        ])
+        ]),
+        sass({
+            processor: css => postcss([autoprefixer, cssnano])
+                .process(css, { from: undefined })
+                .then(result => result.css),
+            output: `${pkg.output}/style.min.css`,
+        })
     ],
 };
+
+
+export default params;

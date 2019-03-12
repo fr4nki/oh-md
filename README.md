@@ -18,13 +18,13 @@ npm install --save oh-md
 Insert css file in your `<head>`:
 
 ```
-<link rel="stylesheet" type="text/css" href="https://unpkg.com/oh-md@latest/dist/style.css"/>
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/oh-md@latest/style.min.css"/>
 ```
 
 Before closing `</body>` add js file:
 
 ```
-<script type="text/javascript" src="https://unpkg.com/oh-md@latest/dist/index.js"></script>
+<script type="text/javascript" src="https://unpkg.com/oh-md@latest/index.min.js"></script>
 ```
 
 
@@ -51,18 +51,17 @@ editor.init();
 
 ### Settings
 
-Settings obejct can be provided as the second argument into editor instance, and it can contain _optional_ nested objects: `params`, `classes` and `controls`.
+Settings obejct can be provided as the second argument into editor instance, and contain _optional_ nested objects: `params`, `classes` and `controls`.
 
 **`params`**:
 
 - `counter: true` - Show symbol counter.
 
-<!-- - `autosave: 30` -  Autosave current <textarea> value to local storage if name or id attribute is provided. Sets in seconds. -->
-- `autosave: 30` -  If name or id attribute is provided to <textarea> element, value will be stored to local storage in specified interval. Sets in seconds.
+- `autosave: 30` -  If name or id attribute is provided to <textarea> element, value will be stored to local storage in specified interval (seconds).
 
 - `wordwrap: { paramVisible: true, active: true }` -  Show word wrap button (paramVisible) and set activity status (active).
 
-- `doubleReturn: { modificator: 'shiftKey', active: true }` - In case of active param is sets to true, click on Enter button inserts double end of line (\n\n). Pressing modificator key and Enter button insert single end of line (\n).
+- `doubleReturn: { modificator: 'shiftKey', active: true }` - In case of active param is sets to true, click on Enter button inserts double end of line (\n\n). By press modificator key and Enter button it'll insert single end of line (\n).
 
 **`classes`**:
 

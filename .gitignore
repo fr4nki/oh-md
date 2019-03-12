@@ -1,3 +1,8 @@
+index.min.js
+index.es.min.js
+index.d.ts
+style.min.css
+images/
 dist
 .vscode
 .idea
