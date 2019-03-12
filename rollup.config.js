@@ -13,9 +13,9 @@ import pkg from './package.json';
 
 const isDevelopment = !!process.env.dev;
 const sassCfg = { output: `${pkg.output}/style.min.css` };
-const uglifyCfg = isDevelopment ? () => { } : uglify
+const uglifyCfg = isDevelopment ? () => {} : uglify;
 
-if (isDevelopment) {
+if (!isDevelopment) {
     sassCfg.processor = css => postcss([autoprefixer, cssnano])
         .process(css, { from: undefined })
         .then(result => result.css)
@@ -54,7 +54,7 @@ const params = {
             { files: 'src/images/*.*', dest: `${pkg.output}/images` },
         ]),
         sass(sassCfg),
-        uglifyCfg,
+        uglifyCfg(),
     ],
 };
 
