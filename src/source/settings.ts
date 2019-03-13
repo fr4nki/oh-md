@@ -2,7 +2,7 @@ const defaultClassNamePrefix = 'oh-md';
 
 const defaultParams = {
     counter: true,
-    autosave: 10000,
+    autosave: 10,
     wordwrap: {
         paramVisible: true,
         active: true,
