@@ -37,7 +37,7 @@ class EditorController {
     private collectSettings(): void {
         const params = Object.assign(
             DefaultSettings.defaultParams,
-            ((this.settings || {}) || (this.settings.params || {}))
+            (this.settings && this.settings.params ? this.settings.params : {})
         );
 
         const os = EditorUtils.detectOs();
@@ -60,6 +60,8 @@ class EditorController {
         });
 
         this.settings = { theme, params, controls, classes, layout };
+
+        console.log(this);
     }
 
     private generateLayout(): void {
