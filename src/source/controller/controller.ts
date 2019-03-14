@@ -60,8 +60,6 @@ class EditorController {
         });
 
         this.settings = { theme, params, controls, classes, layout };
-
-        console.log(this);
     }
 
     private generateLayout(): void {
