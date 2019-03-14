@@ -18,7 +18,8 @@
     "license": "MIT",
     "scripts": {
         "watch": "rollup -c -w --environment dev",
-        "build": "rollup -c"
+        "build": "rollup -c",
+        "publish": "yarn vesion && yarn build && npm publish"
     },
     "devDependencies": {
         "@babel/core": "^7.2.0",
