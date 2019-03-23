@@ -9,16 +9,12 @@ $__size-area-font: 14px;
 $__size-area-height: 500px;
 
 $__color-default: #505050;
+$__color-bg: #efefef;
 $__color-lightest: rgba($__color-default, .15);
 $__color-light: rgba($__color-default, .3);
 $__color-light_deep: rgba($__color-default, .65);
 $__color-dark: #252525;
 $__color-success: #04cc04;
-
-// === FUNCTIONS =============================
-@function rgba-to-rgb($rgba, $background: #fff) {
-    @return mix(rgb(red($rgba), green($rgba), blue($rgba)), $background, alpha($rgba) * 100%)
-};
 
 // === MIXINS ================================
 @mixin key($size: $__size-icon) {

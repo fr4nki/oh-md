@@ -10,7 +10,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba($__color-default, .05);
+            background-color: $__color-bg;
             display: flex;
             align-items: stretch;
             flex-direction: column;
@@ -29,6 +29,25 @@
                 &--text__element {
                     height: 100%;
                     max-height: unset;
+                }
+
+                &--text__element {
+                    border-left: none;
+                    border-right: none;
+                    border-radius: 0;
+                    resize: none;
+
+                    &:focus,
+                    &:active {
+                        border-left: none;
+                        border-right: none;
+                    }
+                }
+
+                &--preview__active {
+                    border-radius: 0;
+                    border-right: none;
+                    border-left: none;
                 }
             }
 
