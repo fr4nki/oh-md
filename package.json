@@ -1,6 +1,6 @@
 {
     "name": "oh-md",
-    "version": "2.1.22",
+    "version": "2.2.0",
     "description": "oh-md: simplest markdown js editor",
     "output": "./",
     "main": "index.min.js",
