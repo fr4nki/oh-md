@@ -6,12 +6,23 @@
     "main": "index.min.js",
     "module": "index.es.min.js",
     "types": "index.d.ts",
+    "homepage": "https://github.com/fr4nki/oh-md",
+    "bugs": {
+        "url": "https://github.com/fr4nki/oh-md/issues"
+    },
     "files": [
         "index.min.js",
         "index.es.min.js",
         "index.d.ts",
         "style.min.css",
         "images/**/*"
+    ],
+    "keywords": [
+        "markdown",
+        "md",
+        "editor",
+        "javascript",
+        "embed"
     ],
     "repository": "git@github.com:fr4nki/oh-md.git",
     "author": "Anton Krivonos <i@fr4nki.ru>",
