@@ -37,6 +37,49 @@ test('editor html getter api correctly works', () => {
 test('check editor disabled method', () => {
     const element = <HTMLTextAreaElement>document.querySelector('.fake-text');
     const e = new Editor(element, {}).init();
+    e.disabled = true;
 
-    // e.disable = true;
-})
+    const isElementHasBeenDisabled = document.querySelector('.fake textarea.fake-text')
+        .getAttribute('disabled');
+
+    expect(isElementHasBeenDisabled).toBe('disabled');
+});
+
+test('check passing not boolean to disabled method', () => {
+    const element = <HTMLTextAreaElement>document.querySelector('.fake-text');
+    const e = new Editor(element, {}).init();
+    e.disabled = false;
+    // @ts-ignore
+    e.disabled = 'iddqd';
+
+    expect(e.disabled).toBeFalsy();
+});
+
+test('check getter disabled method', () => {
+    const element = <HTMLTextAreaElement>document.querySelector('.fake-text');
+    const e = new Editor(element, {}).init();
+    e.disabled = true;
+
+    expect(e.disabled).toBe(true);
+});
+
+test('shoud not fail with passing bad settings schema', () => {
+    const element = <HTMLTextAreaElement>document.querySelector('.fake-text');
+    const settings = {
+        params: {
+            counter: false,
+            autosave: 'ololosh',
+            wordwrap: {
+                pysch: 'pysch',
+            },
+            doubleReturn: {
+                modificator: 'yep',
+            },
+        },
+    };
+
+    // @ts-ignore
+    const e = new Editor(element, settings).init();
+
+    expect(e).toBeInstanceOf(Editor);
+});

@@ -52,8 +52,8 @@ const debounce = (fn: () => {}, time: number) => {
     };
 };
 
-const log = (string: string, type: string = 'warn') => {
-    console[type](`[OH-MD]: ${string}`);
+const log = (string: string, type: string = 'warn', ...args) => {
+    console[type](`[OH-MD]: ${string}\n${args}`);
 };
 
 export default {

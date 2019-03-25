@@ -61,6 +61,8 @@ class Editor {
                 this.element,
                 this.settings,
             ).init();
+
+            delete this.element;
         }
 
         return this;

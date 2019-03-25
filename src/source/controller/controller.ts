@@ -109,7 +109,7 @@ class EditorController {
                     this.input,
                 ).init();
             } else {
-                console.log('Button is not exists:', callee);
+                EditorUtils.log('Button is not exists', callee);
             }
         });
     }
