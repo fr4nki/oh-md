@@ -6,7 +6,7 @@ import { EditorAreaInterface, EditorParamsSettingsInterface } from '../types';
 class Autosave {
     private area: EditorAreaInterface;
     private container: Element;
-    private settings: EditorParamsSettingsInterface;
+    private readonly settings: EditorParamsSettingsInterface;
     private element: Element;
     static separator = '|||||';
 
@@ -57,7 +57,7 @@ class Autosave {
 
     public init(): void {
         const { defaultClasses } = EditorSettings;
-        const { createElement } = EditorUtils;
+        const { createElement, log } = EditorUtils;
         const params = defaultClasses.params[0];
         const { autosave } = this.settings;
         const id =
@@ -67,7 +67,7 @@ class Autosave {
         ;
 
         if (!id) {
-            console.log('Id or name is not exists');
+            log('Id or name is not exists');
         }
 
         if (!autosave || !id) {

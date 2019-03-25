@@ -1,8 +1,4 @@
-import EditorUtils from '../utils/utils';
-import EditorSettings from '../settings';
-
 import {
-    EditorControlsHotkeyInterface,
     EditorSelectionSlice,
     EditorAreaInterface,
 } from '../types';

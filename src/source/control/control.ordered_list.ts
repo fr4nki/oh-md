@@ -32,73 +32,137 @@ class EditorControlOrderedList extends EditorControl {
     }
 
     private insertTagInto() {
-        const {
-            value: taV,
-            slice,
-            selectedValue,
-        } = this.area.selection;
-        const { start: sStart, end: sEnd } = slice;
-        const { capitalize } = EditorUtils;
-        const [tStart] = EditorControlOrderedList.mdTag;
-        const isSomeSelected = selectedValue.length;
-        const normalSlice = taV.slice(sStart, sEnd);
-        const outerSlice = taV.slice(sStart - tStart.length, sEnd);
-        const buttonTitle = capitalize(this.settings.control.split('_').join(' '));
-        const EOL = '\n';
-        const tagOffset = 2;
-        const space = ' ';
-        const tagNumStartCounter = new RegExp(/^\d. /);
-        const eolSlices = outerSlice.split('\n').filter(s => s !== '');
+        if (!this.area.disabled) {
+            const {
+                value: taV,
+                slice,
+                selectedValue,
+            } = this.area.selection;
+            const { start: sStart, end: sEnd } = slice;
+            const { capitalize } = EditorUtils;
+            const [tStart] = EditorControlOrderedList.mdTag;
+            const isSomeSelected = selectedValue.length;
+            const normalSlice = taV.slice(sStart, sEnd);
+            const outerSlice = taV.slice(sStart - tStart.length, sEnd);
+            const buttonTitle = capitalize(this.settings.control.split('_').join(' '));
+            const EOL = '\n';
+            const tagOffset = 2;
+            const space = ' ';
+            const tagNumStartCounter = new RegExp(/^\d. /);
+            const eolSlices = outerSlice.split('\n').filter(s => s !== '');
 
-        let isTagExists = false;
-        let eolSlicesCounter = 0;
+            let isTagExists = false;
+            let eolSlicesCounter = 0;
 
-        eolSlices.forEach((slice) => {
-            if (
-                slice !== '' &&
-                slice.match(tagNumStartCounter)
-            ) {
-                eolSlicesCounter += 1;
+            eolSlices.forEach((slice) => {
+                if (
+                    slice !== '' &&
+                    slice.match(tagNumStartCounter)
+                ) {
+                    eolSlicesCounter += 1;
+                }
+            });
+
+            if (eolSlices.length === eolSlicesCounter) {
+                isTagExists = true;
             }
-        });
 
-        if (eolSlices.length === eolSlicesCounter) {
-            isTagExists = true;
-        }
+            if (isSomeSelected) {
+                if (isTagExists) {
+                    const sliceArr = outerSlice.split('\n');
+                    let counter: number = 0;
 
-        if (isSomeSelected) {
-            if (isTagExists) {
-                const sliceArr = outerSlice.split('\n');
-                let counter: number = 0;
+                    const value = sliceArr.map((s: string) => {
+                        if (
+                            s !== '' &&
+                            s.match(tagNumStartCounter)
+                        ) {
+                            counter += 1;
+                            return s.replace(tagNumStartCounter, '');
+                        }
 
-                const value = sliceArr.map((s: string) => {
-                    if (
-                        s !== '' &&
-                        s.match(tagNumStartCounter)
-                    ) {
-                        counter += 1;
-                        return s.replace(tagNumStartCounter, '');
-                    }
+                        return s;
+                    }).join('\n');
 
-                    return s;
-                }).join('\n');
+                    const isTagInside = outerSlice.slice(0, tStart.length) !== tStart;
 
-                const isTagInside = outerSlice.slice(0, tStart.length) !== tStart;
+                    const slice = {
+                        start: sStart - tStart.length,
+                        end: sEnd,
+                    };
 
-                const slice = {
-                    start: sStart - tStart.length,
-                    end: sEnd,
-                };
+                    const focus = {
+                        start: isTagInside ? sStart : sStart - tStart.length,
+                        end: sEnd - counter * tStart.length - counter * space.length,
+                    };
 
-                const focus = {
-                    start: isTagInside ? sStart : sStart - tStart.length,
-                    end: sEnd - counter * tStart.length - counter * space.length,
-                };
+                    this.area.selection = { value, slice, focus };
+                } else {
+                    let counter: number = 0;
 
-                this.area.selection = { value, slice, focus };
+                    const preSlice = taV.slice(sStart - tagOffset, sStart).split('').reverse();
+                    const preCount = (function () {
+                        let offset = tagOffset;
+
+                        for (let i = 0; preSlice.length; i += 1) {
+                            if (preSlice[i] === EOL) {
+                                offset -= 1;
+                            } else {
+                                break;
+                            }
+                        }
+
+                        return offset;
+                    }());
+
+                    const prefix = EOL.repeat(preCount);
+
+                    const postSlice = taV.slice(sEnd, sEnd + tagOffset).split('');
+                    const postCount = (function () {
+                        let offset = tagOffset;
+
+                        for (let i = 0; postSlice.length; i += 1) {
+                            if (postSlice[i] === EOL) {
+                                offset -= 1;
+                            } else {
+                                break;
+                            }
+                        }
+
+                        return offset;
+                    }());
+
+                    const postfix = EOL.repeat(postCount);
+
+                    const val = normalSlice
+                        .split('\n')
+                        .map((word) => {
+                            if (word !== '') {
+                                counter += 1;
+                                return tStart.replace('$', String(counter)) + space + word;
+                            }
+
+                            return word;
+                        })
+                        .join('\n')
+                    ;
+
+                    const focusLastOffset = (tStart[0].length + space.length) * counter;
+
+                    const value = prefix + val + postfix;
+                    const slice = {
+                        start: sStart,
+                        end: sEnd
+                    };
+
+                    const focus = {
+                        start: sStart + prefix.length,
+                        end: sEnd + postfix.length + focusLastOffset + counter,
+                    };
+
+                    this.area.selection = { value, slice, focus };
+                }
             } else {
-                let counter: number = 0;
-
                 const preSlice = taV.slice(sStart - tagOffset, sStart).split('').reverse();
                 const preCount = (function () {
                     let offset = tagOffset;
@@ -132,82 +196,20 @@ class EditorControlOrderedList extends EditorControl {
                 }());
 
                 const postfix = EOL.repeat(postCount);
-
-                const val = normalSlice
-                    .split('\n')
-                    .map((word) => {
-                        if (word !== '') {
-                            counter += 1;
-                            return tStart.replace('$', String(counter)) + space + word;
-                        }
-
-                        return word;
-                    })
-                    .join('\n')
-                ;
-
-                const focusLastOffset = (tStart[0].length + space.length) * counter;
-
-                const value = prefix + val + postfix;
+                const tStartNormalized = tStart.replace('$', '1');
+                const value = prefix + tStartNormalized + space + buttonTitle + postfix;
                 const slice = {
                     start: sStart,
-                    end: sEnd
+                    end: sEnd,
                 };
 
                 const focus = {
-                    start: sStart + prefix.length,
-                    end: sEnd + postfix.length + focusLastOffset + counter,
+                    start: sStart + prefix.length + tStart.length + space.length,
+                    end: sStart + prefix.length + tStart.length + space.length + buttonTitle.length,
                 };
 
                 this.area.selection = { value, slice, focus };
             }
-        } else {
-            const preSlice = taV.slice(sStart - tagOffset, sStart).split('').reverse();
-            const preCount = (function () {
-                let offset = tagOffset;
-
-                for (let i = 0; preSlice.length; i += 1) {
-                    if (preSlice[i] === EOL) {
-                        offset -= 1;
-                    } else {
-                        break;
-                    }
-                }
-
-                return offset;
-            }());
-
-            const prefix = EOL.repeat(preCount);
-
-            const postSlice = taV.slice(sEnd, sEnd + tagOffset).split('');
-            const postCount = (function () {
-                let offset = tagOffset;
-
-                for (let i = 0; postSlice.length; i += 1) {
-                    if (postSlice[i] === EOL) {
-                        offset -= 1;
-                    } else {
-                        break;
-                    }
-                }
-
-                return offset;
-            }());
-
-            const postfix = EOL.repeat(postCount);
-            const tStartNormalized = tStart.replace('$', '1');
-            const value = prefix + tStartNormalized + space + buttonTitle + postfix;
-            const slice = {
-                start: sStart,
-                end: sEnd,
-            };
-
-            const focus = {
-                start: sStart + prefix.length + tStart.length + space.length,
-                end: sStart + prefix.length + tStart.length + space.length + buttonTitle.length,
-            };
-
-            this.area.selection = { value, slice, focus };
         }
     }
 

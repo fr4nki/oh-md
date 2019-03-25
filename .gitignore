@@ -4,6 +4,8 @@ index.d.ts
 style.min.css
 images/
 dist
+.nyc_output/
+coverage/
 .vscode
 .idea
 .rpt2_cache

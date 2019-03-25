@@ -10,6 +10,7 @@ $__size-area-height: 500px;
 
 $__color-default: #505050;
 $__color-bg: #efefef;
+$__color-disabled: rgba($__color-default, .05);
 $__color-lightest: rgba($__color-default, .15);
 $__color-light: rgba($__color-default, .3);
 $__color-light_deep: rgba($__color-default, .65);
@@ -31,13 +32,16 @@ $__color-success: #04cc04;
     transition: background-color .1s ease-out, opacity .05s ease-in;
     border-radius: $__size-offset / 5;
     outline: none;
+}
 
+@mixin keyStates($color: $__color-lightest) {
     &:active,
     &:hover,
     &:focus {
-        background-color: $__color-lightest;
+        background-color: $color;
     }
 }
+
 
 @mixin param($opacity: .5) {
     font-family: $__ffamily;

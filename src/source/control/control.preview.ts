@@ -30,23 +30,29 @@ class EditorControlPreview extends EditorControl {
     }
 
     private togglePreview() {
+        const { enabledPreview} = this.area;
         const [controlClassname] = EditorSettings.defaultClasses.controls;
-        const buttonClassname = `${controlClassname}--button__preview__active`;
-        const { enabledPreview } = this.area;
+        const buttonClassname = [
+            `${controlClassname}--button__preview__active`,
+            `${controlClassname}--button__active`
+        ];
 
-        // TODO: NEED TO IMPLEMENT!
         if (!enabledPreview) {
-            this.button.classList.add(buttonClassname);
+            buttonClassname.forEach((cl) => {
+                this.button.classList.add(cl);
+            });
             this.area.enabledPreview = true;
         } else {
-            this.button.classList.remove(buttonClassname);
+            buttonClassname.forEach((cl) => {
+                this.button.classList.remove(cl);
+            });
             this.area.enabledPreview = false;
         }
     }
 
     public init(): void {
         const handler: EditorControlsBinder = {
-            settings: this.settings,
+            settings: { ...this.settings, cantBeDisabled: true },
             callback: this.togglePreview.bind(this),
         };
 

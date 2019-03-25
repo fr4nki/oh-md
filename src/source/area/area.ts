@@ -19,6 +19,7 @@ class EditorArea implements EditorAreaInterface {
     controller: Element;
     fullscreenEnabled: boolean;
     previewEnabled: boolean;
+    isDisabled: boolean;
     private static handlerList: EditorControlsBinder[] = [];
     private static insertCommand: string = 'insertText';
     private static endOfLine = '\n';
@@ -47,6 +48,7 @@ class EditorArea implements EditorAreaInterface {
         this.previewContainer = null;
         this.fullscreenEnabled = false;
         this.previewEnabled = false;
+        this.isDisabled = false;
 
         this.elementKeyPress = EditorUtils.debounce(this.elementKeyPress.bind(this), 250);
     }
@@ -88,6 +90,26 @@ class EditorArea implements EditorAreaInterface {
 
     public set text(str: string) {
         this.element.value = str;
+    }
+
+    public get disabled(): boolean {
+        return this.isDisabled;
+    }
+
+    public set disabled(status: boolean) {
+        const el = this.element;
+        const [controllerPrefixClassname] = EditorSettings.defaultClasses.container;
+        const controllerClassname = `${controllerPrefixClassname}-mode-disabled`;
+
+        if (status) {
+            el.setAttribute('disabled', 'disabled');
+            this.controller.classList.add(controllerClassname);
+        } else {
+            el.removeAttribute('disabled');
+            this.controller.classList.remove(controllerClassname);
+        }
+
+        this.isDisabled = status;
     }
 
     public get areaElement() {
@@ -199,22 +221,22 @@ class EditorArea implements EditorAreaInterface {
         this.container.appendChild(this.previewContainer);
 
         this.element.addEventListener('keydown', (e) => {
-            if (window.document.activeElement === this.element) {
-                EditorArea.handlerList.forEach((handler) => {
-                    const { settings } = handler;
+            EditorArea.handlerList.forEach((handler) => {
+                const { settings } = handler;
 
-                    if (
-                        settings.hotkeyCurrent &&
-                        e[settings.hotkeyCurrent.modificator] &&
-                        e.key === settings.hotkeyCurrent.key
-                    ) {
-                        e.preventDefault();
-                        handler.callback();
+                if (
+                    settings.hotkeyCurrent &&
+                    e[settings.hotkeyCurrent.modificator] &&
+                    e.key === settings.hotkeyCurrent.key
+                ) {
+                    e.preventDefault();
+                    e.stopPropagation();
 
-                        return;
-                    }
-                });
-            }
+                    handler.callback();
+
+                    return;
+                }
+            });
         });
 
         return this;

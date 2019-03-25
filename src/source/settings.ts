@@ -167,11 +167,11 @@ const defaultControls = [
         hotkey: {
             default: {
                 modificator: 'ctrlKey',
-                key: 'm',
+                key: 'j',
             },
             mac: {
                 modificator: 'metaKey',
-                key: 'm',
+                key: 'j',
             },
         },
     },
@@ -192,22 +192,11 @@ const defaultControls = [
 
 const defaultLayout = ['controls', 'area', 'params'];
 
-const defaultWarnings = {
-    autosave: {
-        id: 'Textarea element doesn\'t contain id or name attribute. Autosave will not work.',
-    },
-    controls: {
-        notExists: 'Button is not implemented',
-        hotkeyWrong: 'Check your "hotkey" in settings. Seems it\'s wrong.',
-    },
-};
-
 export default {
     defaultClassNamePrefix,
     defaultParams,
     defaultTheme,
     defaultClasses,
     defaultControls,
-    defaultWarnings,
     defaultLayout,
 };

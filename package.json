@@ -19,7 +19,14 @@
     "scripts": {
         "watch": "rollup -c -w --environment dev",
         "build": "rollup -c",
-        "publish": "yarn vesion && yarn build && npm publish"
+        "test": "jest"
+    },
+    "jest": {
+        "moduleNameMapper": {
+            "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/.mocks/fileMock.js",
+            "\\.(css|less)$": "<rootDir>/src/.mocks/styleMock.js",
+            "^.+\\.(css|less|scss)$": "identity-obj-proxy"
+        }
     },
     "devDependencies": {
         "@babel/core": "^7.2.0",
@@ -27,8 +34,12 @@
         "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
         "@babel/plugin-transform-regenerator": "^7.0.0",
         "@babel/preset-env": "^7.2.0",
+        "@babel/preset-typescript": "^7.3.3",
+        "@types/jest": "^24.0.11",
         "autoprefixer": "^9.4.10",
         "cssnano": "^4.1.10",
+        "identity-obj-proxy": "^3.0.0",
+        "jest": "^24.5.0",
         "livereload": "^0.7.0",
         "marked": "^0.6.0",
         "postcss": "^7.0.14",

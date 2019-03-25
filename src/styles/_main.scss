@@ -1,3 +1,5 @@
+//TODO: Make styles for active popup buttons
+
 .#{$__mdClass} {
     position: relative;
 
@@ -62,6 +64,30 @@
                 margin: 0;
             }
         }
+
+        &-disabled {
+            .#{$__mdClass}-area {
+                &--text__element {
+                    background: $__color-disabled;
+                }
+            }
+
+            .#{$__mdClass}-controls {
+                &--button {
+                    opacity: .5;
+                    cursor: default;
+
+                    @include keyStates(transparent);
+
+                    &__forced {
+                        opacity: 1;
+                        cursor: pointer;
+
+                        @include keyStates();
+                    }
+                }
+            }
+        }
     }
 
     .#{$__mdClass}-controls {
@@ -69,6 +95,7 @@
 
         &--button {
             @include key();
+            @include keyStates();
 
             &:last-child {
                 margin-right: 0;
@@ -101,15 +128,13 @@
                 }
             }
 
-            &__fullscreen,
-            &__preview {
-                &__active {
-                    background-color: $__color-light;
+            &__active {
+                background-color: $__color-light;
 
-                    &:focus,
-                    &:active {
-                        background-color: $__color-light;
-                    }
+                &:focus,
+                &:hover,
+                &:active {
+                    background-color: $__color-light;
                 }
             }
         }
@@ -132,6 +157,10 @@
             position: relative;
             width: 100%;
             height: 100%;
+
+            &--wordwrap__off {
+                white-space: pre;
+            }
 
             &__element {
                 padding: 10px;
@@ -168,6 +197,7 @@
                 border-radius: 2px;
                 background: white;
                 color: $__color-dark;
+                overflow: auto;
             }
         }
 

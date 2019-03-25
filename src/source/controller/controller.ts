@@ -145,6 +145,14 @@ class EditorController {
         this.input.text = text;
     }
 
+    public get disabled(): boolean {
+        return this.input.disabled;
+    }
+
+    public set disabled(status: boolean) {
+        this.input.disabled = status;
+    }
+
     public init(): EditorController {
         this.collectSettings();
         this.generateLayout();

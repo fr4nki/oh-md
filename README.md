@@ -310,3 +310,7 @@ Editor provide small api:
 - `editor.text` - getter, return current textarea value as text.
 
 - `editor.text` - setter, sets new textarea value.
+
+- `editor.disabled` - getter, return disabled status of the editor instance.
+
+- `editor.disabled` - setter, sets disabled status for the editor instance.

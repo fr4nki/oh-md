@@ -30,22 +30,29 @@ class EditorControlFullscreen extends EditorControl {
     }
 
     private toggleFullscreen() {
-        const [controlClassname] = EditorSettings.defaultClasses.controls;
-        const buttonClassname = `${controlClassname}--button__fullscreen__active`;
         const { enabledFullscreen } = this.area;
+        const [controlClassname] = EditorSettings.defaultClasses.controls;
+        const buttonClassname = [
+            `${controlClassname}--button__fullscreen__active`,
+            `${controlClassname}--button__active`
+        ];
 
         if (!enabledFullscreen) {
-            this.button.classList.add(buttonClassname);
+            buttonClassname.forEach((cl) => {
+                this.button.classList.add(cl);
+            });
             this.area.enabledFullscreen = true;
         } else {
-            this.button.classList.remove(buttonClassname);
+            buttonClassname.forEach((cl) => {
+                this.button.classList.remove(cl);
+            });
             this.area.enabledFullscreen = false;
         }
     }
 
     public init(): void {
         const handler: EditorControlsBinder = {
-            settings: this.settings,
+            settings: { ...this.settings, cantBeDisabled: true },
             callback: this.toggleFullscreen.bind(this),
         };
 

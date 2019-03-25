@@ -31,7 +31,9 @@ class EditorControlItalic extends EditorControl {
     }
 
     private insertTagInto() {
-        super.insertSimpleElement(EditorControlItalic.mdTag);
+        if (!this.area.disabled) {
+            super.insertSimpleElement(EditorControlItalic.mdTag);
+        }
     }
 
     public init(): void {

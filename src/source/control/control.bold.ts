@@ -31,7 +31,9 @@ class EditorControlBold extends EditorControl {
     }
 
     private insertTagInto() {
-        super.insertSimpleElement(EditorControlBold.mdTag);
+        if (!this.area.disabled) {
+            super.insertSimpleElement(EditorControlBold.mdTag);
+        }
     }
 
     public init(): void {

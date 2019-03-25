@@ -32,12 +32,14 @@ class EditorControlStrike extends EditorControl {
     }
 
     private insertTagInto() {
-        const tag = this.area.hasEndOfLine()
-            ? EditorControlStrike.fullMdTag
-            : EditorControlStrike.mdTag
-        ;
+        if (!this.area.disabled) {
+            const tag = this.area.hasEndOfLine()
+                ? EditorControlStrike.fullMdTag
+                : EditorControlStrike.mdTag
+            ;
 
-        super.insertSimpleElement(tag);
+            super.insertSimpleElement(tag);
+        }
     }
 
     public init(): void {

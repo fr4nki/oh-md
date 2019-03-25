@@ -8,6 +8,7 @@ import {
     EditorAreaInterface,
     EditorPopupSettingsItem,
 } from '../types';
+import EditorSettings from '../settings';
 
 class EditorControlLink extends EditorControl {
     private static mdTagText = '__text__';
@@ -53,36 +54,53 @@ class EditorControlLink extends EditorControl {
         };
     }
 
-    private onCancel(): void {
+    private onDone(): void {
+        const [controlClassname] = EditorSettings.defaultClasses.controls;
+        const buttonClassname = `${controlClassname}--button__active`;
 
+        this.button.classList.remove(buttonClassname);
+    }
+
+    private onCancel(): void {
     }
 
     private handle() {
-        const { selectedValue: value, slice } = this.area.selection;
+        if (!this.area.disabled) {
+            const { selectedValue: value } = this.area.selection;
+            const [controlClassname] = EditorSettings.defaultClasses.controls;
+            const buttonClassname = `${controlClassname}--button__active`;
 
-        const settings = [
-            {
-                value,
-                type: 'text',
-                id: EditorControlLink.mdTagText,
-                title: 'Insert text',
-            },
-            {
-                value: '',
-                type: 'text',
-                id: EditorControlLink.mdTagLink,
-                title: 'Insert URL',
+            const settings = [
+                {
+                    value,
+                    type: 'text',
+                    id: EditorControlLink.mdTagText,
+                    title: 'Insert text',
+                },
+                {
+                    value: '',
+                    type: 'text',
+                    id: EditorControlLink.mdTagLink,
+                    title: 'Insert URL',
+                }
+            ];
+
+            const popup = new EditorPopup(
+                this.area.areaContainer,
+                settings,
+                this.onSubmit.bind(this),
+                this.onCancel.bind(this),
+                this.onDone.bind(this),
+            );
+
+            const popupInstance = popup.init();
+
+            if (popupInstance) {
+                this.button.classList.add(buttonClassname);
             }
-        ];
 
-        const popup = new EditorPopup(
-            this.area.areaContainer,
-            settings,
-            this.onSubmit.bind(this),
-            this.onCancel.bind(this),
-        );
-
-        return popup.init();
+            return popupInstance;
+        }
     }
 
     public init(): void {

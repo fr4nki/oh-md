@@ -33,10 +33,10 @@ class Wordwrap {
 
         if (!this.wordwrapStatus) {
             this.area.areaElement.classList.remove(wordwrapAreaClassname);
-            this.area.areaElement.classList.remove(wordwrapParamsClassname);
+            this.element.classList.remove(wordwrapParamsClassname);
         } else {
             this.area.areaElement.classList.add(wordwrapAreaClassname);
-            this.area.areaElement.classList.add(wordwrapParamsClassname);
+            this.element.classList.add(wordwrapParamsClassname);
         }
     }
 

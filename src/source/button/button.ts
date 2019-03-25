@@ -54,22 +54,27 @@ class EditorButton {
     }
 
     public init(): HTMLElement {
-        const { control, hotkeyCurrent } = this.handler.settings;
+        const { control, hotkeyCurrent, cantBeDisabled } = this.handler.settings;
         const [controlClassname] = EditorSettings.defaultClasses.controls;
         const activeControlClassname = `${controlClassname}--button__active`;
+        const cantBeDisabledControlClassname = `${controlClassname}--button__forced`;
 
         this.button = EditorButton.generateElement(
             control,
             hotkeyCurrent,
         );
 
-        this.button.addEventListener('mousedown', () => {
-            this.button.classList.add(activeControlClassname);
-        });
+        if (cantBeDisabled) {
+            this.button.classList.add(cantBeDisabledControlClassname);
+        }
 
-        this.button.addEventListener('mouseup', () => {
-            this.button.classList.remove(activeControlClassname);
-        });
+        // this.button.addEventListener('mousedown', () => {
+        //     this.button.classList.add(activeControlClassname);
+        // });
+        //
+        // this.button.addEventListener('mouseup', () => {
+        //     this.button.classList.remove(activeControlClassname);
+        // });
 
         this.button.addEventListener('click', (e) => {
             e.preventDefault();

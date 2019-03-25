@@ -6,7 +6,6 @@ export interface EditorControlsHotkeyInterface {
 export interface EditorControlsBinder {
     callback: Function;
     settings: EditorControlsSettings;
-    // hotkey: EditorControlsHotkeyInterface;
 }
 
 interface EditorClassesInterface {
@@ -14,14 +13,6 @@ interface EditorClassesInterface {
     area: string[];
     controls: string[];
     params: string[];
-}
-
-export interface EditorSettingsInterface {
-    theme: string;
-    params: EditorParamsSettings;
-    controls: EditorControlsSettings[];
-    classes: EditorClassesInterface;
-    layout: string[];
 }
 
 export interface EditorPopupSettingsItem {
@@ -47,6 +38,7 @@ export interface EditorControlsSettings {
         mac?: EditorControlsHotkeyInterface;
     };
     hotkeyCurrent?: EditorControlsHotkeyInterface;
+    cantBeDisabled?: boolean;
 }
 
 export interface EditorParamsSettings {
@@ -64,11 +56,11 @@ export interface EditorParamsSettings {
 }
 
 export interface EditorSettings {
-    theme: string;
-    params: EditorParamsSettings;
-    controls: EditorControlsSettings[];
-    classes: EditorClassesInterface;
-    layout: string[];
+    theme?: string;
+    params?: EditorParamsSettings;
+    controls?: EditorControlsSettings[];
+    classes?: EditorClassesInterface;
+    layout?: string[];
 }
 
 export interface EditorLayout {
@@ -92,7 +84,7 @@ export interface EditorSelection {
 export interface EditorAreaInterface {
     container: Element;
     element: HTMLTextAreaElement;
-    settings: EditorSettingsInterface;
+    settings: EditorSettings;
     areaContainer: HTMLElement;
     previewContainer: HTMLElement;
     handlerList?: EditorControlsBinder[];
@@ -104,6 +96,7 @@ export interface EditorAreaInterface {
     enabledPreview?: boolean;
     html: string;
     text: string;
+    disabled: boolean;
     areaElement: HTMLTextAreaElement;
     selection: EditorSelection;
 }
@@ -121,4 +114,3 @@ export interface EditorParamsSettingsInterface {
         active: boolean;
     };
 }
-

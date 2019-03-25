@@ -32,7 +32,7 @@ class EditorControlHeading extends EditorControl {
         this.button = null;
     }
 
-    private getNextQuantity (qty: number) {
+    static getNextQuantity (qty: number) {
         const qtyToIncrement = 1;
 
         if (qty + qtyToIncrement <= EditorControlHeading.mdTagMaxLength) {
@@ -42,7 +42,7 @@ class EditorControlHeading extends EditorControl {
         return qtyToIncrement;
     }
 
-    private setTagPrefix(slice: string, qty: number) {
+    static setTagPrefix(slice: string, qty: number) {
         const prefix = slice.slice(0, qty);
         const qtyToIncrement = 1;
 
@@ -54,7 +54,7 @@ class EditorControlHeading extends EditorControl {
         return EditorControlHeading.mdTag[0] + slice.slice(qty);
     }
 
-    private getTagsQuantity(slice: string) {
+    static getTagsQuantity(slice: string) {
         let counter = 0;
         const space = ' ';
         const sliceArray = slice.split('');
@@ -74,7 +74,7 @@ class EditorControlHeading extends EditorControl {
         return 0;
     }
 
-    private getPrefixQty(start: number, end: number) {
+    private getPrefixQty(start: number) {
         const tStart = EditorControlHeading.mdTag[0];
         const space = ' ';
         const st = start - space.length;
@@ -97,165 +97,167 @@ class EditorControlHeading extends EditorControl {
     }
 
     private insertTagInto() {
-        const {
-            value: taV,
-            slice,
-            selectedValue,
-        } = this.area.selection;
-        const { start: sStart, end: sEnd } = slice;
+        if (!this.area.disabled) {
+            const {
+                value: taV,
+                slice,
+                selectedValue,
+            } = this.area.selection;
+            const { start: sStart, end: sEnd } = slice;
 
-        const space = ' ';
-        const EOL = '\n';
-        const tStart = EditorControlHeading.mdTag[0];
-        const buttonTitle = EditorUtils.capitalize(this.settings.control.split('_').join(''));
+            const space = ' ';
+            const EOL = '\n';
+            const tStart = EditorControlHeading.mdTag[0];
+            const buttonTitle = EditorUtils.capitalize(this.settings.control.split('_').join(''));
 
-        const isSomeSelected = selectedValue.length;
-        const normalSlice = selectedValue;
-        const isInside = normalSlice.startsWith(tStart);
-        const outerStartSlice = taV.slice(sStart - space.length - tStart.length, sEnd);
-        const isOutside = outerStartSlice.startsWith(tStart);
+            const isSomeSelected = selectedValue.length;
+            const normalSlice = selectedValue;
+            const isInside = normalSlice.startsWith(tStart);
+            const outerStartSlice = taV.slice(sStart - space.length - tStart.length, sEnd);
+            const isOutside = outerStartSlice.startsWith(tStart);
 
-        if (isSomeSelected) {
-            if (isInside) {
-                const tagsQuantity = this.getTagsQuantity(normalSlice);
-                const nextQty = this.getNextQuantity(tagsQuantity);
+            if (isSomeSelected) {
+                if (isInside) {
+                    const tagsQuantity = EditorControlHeading.getTagsQuantity(normalSlice);
+                    const nextQty = EditorControlHeading.getNextQuantity(tagsQuantity);
 
-                const value = this.setTagPrefix(normalSlice, tagsQuantity);
+                    const value = EditorControlHeading.setTagPrefix(normalSlice, tagsQuantity);
+
+                    const slice = {
+                        start: sStart,
+                        end: sEnd,
+                    };
+                    const focus = {
+                        start: sStart + nextQty + space.length,
+                        end: sEnd - tagsQuantity + nextQty,
+                    };
+
+                    this.area.selection = { value, slice, focus };
+                    return;
+                }
+
+                if (isOutside) {
+                    const qty = this.getPrefixQty(sStart);
+                    const nextQty = EditorControlHeading.getNextQuantity(qty);
+                    const fullSlice = taV.slice(sStart - space.length - qty, sEnd);
+
+                    const value = EditorControlHeading.setTagPrefix(fullSlice, qty);
+
+                    const slice = {
+                        start: sStart - space.length - qty,
+                        end: sEnd,
+                    };
+
+                    const focus = {
+                        start: sStart - qty + nextQty,
+                        end: sEnd - qty + nextQty,
+                    };
+
+                    this.area.selection = { value, slice, focus };
+                    return;
+                }
+
+                const tagOffset = 1;
+                const preSlice = taV.slice(sStart - tagOffset, sStart).split('').reverse();
+
+                const preCount = (function () {
+                    let offset = tagOffset;
+
+                    for (let i = 0; preSlice.length; i += 1) {
+                        if (preSlice[i] === EOL) {
+                            offset -= 1;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    return offset;
+                }());
+
+                const prefix = EOL.repeat(preCount);
+
+                const tagPostOffset = 2;
+                const postSlice = taV.slice(sEnd, sEnd + tagPostOffset).split('');
+                const postCount = (function () {
+                    let offset = tagPostOffset;
+
+                    for (let i = 0; postSlice.length; i += 1) {
+                        if (postSlice[i] === EOL) {
+                            offset -= 1;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    return offset;
+                }());
+
+                const postfix = EOL.repeat(postCount);
+
+                const value = prefix + tStart + space + normalSlice + postfix;
 
                 const slice = {
                     start: sStart,
-                    end: sEnd,
+                    end: sEnd
                 };
+
                 const focus = {
-                    start: sStart + nextQty + space.length,
-                    end: sEnd - tagsQuantity + nextQty,
+                    start: sStart + prefix.length + tStart.length + space.length,
+                    end: sStart + prefix.length + tStart.length + space.length + normalSlice.length,
                 };
 
                 this.area.selection = { value, slice, focus };
-                return;
-            }
+            } else {
+                const tagOffset = 1;
+                const preSlice = taV.slice(sStart - tagOffset, sStart).split('').reverse();
 
-            if (isOutside) {
-                const qty = this.getPrefixQty(sStart, sEnd);
-                const nextQty = this.getNextQuantity(qty);
-                const fullSlice = taV.slice(sStart - space.length - qty, sEnd);
+                const preCount = (function () {
+                    let offset = tagOffset;
 
-                const value = this.setTagPrefix(fullSlice, qty);
+                    for (let i = 0; preSlice.length; i += 1) {
+                        if (preSlice[i] === EOL) {
+                            offset -= 1;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    return offset;
+                }());
+
+                const prefix = EOL.repeat(preCount);
+
+                const tagPostOffset = 2;
+                const postSlice = taV.slice(sEnd, sEnd + tagPostOffset).split('');
+                const postCount = (function () {
+                    let offset = tagPostOffset;
+
+                    for (let i = 0; postSlice.length; i += 1) {
+                        if (postSlice[i] === EOL) {
+                            offset -= 1;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    return offset;
+                }());
+
+                const postfix = EOL.repeat(postCount);
+                const value = prefix + tStart + space + buttonTitle + postfix;
 
                 const slice = {
-                    start: sStart - space.length - qty,
-                    end: sEnd,
+                    start: sStart,
+                    end: sEnd
                 };
 
                 const focus = {
-                    start: sStart - qty + nextQty,
-                    end: sEnd - qty + nextQty,
+                    start: sStart + prefix.length + tStart.length + space.length,
+                    end: sStart + prefix.length + tStart.length + space.length + buttonTitle.length,
                 };
 
                 this.area.selection = { value, slice, focus };
-                return;
             }
-
-            const tagOffset = 1;
-            const preSlice = taV.slice(sStart - tagOffset, sStart).split('').reverse();
-
-            const preCount = (function () {
-                let offset = tagOffset;
-
-                for (let i = 0; preSlice.length; i += 1) {
-                    if (preSlice[i] === EOL) {
-                        offset -= 1;
-                    } else {
-                        break;
-                    }
-                }
-
-                return offset;
-            }());
-
-            const prefix = EOL.repeat(preCount);
-
-            const tagPostOffset = 2;
-            const postSlice = taV.slice(sEnd, sEnd + tagPostOffset).split('');
-            const postCount = (function () {
-                let offset = tagPostOffset;
-
-                for (let i = 0; postSlice.length; i += 1) {
-                    if (postSlice[i] === EOL) {
-                        offset -= 1;
-                    } else {
-                        break;
-                    }
-                }
-
-                return offset;
-            }());
-
-            const postfix = EOL.repeat(postCount);
-
-            const value = prefix + tStart + space + normalSlice + postfix;
-
-            const slice = {
-                start: sStart,
-                end: sEnd
-            };
-
-            const focus = {
-                start: sStart + prefix.length + tStart.length + space.length,
-                end: sStart + prefix.length + tStart.length + space.length + normalSlice.length,
-            };
-
-            this.area.selection = { value, slice, focus };
-        } else {
-            const tagOffset = 1;
-            const preSlice = taV.slice(sStart - tagOffset, sStart).split('').reverse();
-
-            const preCount = (function () {
-                let offset = tagOffset;
-
-                for (let i = 0; preSlice.length; i += 1) {
-                    if (preSlice[i] === EOL) {
-                        offset -= 1;
-                    } else {
-                        break;
-                    }
-                }
-
-                return offset;
-            }());
-
-            const prefix = EOL.repeat(preCount);
-
-            const tagPostOffset = 2;
-            const postSlice = taV.slice(sEnd, sEnd + tagPostOffset).split('');
-            const postCount = (function () {
-                let offset = tagPostOffset;
-
-                for (let i = 0; postSlice.length; i += 1) {
-                    if (postSlice[i] === EOL) {
-                        offset -= 1;
-                    } else {
-                        break;
-                    }
-                }
-
-                return offset;
-            }());
-
-            const postfix = EOL.repeat(postCount);
-            const value = prefix + tStart + space + buttonTitle + postfix;
-
-            const slice = {
-                start: sStart,
-                end: sEnd
-            };
-
-            const focus = {
-                start: sStart + prefix.length + tStart.length + space.length,
-                end: sStart + prefix.length + tStart.length + space.length + buttonTitle.length,
-            };
-
-            this.area.selection = { value, slice, focus };
         }
     }
 

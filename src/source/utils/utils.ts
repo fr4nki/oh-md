@@ -52,10 +52,15 @@ const debounce = (fn: () => {}, time: number) => {
     };
 };
 
+const log = (string: string, type: string = 'warn') => {
+    console[type](`[OH-MD]: ${string}`);
+};
+
 export default {
     createElement,
     capitalize,
     debounce,
     detectOs,
     getNormalizedKey,
+    log,
 };

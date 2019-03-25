@@ -31,7 +31,9 @@ class EditorControlStrike extends EditorControl {
     }
 
     private insertTagInto() {
-        super.insertSimpleElement(EditorControlStrike.mdTag);
+        if (!this.area.disabled) {
+            super.insertSimpleElement(EditorControlStrike.mdTag);
+        }
     }
 
     public init(): void {
